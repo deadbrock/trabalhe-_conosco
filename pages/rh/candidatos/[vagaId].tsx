@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { apiGet, apiPut } from "@/lib/api";
 import { motion } from "framer-motion";
@@ -23,13 +23,13 @@ export default function RHCandidatosPorVaga() {
   const [items, setItems] = useState<Candidato[]>([]);
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!vagaId) return;
     const data = await apiGet<Candidato[]>(`/candidatos/${vagaId}`, token);
     setItems(data);
-  };
+  }, [vagaId, token]);
 
-  useEffect(() => { load(); }, [vagaId]);
+  useEffect(() => { load(); }, [load]);
 
   const grouped = useMemo(() => {
     const g: Record<string, Candidato[]> = {};
@@ -97,20 +97,20 @@ export default function RHCandidatosPorVaga() {
               }}
             >
               {grouped[st].map((c) => (
-                <motion.div
-                  key={c.id}
-                  layout
-                  draggable
-                  onDragStart={(e) => e.dataTransfer.setData("text/plain", String(c.id))}
-                  className="cursor-grab active:cursor-grabbing rounded-xl border border-white/15 bg-white/20 p-3"
-                >
-                  <div className="font-medium">{c.nome}</div>
-                  <div className="text-xs text-white/70">{c.email}</div>
-                  <div className="mt-2 flex justify-between items-center">
-                    {c.curriculo ? (
-                      <a href={`http://localhost:3333/uploads/${c.curriculo}`} target="_blank" rel="noreferrer" className="underline text-xs">Ver currículo</a>
-                    ) : <span />}
-                    <a href={`mailto:${c.email}`} className="text-xs btn-gradient rounded px-2 py-1 text-white">E-mail</a>
+                <motion.div key={c.id} layout>
+                  <div
+                    draggable
+                    onDragStart={(e: React.DragEvent<HTMLDivElement>) => e.dataTransfer.setData("text/plain", String(c.id))}
+                    className="cursor-grab active:cursor-grabbing rounded-xl border border-white/15 bg-white/20 p-3"
+                  >
+                    <div className="font-medium">{c.nome}</div>
+                    <div className="text-xs text-white/70">{c.email}</div>
+                    <div className="mt-2 flex justify-between items-center">
+                      {c.curriculo ? (
+                        <a href={`http://localhost:3333/uploads/${c.curriculo}`} target="_blank" rel="noreferrer" className="underline text-xs">Ver currículo</a>
+                      ) : <span />}
+                      <a href={`mailto:${c.email}`} className="text-xs btn-gradient rounded px-2 py-1 text-white">E-mail</a>
+                    </div>
                   </div>
                 </motion.div>
               ))}
