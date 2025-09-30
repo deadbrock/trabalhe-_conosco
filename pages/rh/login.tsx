@@ -18,7 +18,7 @@ export default function RHLogin() {
       const data = await apiPost<{ token: string }>("/auth/login", { email, senha });
       localStorage.setItem("rh_token", data.token);
       router.push("/rh");
-    } catch (err) {
+    } catch {
       setError("Credenciais inválidas");
     } finally {
       setLoading(false);

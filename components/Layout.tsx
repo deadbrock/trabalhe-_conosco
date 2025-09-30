@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from "react";
 import Header from "@/components/Header";
-import { motion } from "framer-motion";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

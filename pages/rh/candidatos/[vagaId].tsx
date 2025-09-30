@@ -29,13 +29,13 @@ export default function RHCandidatosPorVaga() {
     setItems(data);
   };
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [vagaId]);
+  useEffect(() => { load(); }, [vagaId]);
 
   const grouped = useMemo(() => {
     const g: Record<string, Candidato[]> = {};
     for (const st of STATUSES) g[st] = [];
     for (const c of items) {
-      const key = STATUSES.includes(c.status as any) ? c.status : "Recebido";
+      const key = (STATUSES as readonly string[]).includes(c.status) ? c.status : "Recebido";
       g[key].push(c);
     }
     return g;

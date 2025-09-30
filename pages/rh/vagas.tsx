@@ -83,7 +83,7 @@ export default function RHVagas() {
     <section className="py-8">
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por título ou descrição" className="min-w-[260px] rounded-lg border border-white/15 bg-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-primary/60" />
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as any)} className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-primary/60">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")} className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-primary/60">
           <option value="all">Todos</option>
           <option value="ativa">Ativas</option>
           <option value="inativa">Inativas</option>
