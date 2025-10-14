@@ -21,11 +21,17 @@ app.get("/health", (_req, res) => {
 
 // públicas
 app.use("/auth", authRouter);
-app.use("/vagas", vagasRouter);
 
-// protegidas (ex.: métricas e gestão de candidatos)
+// Vagas públicas (GET apenas)
+app.get("/vagas", vagasRouter);
+
+// Candidatura pública (POST sem auth)
+app.post("/candidatos", candidatosRouter);
+
+// protegidas (RH apenas)
+app.use("/vagas", requireAuth, vagasRouter); // POST, PUT, DELETE
 app.use("/metrics", requireAuth, metricsRouter);
-app.use("/candidatos", requireAuth, candidatosRouter);
+app.use("/candidatos", requireAuth, candidatosRouter); // GET, PUT
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {

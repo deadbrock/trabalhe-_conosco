@@ -9,7 +9,7 @@ type Milestone = {
 const milestones: Milestone[] = [
   { year: "2010", description: "Fundação como loja de materiais de limpeza." },
   { year: "2012", description: "Início da distribuição de materiais de limpeza." },
-  { year: "2015", description: "Virada de chave: primeiros contratos de terceirização (Extra e Assaí)." },
+  { year: "2015", description: "Virada de chave: primeiros contratos de terceirização." },
   { year: "2020", description: "Pandemia: manutenção de todos os empregos e crescimento de 30%." },
   { year: "2022", description: "Alcançamos 1.500 colaboradores." },
   { year: "2023", description: "Conquista do selo GPTW (Great Place to Work)." },

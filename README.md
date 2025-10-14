@@ -1,361 +1,282 @@
-# 🚀 FG Services - Portal de Vagas e Gestão de Candidatos
+# 💼 FG Services - Portal Trabalhe Conosco
 
-> Sistema completo de recrutamento e seleção com filtros geográficos inteligentes, integração WhatsApp e Kanban drag & drop.
+Sistema completo de recrutamento e seleção com site público para candidaturas e painel administrativo para o RH gerenciar vagas e candidatos.
 
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://trabalhe-conosco.vercel.app)
-[![Next.js](https://img.shields.io/badge/Next.js-13-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)](https://tailwindcss.com/)
-
----
-
-## 📋 **Índice**
-
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Demonstração](#-demonstração)
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias](#-tecnologias)
-- [Começando](#-começando)
-- [Documentação](#-documentação)
-- [Deploy](#-deploy)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Contribuindo](#-contribuindo)
+![Status](https://img.shields.io/badge/status-production--ready-green)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14-blue)
 
 ---
 
-## 🎯 **Sobre o Projeto**
+## 🚀 INÍCIO RÁPIDO
 
-Portal de vagas moderno e sistema de gestão de candidatos desenvolvido para a **FG Services**, empresa especializada em terceirização de serviços. O sistema permite que candidatos se inscrevam em vagas e que o RH gerencie todo o processo de recrutamento com eficiência.
-
-### **Diferenciais:**
-
-- 🗺️ **Filtros Geográficos Avançados** - Encontre candidatos mais próximos
-- 🧭 **Ordenação por Proximidade** - Algoritmo inteligente de localização
-- 💬 **Integração WhatsApp** - Contato direto com candidatos
-- 📊 **Kanban Drag & Drop** - Gestão visual do pipeline
-- 🎨 **Design Moderno** - Interface responsiva e intuitiva
-- ⚡ **Modo Demo** - Teste sem necessidade de backend
-
----
-
-## 🌐 **Demonstração**
-
-### **Site Principal:**
-👉 [https://trabalhe-conosco.vercel.app](https://trabalhe-conosco.vercel.app)
-
-### **Painel RH:**
-👉 [https://trabalhe-conosco.vercel.app/rh/login](https://trabalhe-conosco.vercel.app/rh/login)
-
-**Credenciais Demo:**
-- **Email:** `admin@fgservices.com`
-- **Senha:** `admin123`
-
----
-
-## ✨ **Funcionalidades**
-
-### **Para Candidatos:**
-
-- ✅ Visualizar vagas disponíveis
-- ✅ Ver detalhes completos da vaga
-- ✅ Candidatura online com formulário completo
-- ✅ Upload de currículo (PDF)
-- ✅ Informar localização (Estado, Cidade, Bairro)
-- ✅ Interface responsiva (mobile/tablet/desktop)
-
-### **Para RH:**
-
-#### **Dashboard:**
-- 📊 Métricas em tempo real (vagas abertas, candidatos, novos hoje)
-- 📈 Atividades recentes
-- 🔗 Ações rápidas
-
-#### **Gestão de Vagas:**
-- ➕ Criar novas vagas
-- ✏️ Editar vagas existentes
-- 🔄 Publicar/Despublicar
-- 🗑️ Excluir vagas
-- 🔍 Busca e filtros
-
-#### **Gestão de Candidatos:**
-
-**Filtros Avançados:**
-- 🗺️ Por Estado (dropdown)
-- 🌆 Por Cidade (busca parcial)
-- 🏘️ Por Bairro (busca parcial)
-- 📋 Por Status (Novo, Em Análise, Entrevista, Aprovado, Reprovado)
-- 🔍 Por Nome/Email/Vaga
-- 🧭 **Ordenação por Proximidade** ⭐
-
-**Ações:**
-- 👁️ Ver detalhes completos
-- 💬 Contato via WhatsApp (link direto)
-- ✉️ Enviar email
-- 📄 Download de currículo
-- ✅ Aprovar candidato
-- ❌ Reprovar candidato
-- ⏱️ Colocar em análise
-- 📅 Agendar entrevista
-
-**Visualizações:**
-- 📋 Lista completa com filtros
-- 📊 Kanban drag & drop (5 colunas de status)
-- 🗺️ Localização visível em todos os cards
-- ✅ Badge "Próximo" para candidatos da mesma região
-
----
-
-## 🛠️ **Tecnologias**
-
-### **Frontend:**
-- [Next.js 13](https://nextjs.org/) - Framework React
-- [TypeScript](https://www.typescriptlang.org/) - Tipagem estática
-- [Tailwind CSS](https://tailwindcss.com/) - Estilização
-- [Framer Motion](https://www.framer.com/motion/) - Animações
-- [Lucide React](https://lucide.dev/) - Ícones
-
-### **Backend (Opcional):**
-- [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/) - Banco de dados
-- [JWT](https://jwt.io/) - Autenticação
-- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Hash de senhas
-
-### **Deploy:**
-- [Vercel](https://vercel.com/) - Hospedagem frontend
-- [Multer](https://github.com/expressjs/multer) - Upload de arquivos
-
----
-
-## 🚀 **Começando**
-
-### **Pré-requisitos:**
-- Node.js 18+ 
+### Pré-requisitos
+- Node.js 18+
+- PostgreSQL 14+
 - npm ou yarn
 
-### **Instalação:**
-
+### 1. Clone o repositório
 ```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/trabalhe-conosco.git
-
-# Entre na pasta do frontend
-cd trabalhe-_conosco
-
-# Instale as dependências
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
+git clone https://github.com/seu-repo/trabalhe-conosco.git
+cd trabalhe-conosco
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no navegador.
-
-### **Modo Demo:**
-
-O projeto está configurado para funcionar em **modo demo** sem necessidade de backend. Todas as funcionalidades estão disponíveis com dados mockados.
-
-### **Com Backend (Opcional):**
+### 2. Configure o Backend
 
 ```bash
-# Entre na pasta do backend
-cd server
+cd trabalhe-_conosco/server
 
-# Instale as dependências
+# Instalar dependências
 npm install
 
-# Configure o .env
-cp .env.example .env
-# Edite o .env com suas configurações
+# Configurar banco de dados (crie .env com suas credenciais)
+# Ver: server/.env.example
 
-# Execute as migrações
+# Criar tabelas
 npm run migrate
 
-# Popule o banco (usuário admin)
+# Criar usuário admin
 npm run seed
 
-# Inicie o servidor
+# Iniciar servidor
 npm run dev
 ```
 
-Servidor rodará em [http://localhost:3333](http://localhost:3333).
+**Backend rodando em:** `http://localhost:3333`
 
-Para mais detalhes, consulte: [`SETUP_BACKEND.md`](./SETUP_BACKEND.md)
-
----
-
-## 📚 **Documentação**
-
-### **Guias Disponíveis:**
-
-| Documento | Descrição |
-|-----------|-----------|
-| [`GUIA_RAPIDO.md`](./GUIA_RAPIDO.md) | ⚡ Início rápido em 5 minutos |
-| [`FUNCIONALIDADES_CANDIDATOS.md`](./FUNCIONALIDADES_CANDIDATOS.md) | 📋 Guia completo de funcionalidades |
-| [`FILTROS_LOCALIZACAO.md`](./FILTROS_LOCALIZACAO.md) | 🗺️ Filtros geográficos e proximidade |
-| [`ACESSO_RH.md`](./ACESSO_RH.md) | 🔐 Credenciais e acesso ao painel |
-| [`SETUP_BACKEND.md`](./SETUP_BACKEND.md) | 🔧 Configuração do backend |
-| [`DEPLOY_INSTRUCOES.md`](./DEPLOY_INSTRUCOES.md) | 🚀 Como fazer deploy |
-| [`RESUMO_FINAL.md`](./RESUMO_FINAL.md) | 📊 Visão geral completa |
-
-### **Guia Rápido de Uso:**
-
-1. Acesse: `https://trabalhe-conosco.vercel.app/rh/login`
-2. Login: `admin@fgservices.com` / `admin123`
-3. Vá em **"Candidatos"**
-4. Use filtros de localização:
-   - Estado: SP
-   - Cidade: São Paulo
-   - Clique em **"Ordenar por Proximidade"**
-5. Veja candidatos próximos primeiro com badge "Próximo" ✅
-
----
-
-## 📦 **Deploy**
-
-### **Frontend (Vercel):**
+### 3. Configure o Frontend
 
 ```bash
-# Instale a CLI da Vercel
-npm i -g vercel
-
-# Faça login (use o token fornecido)
-vercel login
-
-# Deploy em produção
 cd trabalhe-_conosco
-vercel --prod
+
+# Instalar dependências
+npm install
+
+# Configurar API (crie .env.local)
+echo "NEXT_PUBLIC_API_BASE=http://localhost:3333" > .env.local
+
+# Iniciar aplicação
+npm run dev
 ```
 
-Ou conecte o repositório GitHub com a Vercel para deploy automático.
-
-### **Backend (Railway/Heroku):**
-
-Consulte [`SETUP_BACKEND.md`](./SETUP_BACKEND.md) para instruções detalhadas.
+**Frontend rodando em:** `http://localhost:3000`
 
 ---
 
-## 📁 **Estrutura do Projeto**
+## 🎯 FUNCIONALIDADES
+
+### 🌐 Site Público
+- ✅ Página institucional moderna e responsiva
+- ✅ Listagem de vagas ativas
+- ✅ Formulário de candidatura completo
+- ✅ Upload de currículo (PDF)
+- ✅ Dados de localização (Estado, Cidade, Bairro)
+- ✅ Design moderno com animações
+
+### 🔐 Painel RH (Autenticado)
+- ✅ Dashboard com métricas em tempo real
+- ✅ Gestão completa de vagas (criar, editar, deletar)
+- ✅ Visualização de candidatos por vaga
+- ✅ Kanban de candidatos (drag & drop)
+- ✅ Filtros avançados (status, localização, proximidade)
+- ✅ Banco de Talentos
+- ✅ Integração com WhatsApp
+- ✅ Download de currículos
+- ✅ Sistema de status automático
+
+### 📊 Recursos Avançados
+- ✅ Filtro por proximidade geográfica
+- ✅ Banco de Talentos com gestão separada
+- ✅ Kanban limitado (5 candidatos + "Ver Todos")
+- ✅ Modo DEMO (funciona sem backend)
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Upload de arquivos
+- ✅ Autenticação JWT
+- ✅ API RESTful
+
+---
+
+## 📁 ESTRUTURA DO PROJETO
 
 ```
 trabalhe-_conosco/
 ├── components/          # Componentes React
 │   ├── RHLayout.tsx    # Layout do painel RH
-│   ├── Hero.tsx        # Hero com vídeo
-│   ├── OurStorySection.tsx
-│   ├── HistorySection.tsx
-│   ├── JobsSection.tsx
-│   └── ConclusionSection.tsx
+│   ├── Hero.tsx        # Seção hero com vídeo
+│   └── ...
 ├── pages/              # Páginas Next.js
-│   ├── index.tsx       # Página inicial
-│   ├── vagas/
-│   │   └── [id].tsx    # Detalhes da vaga
-│   └── rh/             # Painel RH
-│       ├── login.tsx
-│       ├── index.tsx   # Dashboard
-│       ├── vagas.tsx   # Gestão de vagas
-│       └── candidatos/
-│           ├── index.tsx      # Lista de candidatos
-│           └── [vagaId].tsx   # Kanban
-├── lib/                # Utilitários
-│   ├── api.ts         # Funções de API
-│   └── jobs.ts        # Dados de vagas
-├── public/            # Arquivos estáticos
-│   └── hero.mp4       # Vídeo institucional
-├── styles/            # Estilos globais
-└── server/            # Backend (opcional)
-    ├── src/
-    │   ├── index.ts
-    │   ├── db.ts
-    │   ├── migrate.ts
-    │   ├── seed.ts
-    │   └── routes/
-    └── uploads/       # Currículos
+│   ├── index.tsx       # Homepage pública
+│   ├── vagas/          # Páginas de vagas
+│   └── rh/             # Painel administrativo
+├── lib/                # Utilities e helpers
+├── server/             # Backend (Express + PostgreSQL)
+│   ├── src/
+│   │   ├── index.ts    # Servidor principal
+│   │   ├── db.ts       # Conexão PostgreSQL
+│   │   ├── routes/     # Rotas da API
+│   │   ├── middleware/ # Autenticação JWT
+│   │   ├── migrate.ts  # Migrations
+│   │   └── seed.ts     # Seeds
+│   └── uploads/        # Arquivos enviados
+└── public/             # Assets estáticos
 ```
 
 ---
 
-## 🎨 **Screenshots**
+## 🔑 CREDENCIAIS PADRÃO
 
-### **Página Inicial:**
-- Hero com vídeo institucional
-- Nossa História
-- Cronologia - Nossos Marcos (timeline)
-- Vagas Disponíveis
-- Conclusão
+### Painel RH:
+- **URL:** `http://localhost:3000/rh/login`
+- **Email:** `admin@fgservices.com`
+- **Senha:** `admin123`
 
-### **Painel RH - Dashboard:**
-- Cards de métricas
-- Ações rápidas
-- Atividades recentes
-
-### **Painel RH - Candidatos:**
-- Filtros de localização
-- Ordenação por proximidade
-- Lista com badges
-- Modal de detalhes completo
-
-### **Painel RH - Kanban:**
-- 5 colunas de status
-- Drag & drop funcional
-- WhatsApp e Email em cada card
+⚠️ **IMPORTANTE:** Altere a senha padrão em produção!
 
 ---
 
-## 🤝 **Contribuindo**
+## 🛠️ TECNOLOGIAS
 
-Contribuições são bem-vindas! Para contribuir:
+### Frontend:
+- **Next.js 14** - Framework React
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Estilização
+- **Framer Motion** - Animações
+- **Lucide Icons** - Ícones
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
----
-
-## 📝 **Licença**
-
-Este projeto foi desenvolvido para a **FG Services**.
-
----
-
-## 👥 **Autores**
-
-Desenvolvido com ❤️ para a **FG Services**
+### Backend:
+- **Node.js** - Runtime
+- **Express** - Framework web
+- **PostgreSQL** - Banco de dados
+- **JWT** - Autenticação
+- **Multer** - Upload de arquivos
+- **bcryptjs** - Hash de senhas
 
 ---
 
-## 🙏 **Agradecimentos**
+## 📚 DOCUMENTAÇÃO
 
-- [Next.js](https://nextjs.org/)
-- [Vercel](https://vercel.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Lucide Icons](https://lucide.dev/)
+- **[GUIA_COMPLETO_DEPLOY.md](./GUIA_COMPLETO_DEPLOY.md)** - Guia completo de deploy e configuração
+- **[ACESSO_RH.md](./ACESSO_RH.md)** - Credenciais e URLs de acesso
+- **[SETUP_BACKEND.md](./SETUP_BACKEND.md)** - Configuração detalhada do backend
 
 ---
 
-## 📞 **Contato**
+## 🚢 DEPLOY
 
-**FG Services**
-- Website: [https://trabalhe-conosco.vercel.app](https://trabalhe-conosco.vercel.app)
-- Email: contato@fgservices.com
+### Frontend (Vercel):
+```bash
+vercel --prod
+```
+
+### Backend (Railway/Render):
+1. Conecte seu repositório
+2. Configure variáveis de ambiente
+3. Execute migrations: `npm run migrate && npm run seed`
+
+**Veja o [GUIA COMPLETO](./GUIA_COMPLETO_DEPLOY.md) para instruções detalhadas.**
 
 ---
 
-## 🔗 **Links Úteis**
+## 🧪 TESTES
 
-- [Documentação Next.js](https://nextjs.org/docs)
-- [Documentação Tailwind CSS](https://tailwindcss.com/docs)
-- [Documentação TypeScript](https://www.typescriptlang.org/docs)
-- [Guia Framer Motion](https://www.framer.com/motion/introduction/)
+### Testar Backend:
+```bash
+curl http://localhost:3333/health
+# Resposta: {"status":"ok"}
+```
+
+### Testar Login:
+1. Acesse `http://localhost:3000/rh/login`
+2. Use credenciais padrão
+3. Deve redirecionar para dashboard
+
+### Testar Candidatura:
+1. Acesse `http://localhost:3000`
+2. Clique em uma vaga
+3. Preencha formulário
+4. Anexe PDF
+5. Envie candidatura
+6. Verifique no painel RH
 
 ---
 
-<div align="center">
+## 🔄 FLUXO DE TRABALHO
 
-**⭐ Se este projeto foi útil, considere dar uma estrela!**
+### Candidato:
+1. Acessa site público
+2. Vê vagas disponíveis
+3. Clica em "Ver Detalhes"
+4. Preenche formulário
+5. Envia candidatura
+6. Recebe confirmação
 
-**Made with ❤️ for FG Services**
+### RH:
+1. Faz login no painel
+2. Vê candidatos novos
+3. Analisa currículos
+4. Muda status:
+   - Novo → Em Análise → Entrevista → Aprovado
+   - Ou → Reprovado / Banco de Talentos
+5. Entra em contato via:
+   - Email
+   - WhatsApp
+6. Gerencia vagas (criar/editar/deletar)
 
-</div>
+---
+
+## 🌟 DIFERENCIAIS
+
+✅ **Design Moderno** - Interface limpa e profissional  
+✅ **Totalmente Responsivo** - Funciona em qualquer dispositivo  
+✅ **Kanban Intuitivo** - Drag & drop para mudar status  
+✅ **Filtros Avançados** - Localização e proximidade  
+✅ **Banco de Talentos** - Armazena candidatos para futuras vagas  
+✅ **WhatsApp Integrado** - Link direto para contato  
+✅ **Upload de Arquivos** - Recebe currículos em PDF  
+✅ **Modo Demo** - Funciona sem backend para testes  
+✅ **TypeScript** - Código tipado e seguro  
+✅ **Documentação Completa** - Fácil de entender e manter  
+
+---
+
+## 🐛 TROUBLESHOOTING
+
+### Erro: "Cannot connect to database"
+- Verifique se PostgreSQL está rodando
+- Confira credenciais no `.env`
+
+### Erro: "Unauthorized"
+- Faça logout e login novamente
+- Limpe localStorage do navegador
+
+### Erro: "Network error"
+- Confirme que backend está rodando
+- Verifique `NEXT_PUBLIC_API_BASE`
+
+**Ver mais em:** [GUIA_COMPLETO_DEPLOY.md](./GUIA_COMPLETO_DEPLOY.md#troubleshooting)
+
+---
+
+## 📄 LICENÇA
+
+MIT License - Sinta-se livre para usar em seus projetos!
+
+---
+
+## 👥 SUPORTE
+
+- **Email:** suporte@fgservices.com
+- **GitHub Issues:** [Abrir Issue](https://github.com/seu-repo/issues)
+
+---
+
+## 🎉 PRONTO PARA USAR!
+
+O sistema está **100% funcional** e pronto para receber candidatos reais!
+
+**Boa sorte com o recrutamento!** 💼✨
+
+---
+
+**Desenvolvido com ❤️ para FG Services**

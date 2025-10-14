@@ -1,64 +1,55 @@
+// Tipos para vagas do backend
 export type Job = {
-  id: string;
-  title: string;
-  contractType: string;
-  address: string;
-  description?: string;
-  requirements?: string[];
+  id: number;
+  titulo: string;
+  tipo_contrato: string;
+  endereco: string;
+  descricao?: string;
+  requisitos?: string;
+  diferenciais?: string;
+  status: string;
+  criado_em?: string;
 };
 
-export const jobs: Job[] = [
-  {
-    id: "1",
-    title: "Desenvolvedor(a) Front-end",
-    contractType: "CLT",
-    address: "São Paulo, SP",
-    description: "Trabalhe com Next.js, Tailwind e animações modernas.",
-    requirements: ["React/Next.js", "TypeScript", "Tailwind CSS", "Teste e Acessibilidade"],
-  },
-  {
-    id: "2",
-    title: "Product Designer",
-    contractType: "PJ",
-    address: "Remoto",
-    description: "Crie experiências incríveis focadas em usabilidade.",
-    requirements: ["UI/UX", "Figma", "Design System", "Prototipagem"],
-  },
-  {
-    id: "3",
-    title: "Engenheiro(a) de Dados",
-    contractType: "CLT",
-    address: "Belo Horizonte, MG",
-    description: "Pipelines, modelagem e qualidade de dados em escala.",
-    requirements: ["SQL", "ETL", "Cloud Data", "Python/Scala"],
-  },
-  {
-    id: "4",
-    title: "QA Analyst",
-    contractType: "CLT",
-    address: "Curitiba, PR",
-    description: "Automação de testes e garantia de qualidade.",
-    requirements: ["Cypress/Playwright", "Testes Funcionais", "Boas práticas QA"],
-  },
-  {
-    id: "5",
-    title: "Tech Lead",
-    contractType: "PJ",
-    address: "Remoto",
-    description: "Lidere times e decisões técnicas estratégicas.",
-    requirements: ["Liderança técnica", "Arquitetura", "Code Review", "Roadmap"],
-  },
-  {
-    id: "6",
-    title: "DevOps Engineer",
-    contractType: "CLT",
-    address: "Porto Alegre, RS",
-    description: "Infraestrutura como código, observabilidade e CI/CD.",
-    requirements: ["IaC (Terraform)", "Kubernetes", "Observabilidade", "CI/CD"],
-  },
-];
+// Função para buscar vagas ativas da API
+export async function getActiveJobs(): Promise<Job[]> {
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3333";
+    const response = await fetch(`${API_URL}/vagas?status=ativa`, {
+      cache: "no-store", // Sempre busca dados frescos
+    });
 
-export function getJobById(id: string): Job | undefined {
-  return jobs.find((j) => j.id === id);
+    if (!response.ok) {
+      console.error("Erro ao buscar vagas:", response.statusText);
+      return [];
+    }
+
+    const jobs = await response.json();
+    return jobs;
+  } catch (error) {
+    console.error("Erro ao conectar com API:", error);
+    return [];
+  }
+}
+
+// Função para buscar vaga por ID
+export async function getJobById(id: string | number): Promise<Job | null> {
+  try {
+    const API_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3333";
+    const response = await fetch(`${API_URL}/vagas?status=ativa`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const jobs = await response.json();
+    const job = jobs.find((j: Job) => j.id === Number(id));
+    return job || null;
+  } catch (error) {
+    console.error("Erro ao buscar vaga:", error);
+    return null;
+  }
 }
 
