@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star } from "lucide-react";
 
 export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -30,6 +30,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
     { href: "/rh", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/rh/vagas", icon: Briefcase, label: "Vagas" },
     { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
+    { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
   ];
 
   return (

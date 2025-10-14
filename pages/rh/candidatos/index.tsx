@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiGet, apiPut } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
-import { Search, Filter, Users, FileText, Mail, Phone, Calendar, Download, Eye, MessageCircle, CheckCircle, XCircle, Clock, MapPin, Navigation } from "lucide-react";
+import { Search, Filter, Users, FileText, Mail, Phone, Calendar, Download, Eye, MessageCircle, CheckCircle, XCircle, Clock, MapPin, Navigation, Star } from "lucide-react";
 import Link from "next/link";
 
 export type Candidato = {
@@ -27,6 +27,7 @@ const STATUS_COLORS: Record<string, string> = {
   "entrevista": "bg-purple-100 text-purple-700",
   "aprovado": "bg-green-100 text-green-700",
   "reprovado": "bg-red-100 text-red-700",
+  "banco_talentos": "bg-indigo-100 text-indigo-700",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -35,6 +36,7 @@ const STATUS_LABELS: Record<string, string> = {
   "entrevista": "Entrevista",
   "aprovado": "Aprovado",
   "reprovado": "Reprovado",
+  "banco_talentos": "Banco de Talentos",
 };
 
 export default function RHCandidatos() {
@@ -61,11 +63,12 @@ export default function RHCandidatos() {
           { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: 2, vaga_titulo: "Supervisor de Limpeza", status: "entrevista", data_cadastro: "2025-01-08", estado: "PE", cidade: "Recife", bairro: "Boa Viagem" },
           { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: 3, vaga_titulo: "Porteiro", status: "aprovado", data_cadastro: "2025-01-07", estado: "CE", cidade: "Fortaleza", bairro: "Meireles" },
           { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "reprovado", data_cadastro: "2025-01-06", estado: "SP", cidade: "São Paulo", bairro: "Vila Mariana" },
-          { id: 6, nome: "Juliana Lima", cpf: "654.987.321-00", email: "juliana@email.com", telefone: "(21) 96543-2109", vaga_id: 5, vaga_titulo: "Copeira", status: "novo", data_cadastro: "2025-01-05", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Ipanema" },
+          { id: 6, nome: "Juliana Lima", cpf: "654.987.321-00", email: "juliana@email.com", telefone: "(21) 96543-2109", vaga_id: 5, vaga_titulo: "Copeira", status: "banco_talentos", data_cadastro: "2025-01-05", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Ipanema" },
           { id: 7, nome: "Roberto Alves", cpf: "147.258.369-00", email: "roberto@email.com", telefone: "(31) 95432-1098", vaga_id: 2, vaga_titulo: "Supervisor de Limpeza", status: "em_analise", data_cadastro: "2025-01-04", estado: "MG", cidade: "Belo Horizonte", bairro: "Savassi" },
-          { id: 8, nome: "Fernanda Costa", cpf: "258.369.147-00", email: "fernanda@email.com", telefone: "(11) 94321-0987", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-11", estado: "SP", cidade: "São Paulo", bairro: "Mooca" },
+          { id: 8, nome: "Fernanda Costa", cpf: "258.369.147-00", email: "fernanda@email.com", telefone: "(11) 94321-0987", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "banco_talentos", data_cadastro: "2025-01-11", estado: "SP", cidade: "São Paulo", bairro: "Mooca" },
           { id: 9, nome: "Ricardo Mendes", cpf: "369.147.258-00", email: "ricardo@email.com", telefone: "(11) 93210-9876", vaga_id: 2, vaga_titulo: "Porteiro", status: "em_analise", data_cadastro: "2025-01-11", estado: "SP", cidade: "Guarulhos", bairro: "Centro" },
           { id: 10, nome: "Patrícia Rocha", cpf: "741.852.963-00", email: "patricia@email.com", telefone: "(81) 92109-8765", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-12", estado: "PE", cidade: "Olinda", bairro: "Casa Caiada" },
+          { id: 11, nome: "Marcos Pereira", cpf: "159.753.486-00", email: "marcos@email.com", telefone: "(11) 98888-7777", vaga_id: 3, vaga_titulo: "Zelador", status: "banco_talentos", data_cadastro: "2024-12-15", estado: "SP", cidade: "São Paulo", bairro: "Tatuapé" },
         ];
         
         let filtered = demoCandidatos;
@@ -226,8 +229,22 @@ export default function RHCandidatos() {
                   {items.filter(c => c.status === "aprovado").length}
                 </p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 font-medium">Banco de Talentos</p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">
+                  {items.filter(c => c.status === "banco_talentos").length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                <Star className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
@@ -253,7 +270,7 @@ export default function RHCandidatos() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium min-w-[160px]"
+              className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium min-w-[180px]"
             >
               <option value="all">Todos os Status</option>
               <option value="novo">Novos</option>
@@ -261,6 +278,7 @@ export default function RHCandidatos() {
               <option value="entrevista">Entrevista</option>
               <option value="aprovado">Aprovados</option>
               <option value="reprovado">Reprovados</option>
+              <option value="banco_talentos">🌟 Banco de Talentos</option>
             </select>
 
             <button
@@ -462,6 +480,15 @@ export default function RHCandidatos() {
                             <CheckCircle className="w-5 h-5" />
                           </button>
                         )}
+                        {candidato.status !== "banco_talentos" && (
+                          <button
+                            onClick={() => handleStatusChange(candidato.id, "banco_talentos")}
+                            className="p-2 rounded-lg hover:bg-indigo-50 text-indigo-600 transition-all"
+                            title="Adicionar ao Banco de Talentos"
+                          >
+                            <Star className="w-5 h-5" />
+                          </button>
+                        )}
                         {candidato.status !== "reprovado" && (
                           <button
                             onClick={() => handleStatusChange(candidato.id, "reprovado")}
@@ -628,10 +655,20 @@ export default function RHCandidatos() {
                   </button>
                   <button
                     onClick={() => {
+                      handleStatusChange(selectedCandidato.id, "banco_talentos");
+                      setSelectedCandidato(null);
+                    }}
+                    className="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Star className="w-4 h-4" />
+                    Banco de Talentos
+                  </button>
+                  <button
+                    onClick={() => {
                       handleStatusChange(selectedCandidato.id, "reprovado");
                       setSelectedCandidato(null);
                     }}
-                    className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all"
+                    className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
                   >
                     ✗ Reprovar
                   </button>

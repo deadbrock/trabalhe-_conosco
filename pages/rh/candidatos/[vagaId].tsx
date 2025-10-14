@@ -22,13 +22,14 @@ export type Candidato = {
   bairro?: string;
 };
 
-const STATUSES = ["novo", "em_analise", "entrevista", "aprovado", "reprovado"] as const;
+const STATUSES = ["novo", "em_analise", "entrevista", "aprovado", "reprovado", "banco_talentos"] as const;
 const STATUS_LABELS: Record<string, string> = {
   "novo": "Novo",
   "em_analise": "Em Análise",
   "entrevista": "Entrevista",
   "aprovado": "Aprovado",
   "reprovado": "Reprovado",
+  "banco_talentos": "Banco de Talentos",
 };
 const STATUS_COLORS: Record<string, string> = {
   "novo": "from-blue-500 to-blue-600",
@@ -36,6 +37,7 @@ const STATUS_COLORS: Record<string, string> = {
   "entrevista": "from-purple-500 to-purple-600",
   "aprovado": "from-green-500 to-green-600",
   "reprovado": "from-red-500 to-red-600",
+  "banco_talentos": "from-indigo-500 to-indigo-600",
 };
 
 export default function RHCandidatosPorVaga() {
@@ -55,6 +57,7 @@ export default function RHCandidatosPorVaga() {
         { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "em_analise", data_cadastro: "2025-01-08", estado: "PE", cidade: "Recife", bairro: "Boa Viagem" },
         { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "entrevista", data_cadastro: "2025-01-07", estado: "CE", cidade: "Fortaleza", bairro: "Meireles" },
         { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "aprovado", data_cadastro: "2025-01-06", estado: "SP", cidade: "São Paulo", bairro: "Vila Mariana" },
+        { id: 6, nome: "Fernanda Costa", cpf: "258.369.147-00", email: "fernanda@email.com", telefone: "(11) 94321-0987", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "banco_talentos", data_cadastro: "2024-12-20", estado: "SP", cidade: "São Paulo", bairro: "Mooca" },
       ];
       setItems(demoCandidatos);
       return;
@@ -113,7 +116,7 @@ export default function RHCandidatosPorVaga() {
 
         {/* Contadores */}
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
             {STATUSES.map((st) => (
               <div key={st}>
                 <div className="text-3xl font-bold text-gray-900">{grouped[st].length}</div>
@@ -124,7 +127,7 @@ export default function RHCandidatosPorVaga() {
         </div>
 
         {/* Kanban Board */}
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {STATUSES.map((st) => (
             <div key={st} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
               <div className={`flex items-center gap-2 mb-4 p-3 rounded-xl bg-gradient-to-r ${STATUS_COLORS[st]} text-white font-semibold`}>
