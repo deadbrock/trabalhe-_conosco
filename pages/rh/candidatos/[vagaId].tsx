@@ -17,6 +17,9 @@ export type Candidato = {
   vaga_titulo?: string;
   status: string;
   data_cadastro?: string;
+  estado?: string;
+  cidade?: string;
+  bairro?: string;
 };
 
 const STATUSES = ["novo", "em_analise", "entrevista", "aprovado", "reprovado"] as const;
@@ -47,11 +50,11 @@ export default function RHCandidatosPorVaga() {
     // Modo DEMO
     if (token === "demo-token-temporario") {
       const demoCandidatos: Candidato[] = [
-        { id: 1, nome: "João Silva", cpf: "123.456.789-00", email: "joao@email.com", telefone: "(11) 98765-4321", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-10" },
-        { id: 2, nome: "Maria Santos", cpf: "987.654.321-00", email: "maria@email.com", telefone: "(21) 91234-5678", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-09" },
-        { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "em_analise", data_cadastro: "2025-01-08" },
-        { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "entrevista", data_cadastro: "2025-01-07" },
-        { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "aprovado", data_cadastro: "2025-01-06" },
+        { id: 1, nome: "João Silva", cpf: "123.456.789-00", email: "joao@email.com", telefone: "(11) 98765-4321", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-10", estado: "SP", cidade: "São Paulo", bairro: "Centro" },
+        { id: 2, nome: "Maria Santos", cpf: "987.654.321-00", email: "maria@email.com", telefone: "(21) 91234-5678", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-09", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Copacabana" },
+        { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "em_analise", data_cadastro: "2025-01-08", estado: "PE", cidade: "Recife", bairro: "Boa Viagem" },
+        { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "entrevista", data_cadastro: "2025-01-07", estado: "CE", cidade: "Fortaleza", bairro: "Meireles" },
+        { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "aprovado", data_cadastro: "2025-01-06", estado: "SP", cidade: "São Paulo", bairro: "Vila Mariana" },
       ];
       setItems(demoCandidatos);
       return;
