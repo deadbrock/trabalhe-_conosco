@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
+import RHLayout from "@/components/RHLayout";
+import { Plus, Search, Edit, Trash2, Eye, EyeOff, RefreshCw, MapPin, Briefcase, FileText } from "lucide-react";
 
 export type Vaga = {
   id: number;
@@ -27,6 +29,33 @@ export default function RHVagas() {
   const load = async () => {
     setLoading(true);
     try {
+      // Modo DEMO - Dados mockados
+      if (token === "demo-token-temporario") {
+        const demoVagas: Vaga[] = [
+          { id: 1, titulo: "Auxiliar de Limpeza", tipo_contrato: "CLT", endereco: "São Paulo/SP", descricao: "Responsável pela limpeza e organização de ambientes.", requisitos: "Ensino fundamental completo", status: "ativa" },
+          { id: 2, titulo: "Supervisor de Limpeza", tipo_contrato: "CLT", endereco: "Rio de Janeiro/RJ", descricao: "Supervisionar equipe de limpeza.", requisitos: "Experiência em liderança", status: "ativa" },
+          { id: 3, titulo: "Porteiro", tipo_contrato: "CLT", endereco: "Recife/PE", descricao: "Controle de acesso e segurança.", requisitos: "Ensino médio completo", status: "ativa" },
+          { id: 4, titulo: "Zelador", tipo_contrato: "CLT", endereco: "Brasília/DF", descricao: "Manutenção predial básica.", status: "inativa" },
+          { id: 5, titulo: "Copeira", tipo_contrato: "CLT", endereco: "Belo Horizonte/MG", descricao: "Preparo e servição de alimentos.", status: "ativa" },
+        ];
+        
+        let filtered = demoVagas;
+        if (statusFilter !== "all") {
+          filtered = filtered.filter(v => v.status === statusFilter);
+        }
+        if (q.trim()) {
+          const query = q.toLowerCase();
+          filtered = filtered.filter(v => 
+            v.titulo.toLowerCase().includes(query) || 
+            v.endereco.toLowerCase().includes(query)
+          );
+        }
+        
+        setItems(filtered);
+        setLoading(false);
+        return;
+      }
+
       const qs = new URLSearchParams();
       qs.set("status", statusFilter);
       if (q.trim()) qs.set("q", q.trim());
@@ -44,6 +73,16 @@ export default function RHVagas() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Modo DEMO - Simula sucesso
+    if (token === "demo-token-temporario") {
+      alert("✅ Modo DEMO: A vaga seria salva no backend real.");
+      setModalOpen(false);
+      setEditing(null);
+      await load();
+      return;
+    }
+
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload: Partial<Vaga> = {
@@ -67,11 +106,26 @@ export default function RHVagas() {
 
   const onDelete = async (id: number) => {
     if (!confirm("Excluir esta vaga?")) return;
+    
+    // Modo DEMO
+    if (token === "demo-token-temporario") {
+      alert("✅ Modo DEMO: A vaga seria excluída no backend real.");
+      await load();
+      return;
+    }
+    
     await apiDelete(`/vagas/${id}`, token);
     await load();
   };
 
   const onToggle = async (vaga: Vaga) => {
+    // Modo DEMO
+    if (token === "demo-token-temporario") {
+      alert(`✅ Modo DEMO: A vaga seria ${vaga.status === 'ativa' ? 'despublicada' : 'publicada'} no backend real.`);
+      await load();
+      return;
+    }
+    
     const newStatus = vaga.status === "ativa" ? "inativa" : "ativa";
     await apiPut(`/vagas/${vaga.id}`, { status: newStatus }, token);
     await load();
@@ -80,82 +134,262 @@ export default function RHVagas() {
   const filtered = useMemo(() => items, [items]);
 
   return (
-    <section className="py-8">
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar por título ou descrição" className="min-w-[260px] rounded-lg border border-white/15 bg-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-primary/60" />
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")} className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-primary/60">
-          <option value="all">Todos</option>
-          <option value="ativa">Ativas</option>
-          <option value="inativa">Inativas</option>
-        </select>
-        <button onClick={() => { setEditing(null); setModalOpen(true); }} className="btn-gradient rounded-lg px-4 py-2 font-medium text-white">Nova Vaga</button>
-        <button onClick={load} className="rounded-lg px-4 py-2 font-medium text-white bg-white/10 border border-white/15">{loading ? "Atualizando..." : "Atualizar"}</button>
-      </div>
+    <RHLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Gerenciar Vagas</h1>
+            <p className="text-gray-600">Publique e gerencie as vagas disponíveis</p>
+          </div>
+          <button 
+            onClick={() => { setEditing(null); setModalOpen(true); }} 
+            className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+          >
+            <Plus className="w-5 h-5" />
+            Nova Vaga
+          </button>
+        </div>
 
-      <div className="overflow-auto rounded-2xl border border-white/15 bg-white/5">
-        <table className="w-full text-sm">
-          <thead className="bg-white/10">
-            <tr>
-              <th className="text-left p-3">Título</th>
-              <th className="text-left p-3">Contrato</th>
-              <th className="text-left p-3">Endereço</th>
-              <th className="text-left p-3">Status</th>
-              <th className="text-right p-3">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((v) => (
-              <tr key={v.id} className="border-t border-white/10">
-                <td className="p-3 font-semibold">{v.titulo}</td>
-                <td className="p-3">{v.tipo_contrato}</td>
-                <td className="p-3">{v.endereco}</td>
-                <td className="p-3">{v.status}</td>
-                <td className="p-3 text-right">
-                  <div className="inline-flex gap-2">
-                    <button onClick={() => { setEditing(v); setModalOpen(true); }} className="rounded-lg px-3 py-1.5 bg-white text-[#0a0a0a] font-medium hover:bg-primary hover:text-white transition">Editar</button>
-                    <button onClick={() => onToggle(v)} className="rounded-lg px-3 py-1.5 font-medium btn-gradient">{v.status === "ativa" ? "Despublicar" : "Publicar"}</button>
-                    <button onClick={() => onDelete(v.id)} className="rounded-lg px-3 py-1.5 bg-white/10 border border-white/15">Excluir</button>
+        {/* Filtros */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex-grow min-w-[280px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input 
+                  value={q} 
+                  onChange={(e) => setQ(e.target.value)} 
+                  onKeyDown={(e) => e.key === 'Enter' && load()}
+                  placeholder="Buscar por título, endereço ou descrição..." 
+                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
+                />
+              </div>
+            </div>
+            <select 
+              value={statusFilter} 
+              onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")} 
+              className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium"
+            >
+              <option value="all">Todos os Status</option>
+              <option value="ativa">Ativas</option>
+              <option value="inativa">Inativas</option>
+            </select>
+            <button 
+              onClick={load} 
+              disabled={loading}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all font-medium text-gray-700 disabled:opacity-50"
+            >
+              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+              {loading ? "Atualizando..." : "Atualizar"}
+            </button>
+          </div>
+        </div>
+
+        {/* Lista de Vagas */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          {filtered.length === 0 ? (
+            <div className="p-12 text-center">
+              <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 text-lg font-medium">Nenhuma vaga encontrada</p>
+              <p className="text-gray-400 text-sm mt-2">Crie sua primeira vaga clicando no botão acima</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {filtered.map((v, idx) => (
+                <motion.div
+                  key={v.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="p-6 hover:bg-gray-50 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className="text-xl font-bold text-gray-900">{v.titulo}</h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          v.status === 'ativa' 
+                            ? 'bg-green-100 text-green-700' 
+                            : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          {v.status === 'ativa' ? 'Ativa' : 'Inativa'}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
+                        <span className="flex items-center gap-1.5">
+                          <Briefcase className="w-4 h-4" />
+                          {v.tipo_contrato}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="w-4 h-4" />
+                          {v.endereco}
+                        </span>
+                      </div>
+                      {v.descricao && (
+                        <p className="text-gray-600 line-clamp-2">{v.descricao}</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => { setEditing(v); setModalOpen(true); }}
+                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
+                        title="Editar"
+                      >
+                        <Edit className="w-5 h-5" />
+                      </button>
+                      <button 
+                        onClick={() => onToggle(v)}
+                        className={`p-2 rounded-lg transition-all ${
+                          v.status === 'ativa'
+                            ? 'hover:bg-yellow-50 text-yellow-600'
+                            : 'hover:bg-green-50 text-green-600'
+                        }`}
+                        title={v.status === 'ativa' ? 'Despublicar' : 'Publicar'}
+                      >
+                        {v.status === 'ativa' ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                      <button 
+                        onClick={() => onDelete(v.id)}
+                        className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
+                        title="Excluir"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="p-6 text-center text-white/70">Nenhuma vaga encontrada.</td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <AnimatePresence>
-        {modalOpen ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
-            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 20, opacity: 0 }} className="w-full max-w-2xl rounded-2xl border border-white/15 bg-white/10 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">{editing ? "Editar Vaga" : "Nova Vaga"}</h2>
-                <button onClick={() => { setModalOpen(false); setEditing(null); }} className="rounded-lg px-3 py-1 bg-white/10 border border-white/15">Fechar</button>
+        {modalOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 overflow-y-auto"
+            onClick={() => { setModalOpen(false); setEditing(null); }}
+          >
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }} 
+              animate={{ y: 0, opacity: 1 }} 
+              exit={{ y: 20, opacity: 0 }} 
+              className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl my-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="bg-gradient-to-r from-primary to-secondary p-6 rounded-t-3xl">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-white">{editing ? "Editar Vaga" : "Criar Nova Vaga"}</h2>
+                  <button 
+                    onClick={() => { setModalOpen(false); setEditing(null); }} 
+                    className="p-2 hover:bg-white/20 rounded-lg transition-all text-white"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
-              <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
-                <input name="titulo" defaultValue={editing?.titulo} placeholder="Título" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 sm:col-span-2" required />
-                <input name="tipo_contrato" defaultValue={editing?.tipo_contrato} placeholder="Tipo de contrato" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2" required />
-                <input name="endereco" defaultValue={editing?.endereco} placeholder="Endereço" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2" required />
-                <select name="status" defaultValue={editing?.status || "ativa"} className="rounded-lg border border-white/15 bg-white/5 px-3 py-2">
-                  <option value="ativa">Ativa</option>
-                  <option value="inativa">Inativa</option>
-                </select>
-                <textarea name="descricao" defaultValue={editing?.descricao} placeholder="Descrição" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 sm:col-span-2 min-h-[90px]" />
-                <textarea name="requisitos" defaultValue={editing?.requisitos} placeholder="Requisitos" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 sm:col-span-2 min-h-[90px]" />
-                <textarea name="diferenciais" defaultValue={editing?.diferenciais} placeholder="Diferenciais" className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 sm:col-span-2 min-h-[90px]" />
-                <div className="sm:col-span-2 flex justify-end gap-2">
-                  <button type="button" onClick={() => { setModalOpen(false); setEditing(null); }} className="rounded-lg px-4 py-2 bg-white/10 border border-white/15">Cancelar</button>
-                  <button className="btn-gradient rounded-lg px-4 py-2 text-white font-medium">Salvar</button>
+
+              <form onSubmit={onSubmit} className="p-8 space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título da Vaga *</label>
+                  <input 
+                    name="titulo" 
+                    defaultValue={editing?.titulo} 
+                    placeholder="Ex: Auxiliar de Limpeza" 
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900"
+                    required 
+                  />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Contrato *</label>
+                    <input 
+                      name="tipo_contrato" 
+                      defaultValue={editing?.tipo_contrato} 
+                      placeholder="Ex: CLT" 
+                      className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900"
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Endereço *</label>
+                    <input 
+                      name="endereco" 
+                      defaultValue={editing?.endereco} 
+                      placeholder="Ex: São Paulo/SP" 
+                      className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900"
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                  <select 
+                    name="status" 
+                    defaultValue={editing?.status || "ativa"} 
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium"
+                  >
+                    <option value="ativa">Ativa (Visível no site)</option>
+                    <option value="inativa">Inativa (Oculta)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descrição</label>
+                  <textarea 
+                    name="descricao" 
+                    defaultValue={editing?.descricao} 
+                    placeholder="Descreva as principais atividades e responsabilidades..." 
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-h-[100px]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Requisitos</label>
+                  <textarea 
+                    name="requisitos" 
+                    defaultValue={editing?.requisitos} 
+                    placeholder="Liste os requisitos necessários (separados por vírgula ou linha)..." 
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-h-[100px]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Diferenciais</label>
+                  <textarea 
+                    name="diferenciais" 
+                    defaultValue={editing?.diferenciais} 
+                    placeholder="Diferenciais ou benefícios da vaga..." 
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-h-[100px]"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button 
+                    type="button" 
+                    onClick={() => { setModalOpen(false); setEditing(null); }} 
+                    className="px-6 py-3 rounded-xl border-2 border-gray-200 hover:bg-gray-50 transition-all font-semibold text-gray-700"
+                  >
+                    Cancelar
+                  </button>
+                  <button 
+                    type="submit"
+                    className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    {editing ? "Salvar Alterações" : "Criar Vaga"}
+                  </button>
                 </div>
               </form>
             </motion.div>
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
-    </section>
+    </RHLayout>
   );
 }

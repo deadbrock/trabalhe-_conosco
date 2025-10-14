@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { apiGet, apiPut } from "@/lib/api";
 import { motion } from "framer-motion";
+import RHLayout from "@/components/RHLayout";
+import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle } from "lucide-react";
+import Link from "next/link";
 
 export type Candidato = {
   id: number;
@@ -11,11 +14,26 @@ export type Candidato = {
   telefone?: string;
   curriculo?: string | null;
   vaga_id: number;
+  vaga_titulo?: string;
   status: string;
   data_cadastro?: string;
 };
 
-const STATUSES = ["Recebido", "Em análise", "Entrevista", "Aprovado", "Reprovado"] as const;
+const STATUSES = ["novo", "em_analise", "entrevista", "aprovado", "reprovado"] as const;
+const STATUS_LABELS: Record<string, string> = {
+  "novo": "Novo",
+  "em_analise": "Em Análise",
+  "entrevista": "Entrevista",
+  "aprovado": "Aprovado",
+  "reprovado": "Reprovado",
+};
+const STATUS_COLORS: Record<string, string> = {
+  "novo": "from-blue-500 to-blue-600",
+  "em_analise": "from-yellow-500 to-yellow-600",
+  "entrevista": "from-purple-500 to-purple-600",
+  "aprovado": "from-green-500 to-green-600",
+  "reprovado": "from-red-500 to-red-600",
+};
 
 export default function RHCandidatosPorVaga() {
   const router = useRouter();
@@ -25,6 +43,20 @@ export default function RHCandidatosPorVaga() {
 
   const load = useCallback(async () => {
     if (!vagaId) return;
+    
+    // Modo DEMO
+    if (token === "demo-token-temporario") {
+      const demoCandidatos: Candidato[] = [
+        { id: 1, nome: "João Silva", cpf: "123.456.789-00", email: "joao@email.com", telefone: "(11) 98765-4321", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-10" },
+        { id: 2, nome: "Maria Santos", cpf: "987.654.321-00", email: "maria@email.com", telefone: "(21) 91234-5678", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-09" },
+        { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "em_analise", data_cadastro: "2025-01-08" },
+        { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "entrevista", data_cadastro: "2025-01-07" },
+        { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: Number(vagaId), vaga_titulo: "Auxiliar de Limpeza", status: "aprovado", data_cadastro: "2025-01-06" },
+      ];
+      setItems(demoCandidatos);
+      return;
+    }
+
     const data = await apiGet<Candidato[]>(`/candidatos/${vagaId}`, token);
     setItems(data);
   }, [vagaId, token]);
@@ -35,89 +67,168 @@ export default function RHCandidatosPorVaga() {
     const g: Record<string, Candidato[]> = {};
     for (const st of STATUSES) g[st] = [];
     for (const c of items) {
-      const key = (STATUSES as readonly string[]).includes(c.status) ? c.status : "Recebido";
+      const key = (STATUSES as readonly string[]).includes(c.status) ? c.status : "novo";
       g[key].push(c);
     }
     return g;
   }, [items]);
 
   const onDrop = async (candidatoId: number, newStatus: string) => {
+    // Modo DEMO
+    if (token === "demo-token-temporario") {
+      setItems(prev => prev.map(c => c.id === candidatoId ? { ...c, status: newStatus } : c));
+      return;
+    }
+
     await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
     await load();
   };
 
-  return (
-    <section className="py-8 space-y-8">
-      <div className="rounded-2xl border border-white/15 bg-white/5 overflow-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-white/10">
-            <tr>
-              <th className="text-left p-3">Nome</th>
-              <th className="text-left p-3">E-mail</th>
-              <th className="text-left p-3">Telefone</th>
-              <th className="text-left p-3">Currículo</th>
-              <th className="text-left p-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((c) => (
-              <tr key={c.id} className="border-t border-white/10">
-                <td className="p-3 font-semibold">{c.nome}</td>
-                <td className="p-3">{c.email}</td>
-                <td className="p-3">{c.telefone || "-"}</td>
-                <td className="p-3">
-                  {c.curriculo ? (
-                    <a href={`http://localhost:3333/uploads/${c.curriculo}`} target="_blank" rel="noreferrer" className="underline">Ver PDF</a>
-                  ) : (
-                    <span className="opacity-70">Sem arquivo</span>
-                  )}
-                </td>
-                <td className="p-3">{c.status}</td>
-              </tr>
-            ))}
-            {items.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="p-6 text-center text-white/70">Nenhum candidato encontrado.</td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+  const getWhatsAppLink = (telefone?: string) => {
+    if (!telefone) return null;
+    const numeroLimpo = telefone.replace(/\D/g, '');
+    const numeroCompleto = numeroLimpo.startsWith('55') ? numeroLimpo : `55${numeroLimpo}`;
+    return `https://wa.me/${numeroCompleto}`;
+  };
 
-      <div className="grid gap-4 md:grid-cols-5">
-        {STATUSES.map((st) => (
-          <div key={st} className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md p-3">
-            <h3 className="text-sm font-semibold mb-2">{st}</h3>
-            <div
-              className="min-h-[200px] space-y-2"
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                const id = Number(e.dataTransfer.getData("text/plain"));
-                onDrop(id, st);
-              }}
-            >
-              {grouped[st].map((c) => (
-                <motion.div key={c.id} layout>
-                  <div
-                    draggable
-                    onDragStart={(e: React.DragEvent<HTMLDivElement>) => e.dataTransfer.setData("text/plain", String(c.id))}
-                    className="cursor-grab active:cursor-grabbing rounded-xl border border-white/15 bg-white/20 p-3"
-                  >
-                    <div className="font-medium">{c.nome}</div>
-                    <div className="text-xs text-white/70">{c.email}</div>
-                    <div className="mt-2 flex justify-between items-center">
-                      {c.curriculo ? (
-                        <a href={`http://localhost:3333/uploads/${c.curriculo}`} target="_blank" rel="noreferrer" className="underline text-xs">Ver currículo</a>
-                      ) : <span />}
-                      <a href={`mailto:${c.email}`} className="text-xs btn-gradient rounded px-2 py-1 text-white">E-mail</a>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+  return (
+    <RHLayout>
+      <div className="space-y-6">
+        {/* Header com voltar */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/rh/candidatos"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+          >
+            <ArrowLeft className="w-6 h-6 text-gray-600" />
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Kanban de Candidatos</h1>
+            <p className="text-gray-600">Arraste e solte para alterar o status</p>
           </div>
-        ))}
+        </div>
+
+        {/* Contadores */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+            {STATUSES.map((st) => (
+              <div key={st}>
+                <div className="text-3xl font-bold text-gray-900">{grouped[st].length}</div>
+                <div className="text-sm text-gray-600 mt-1">{STATUS_LABELS[st]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Kanban Board */}
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
+          {STATUSES.map((st) => (
+            <div key={st} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+              <div className={`flex items-center gap-2 mb-4 p-3 rounded-xl bg-gradient-to-r ${STATUS_COLORS[st]} text-white font-semibold`}>
+                <span className="flex-grow">{STATUS_LABELS[st]}</span>
+                <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{grouped[st].length}</span>
+              </div>
+              <div
+                className="min-h-[400px] space-y-3"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add('bg-gray-100');
+                }}
+                onDragLeave={(e) => {
+                  e.currentTarget.classList.remove('bg-gray-100');
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('bg-gray-100');
+                  const id = Number(e.dataTransfer.getData("text/plain"));
+                  onDrop(id, st);
+                }}
+              >
+                {grouped[st].map((c) => (
+                  <motion.div 
+                    key={c.id} 
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                  >
+                    <div
+                      draggable
+                      onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
+                        e.dataTransfer.setData("text/plain", String(c.id));
+                        e.currentTarget.classList.add('opacity-50');
+                      }}
+                      onDragEnd={(e: React.DragEvent<HTMLDivElement>) => {
+                        e.currentTarget.classList.remove('opacity-50');
+                      }}
+                      className="cursor-grab active:cursor-grabbing rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-all"
+                    >
+                      <div className="font-bold text-gray-900 mb-2">{c.nome}</div>
+                      <div className="space-y-1.5 text-xs text-gray-600">
+                        <div className="flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5" />
+                          <span className="truncate">{c.email}</span>
+                        </div>
+                        {c.telefone && (
+                          <div className="flex items-center gap-1.5">
+                            <Phone className="w-3.5 h-3.5" />
+                            <span>{c.telefone}</span>
+                          </div>
+                        )}
+                        {c.data_cadastro && (
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>{new Date(c.data_cadastro).toLocaleDateString('pt-BR')}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                        {c.curriculo ? (
+                          <a 
+                            href={`http://localhost:3333/uploads/${c.curriculo}`} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <FileText className="w-3 h-3" />
+                            Ver CV
+                          </a>
+                        ) : <span className="text-xs text-gray-400">Sem CV</span>}
+                        <div className="flex gap-1">
+                          {getWhatsAppLink(c.telefone) && (
+                            <a 
+                              href={getWhatsAppLink(c.telefone)!}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs px-2 py-1.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all flex items-center gap-1"
+                              onClick={(e) => e.stopPropagation()}
+                              title="WhatsApp"
+                            >
+                              <MessageCircle className="w-3 h-3" />
+                            </a>
+                          )}
+                          <a 
+                            href={`mailto:${c.email}`} 
+                            className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-medium hover:shadow-md transition-all"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Email
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+                {grouped[st].length === 0 && (
+                  <div className="text-center text-gray-400 text-sm py-8">
+                    Arraste candidatos aqui
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+    </RHLayout>
   );
 }

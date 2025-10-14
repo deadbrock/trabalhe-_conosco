@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { HeartHandshake, Target, ShieldCheck, Lightbulb } from "lucide-react";
+import { Award, ShieldCheck, Users, Leaf, Lightbulb, Handshake } from "lucide-react";
 
 type ValueItem = {
   id: string;
@@ -10,10 +10,12 @@ type ValueItem = {
 };
 
 const values: ValueItem[] = [
-  { id: "v1", icon: <HeartHandshake size={22} />, title: "Colaboração", text: "Trabalhamos em equipe com empatia e respeito." },
-  { id: "v2", icon: <Target size={22} />, title: "Foco em Resultado", text: "Buscamos impacto real para nossos clientes e times." },
-  { id: "v3", icon: <ShieldCheck size={22} />, title: "Integridade", text: "Transparência e ética guiam nossas decisões." },
-  { id: "v4", icon: <Lightbulb size={22} />, title: "Inovação", text: "Curiosidade e melhoria contínua no dia a dia." },
+  { id: "v1", icon: <Award size={22} />, title: "Excelência", text: "Buscamos sempre o mais alto padrão em cada serviço prestado." },
+  { id: "v2", icon: <ShieldCheck size={22} />, title: "Ética e Transparência", text: "Agimos com integridade em todas as relações." },
+  { id: "v3", icon: <Users size={22} />, title: "Valorização Humana", text: "Acreditamos que pessoas são o nosso maior patrimônio." },
+  { id: "v4", icon: <Leaf size={22} />, title: "Sustentabilidade", text: "Respeitamos o meio ambiente e investimos em práticas responsáveis." },
+  { id: "v5", icon: <Lightbulb size={22} />, title: "Inovação", text: "Transformamos desafios em soluções práticas e inteligentes." },
+  { id: "v6", icon: <Handshake size={22} />, title: "Compromisso", text: "Tratamos cada cliente como parceiro estratégico, entregando resultados que fazem diferença." },
 ];
 
 export default function ValuesSection() {
@@ -21,7 +23,7 @@ export default function ValuesSection() {
     <section className="relative py-16">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="text-2xl sm:text-3xl font-bold mb-8">Valores Institucionais</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {values.map((v, idx) => (
             <motion.div
               key={v.id}

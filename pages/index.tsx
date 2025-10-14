@@ -1,8 +1,9 @@
 import React from "react";
 import Hero from "@/components/Hero";
+import OurStorySection from "@/components/OurStorySection";
+import HistorySection from "@/components/HistorySection";
 import JobsSection from "@/components/JobsSection";
-import TimelineSection from "@/components/TimelineSection";
-import ValuesSection from "@/components/ValuesSection";
+import ConclusionSection from "@/components/ConclusionSection";
 import { useTyping } from "@/hooks/useTyping";
 
 export default function Home() {
@@ -10,9 +11,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <ValuesSection />
+      <OurStorySection />
+      <HistorySection />
       <JobsSection />
-      <TimelineSection />
+      <ConclusionSection />
     </>
   );
 }
