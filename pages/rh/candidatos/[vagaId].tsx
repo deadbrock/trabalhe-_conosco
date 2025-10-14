@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { apiGet, apiPut } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
-import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle } from "lucide-react";
+import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export type Candidato = {
@@ -128,111 +128,139 @@ export default function RHCandidatosPorVaga() {
 
         {/* Kanban Board */}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {STATUSES.map((st) => (
-            <div key={st} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
-              <div className={`flex items-center gap-2 mb-4 p-3 rounded-xl bg-gradient-to-r ${STATUS_COLORS[st]} text-white font-semibold`}>
-                <span className="flex-grow">{STATUS_LABELS[st]}</span>
-                <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{grouped[st].length}</span>
-              </div>
-              <div
-                className="min-h-[400px] space-y-3"
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.add('bg-gray-100');
-                }}
-                onDragLeave={(e) => {
-                  e.currentTarget.classList.remove('bg-gray-100');
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.remove('bg-gray-100');
-                  const id = Number(e.dataTransfer.getData("text/plain"));
-                  onDrop(id, st);
-                }}
-              >
-                {grouped[st].map((c) => (
-                  <motion.div 
-                    key={c.id} 
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                  >
-                    <div
-                      draggable
-                      onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
-                        e.dataTransfer.setData("text/plain", String(c.id));
-                        e.currentTarget.classList.add('opacity-50');
-                      }}
-                      onDragEnd={(e: React.DragEvent<HTMLDivElement>) => {
-                        e.currentTarget.classList.remove('opacity-50');
-                      }}
-                      className="cursor-grab active:cursor-grabbing rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-all"
+          {STATUSES.map((st) => {
+            // Limita Banco de Talentos a 5 candidatos
+            const candidatosExibir = st === "banco_talentos" 
+              ? grouped[st].slice(0, 5) 
+              : grouped[st];
+            const temMais = st === "banco_talentos" && grouped[st].length > 5;
+            
+            return (
+              <div key={st} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+                <div className={`flex items-center gap-2 mb-4 p-3 rounded-xl bg-gradient-to-r ${STATUS_COLORS[st]} text-white font-semibold`}>
+                  <span className="flex-grow">{STATUS_LABELS[st]}</span>
+                  <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{grouped[st].length}</span>
+                </div>
+                <div
+                  className="min-h-[400px] space-y-3"
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.add('bg-gray-100');
+                  }}
+                  onDragLeave={(e) => {
+                    e.currentTarget.classList.remove('bg-gray-100');
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove('bg-gray-100');
+                    const id = Number(e.dataTransfer.getData("text/plain"));
+                    onDrop(id, st);
+                  }}
+                >
+                  {candidatosExibir.map((c) => (
+                    <motion.div 
+                      key={c.id} 
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
                     >
-                      <div className="font-bold text-gray-900 mb-2">{c.nome}</div>
-                      <div className="space-y-1.5 text-xs text-gray-600">
-                        <div className="flex items-center gap-1.5">
-                          <Mail className="w-3.5 h-3.5" />
-                          <span className="truncate">{c.email}</span>
-                        </div>
-                        {c.telefone && (
+                      <div
+                        draggable
+                        onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
+                          e.dataTransfer.setData("text/plain", String(c.id));
+                          e.currentTarget.classList.add('opacity-50');
+                        }}
+                        onDragEnd={(e: React.DragEvent<HTMLDivElement>) => {
+                          e.currentTarget.classList.remove('opacity-50');
+                        }}
+                        className="cursor-grab active:cursor-grabbing rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-all"
+                      >
+                        <div className="font-bold text-gray-900 mb-2">{c.nome}</div>
+                        <div className="space-y-1.5 text-xs text-gray-600">
                           <div className="flex items-center gap-1.5">
-                            <Phone className="w-3.5 h-3.5" />
-                            <span>{c.telefone}</span>
+                            <Mail className="w-3.5 h-3.5" />
+                            <span className="truncate">{c.email}</span>
                           </div>
-                        )}
-                        {c.data_cadastro && (
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5" />
-                            <span>{new Date(c.data_cadastro).toLocaleDateString('pt-BR')}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
-                        {c.curriculo ? (
-                          <a 
-                            href={`http://localhost:3333/uploads/${c.curriculo}`} 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="text-xs text-blue-600 hover:underline flex items-center gap-1"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <FileText className="w-3 h-3" />
-                            Ver CV
-                          </a>
-                        ) : <span className="text-xs text-gray-400">Sem CV</span>}
-                        <div className="flex gap-1">
-                          {getWhatsAppLink(c.telefone) && (
-                            <a 
-                              href={getWhatsAppLink(c.telefone)!}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs px-2 py-1.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all flex items-center gap-1"
-                              onClick={(e) => e.stopPropagation()}
-                              title="WhatsApp"
-                            >
-                              <MessageCircle className="w-3 h-3" />
-                            </a>
+                          {c.telefone && (
+                            <div className="flex items-center gap-1.5">
+                              <Phone className="w-3.5 h-3.5" />
+                              <span>{c.telefone}</span>
+                            </div>
                           )}
-                          <a 
-                            href={`mailto:${c.email}`} 
-                            className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-medium hover:shadow-md transition-all"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Email
-                          </a>
+                          {c.data_cadastro && (
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5" />
+                              <span>{new Date(c.data_cadastro).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                          {c.curriculo ? (
+                            <a 
+                              href={`http://localhost:3333/uploads/${c.curriculo}`} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <FileText className="w-3 h-3" />
+                              Ver CV
+                            </a>
+                          ) : <span className="text-xs text-gray-400">Sem CV</span>}
+                          <div className="flex gap-1">
+                            {getWhatsAppLink(c.telefone) && (
+                              <a 
+                                href={getWhatsAppLink(c.telefone)!}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs px-2 py-1.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all flex items-center gap-1"
+                                onClick={(e) => e.stopPropagation()}
+                                title="WhatsApp"
+                              >
+                                <MessageCircle className="w-3 h-3" />
+                              </a>
+                            )}
+                            <a 
+                              href={`mailto:${c.email}`} 
+                              className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-medium hover:shadow-md transition-all"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Email
+                            </a>
+                          </div>
                         </div>
                       </div>
+                    </motion.div>
+                  ))}
+                  
+                  {/* Botão "Ver Todos" para Banco de Talentos */}
+                  {temMais && (
+                    <Link href="/rh/banco-talentos">
+                      <div className="rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50 p-4 hover:bg-indigo-100 transition-all cursor-pointer group">
+                        <div className="text-center">
+                          <ExternalLink className="w-6 h-6 text-indigo-600 mx-auto mb-2 group-hover:scale-110 transition-transform" />
+                          <p className="text-sm font-semibold text-indigo-700">
+                            + {grouped[st].length - 5} talentos
+                          </p>
+                          <p className="text-xs text-indigo-600 mt-1">
+                            Ver Todos
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                  
+                  {grouped[st].length === 0 && (
+                    <div className="text-center text-gray-400 text-sm py-8">
+                      {st === "banco_talentos" 
+                        ? "Sem talentos salvos" 
+                        : "Arraste candidatos aqui"}
                     </div>
-                  </motion.div>
-                ))}
-                {grouped[st].length === 0 && (
-                  <div className="text-center text-gray-400 text-sm py-8">
-                    Arraste candidatos aqui
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </RHLayout>
