@@ -29,33 +29,6 @@ export default function RHVagas() {
   const load = async () => {
     setLoading(true);
     try {
-      // Modo DEMO - Dados mockados
-      if (token === "demo-token-temporario") {
-        const demoVagas: Vaga[] = [
-          { id: 1, titulo: "Auxiliar de Limpeza", tipo_contrato: "CLT", endereco: "São Paulo/SP", descricao: "Responsável pela limpeza e organização de ambientes.", requisitos: "Ensino fundamental completo", status: "ativa" },
-          { id: 2, titulo: "Supervisor de Limpeza", tipo_contrato: "CLT", endereco: "Rio de Janeiro/RJ", descricao: "Supervisionar equipe de limpeza.", requisitos: "Experiência em liderança", status: "ativa" },
-          { id: 3, titulo: "Porteiro", tipo_contrato: "CLT", endereco: "Recife/PE", descricao: "Controle de acesso e segurança.", requisitos: "Ensino médio completo", status: "ativa" },
-          { id: 4, titulo: "Zelador", tipo_contrato: "CLT", endereco: "Brasília/DF", descricao: "Manutenção predial básica.", status: "inativa" },
-          { id: 5, titulo: "Copeira", tipo_contrato: "CLT", endereco: "Belo Horizonte/MG", descricao: "Preparo e servição de alimentos.", status: "ativa" },
-        ];
-        
-        let filtered = demoVagas;
-        if (statusFilter !== "all") {
-          filtered = filtered.filter(v => v.status === statusFilter);
-        }
-        if (q.trim()) {
-          const query = q.toLowerCase();
-          filtered = filtered.filter(v => 
-            v.titulo.toLowerCase().includes(query) || 
-            v.endereco.toLowerCase().includes(query)
-          );
-        }
-        
-        setItems(filtered);
-        setLoading(false);
-        return;
-      }
-
       const qs = new URLSearchParams();
       qs.set("status", statusFilter);
       if (q.trim()) qs.set("q", q.trim());
@@ -73,16 +46,6 @@ export default function RHVagas() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Modo DEMO - Simula sucesso
-    if (token === "demo-token-temporario") {
-      alert("✅ Modo DEMO: A vaga seria salva no backend real.");
-      setModalOpen(false);
-      setEditing(null);
-      await load();
-      return;
-    }
-
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload: Partial<Vaga> = {
@@ -106,26 +69,11 @@ export default function RHVagas() {
 
   const onDelete = async (id: number) => {
     if (!confirm("Excluir esta vaga?")) return;
-    
-    // Modo DEMO
-    if (token === "demo-token-temporario") {
-      alert("✅ Modo DEMO: A vaga seria excluída no backend real.");
-      await load();
-      return;
-    }
-    
     await apiDelete(`/vagas/${id}`, token);
     await load();
   };
 
   const onToggle = async (vaga: Vaga) => {
-    // Modo DEMO
-    if (token === "demo-token-temporario") {
-      alert(`✅ Modo DEMO: A vaga seria ${vaga.status === 'ativa' ? 'despublicada' : 'publicada'} no backend real.`);
-      await load();
-      return;
-    }
-    
     const newStatus = vaga.status === "ativa" ? "inativa" : "ativa";
     await apiPut(`/vagas/${vaga.id}`, { status: newStatus }, token);
     await load();

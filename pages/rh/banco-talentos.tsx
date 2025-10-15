@@ -31,32 +31,6 @@ export default function BancoTalentos() {
   const load = async () => {
     setLoading(true);
     try {
-      // Modo DEMO
-      if (token === "demo-token-temporario") {
-        const demoTalentos: Talento[] = [
-          { id: 6, nome: "Juliana Lima", cpf: "654.987.321-00", email: "juliana@email.com", telefone: "(21) 96543-2109", vaga_id: 5, vaga_titulo: "Copeira", status: "banco_talentos", data_cadastro: "2025-01-05", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Ipanema" },
-          { id: 8, nome: "Fernanda Costa", cpf: "258.369.147-00", email: "fernanda@email.com", telefone: "(11) 94321-0987", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "banco_talentos", data_cadastro: "2025-01-11", estado: "SP", cidade: "São Paulo", bairro: "Mooca" },
-          { id: 11, nome: "Marcos Pereira", cpf: "159.753.486-00", email: "marcos@email.com", telefone: "(11) 98888-7777", vaga_id: 3, vaga_titulo: "Zelador", status: "banco_talentos", data_cadastro: "2024-12-15", estado: "SP", cidade: "São Paulo", bairro: "Tatuapé" },
-        ];
-        
-        let filtered = demoTalentos;
-        
-        if (searchQuery.trim()) {
-          const query = searchQuery.toLowerCase();
-          filtered = filtered.filter(t => 
-            t.nome.toLowerCase().includes(query) ||
-            t.email.toLowerCase().includes(query) ||
-            t.vaga_titulo?.toLowerCase().includes(query) ||
-            t.cidade?.toLowerCase().includes(query) ||
-            t.bairro?.toLowerCase().includes(query)
-          );
-        }
-        
-        setItems(filtered);
-        setLoading(false);
-        return;
-      }
-
       const data = await apiGet<Talento[]>("/candidatos?status=banco_talentos", token);
       setItems(data);
     } catch (error) {
@@ -89,13 +63,6 @@ export default function BancoTalentos() {
   };
 
   const handleMoveToVaga = async (talentoId: number, newStatus: string) => {
-    // Modo DEMO
-    if (token === "demo-token-temporario") {
-      setItems(prev => prev.filter(t => t.id !== talentoId));
-      alert(`✅ Talento movido para: ${newStatus === "novo" ? "Nova Vaga" : "Em Análise"}!`);
-      return;
-    }
-
     try {
       await apiPut(`/candidatos/${talentoId}`, { status: newStatus }, token);
       await load();

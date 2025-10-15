@@ -55,69 +55,6 @@ export default function RHCandidatos() {
   const load = async () => {
     setLoading(true);
     try {
-      // Modo DEMO
-      if (token === "demo-token-temporario") {
-        const demoCandidatos: Candidato[] = [
-          { id: 1, nome: "João Silva", cpf: "123.456.789-00", email: "joao@email.com", telefone: "(11) 98765-4321", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-10", estado: "SP", cidade: "São Paulo", bairro: "Centro" },
-          { id: 2, nome: "Maria Santos", cpf: "987.654.321-00", email: "maria@email.com", telefone: "(21) 91234-5678", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "em_analise", data_cadastro: "2025-01-09", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Copacabana" },
-          { id: 3, nome: "Pedro Oliveira", cpf: "456.789.123-00", email: "pedro@email.com", telefone: "(81) 99876-5432", vaga_id: 2, vaga_titulo: "Supervisor de Limpeza", status: "entrevista", data_cadastro: "2025-01-08", estado: "PE", cidade: "Recife", bairro: "Boa Viagem" },
-          { id: 4, nome: "Ana Costa", cpf: "321.654.987-00", email: "ana@email.com", telefone: "(85) 98765-1234", vaga_id: 3, vaga_titulo: "Porteiro", status: "aprovado", data_cadastro: "2025-01-07", estado: "CE", cidade: "Fortaleza", bairro: "Meireles" },
-          { id: 5, nome: "Carlos Souza", cpf: "789.123.456-00", email: "carlos@email.com", telefone: "(11) 97654-3210", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "reprovado", data_cadastro: "2025-01-06", estado: "SP", cidade: "São Paulo", bairro: "Vila Mariana" },
-          { id: 6, nome: "Juliana Lima", cpf: "654.987.321-00", email: "juliana@email.com", telefone: "(21) 96543-2109", vaga_id: 5, vaga_titulo: "Copeira", status: "banco_talentos", data_cadastro: "2025-01-05", estado: "RJ", cidade: "Rio de Janeiro", bairro: "Ipanema" },
-          { id: 7, nome: "Roberto Alves", cpf: "147.258.369-00", email: "roberto@email.com", telefone: "(31) 95432-1098", vaga_id: 2, vaga_titulo: "Supervisor de Limpeza", status: "em_analise", data_cadastro: "2025-01-04", estado: "MG", cidade: "Belo Horizonte", bairro: "Savassi" },
-          { id: 8, nome: "Fernanda Costa", cpf: "258.369.147-00", email: "fernanda@email.com", telefone: "(11) 94321-0987", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "banco_talentos", data_cadastro: "2025-01-11", estado: "SP", cidade: "São Paulo", bairro: "Mooca" },
-          { id: 9, nome: "Ricardo Mendes", cpf: "369.147.258-00", email: "ricardo@email.com", telefone: "(11) 93210-9876", vaga_id: 2, vaga_titulo: "Porteiro", status: "em_analise", data_cadastro: "2025-01-11", estado: "SP", cidade: "Guarulhos", bairro: "Centro" },
-          { id: 10, nome: "Patrícia Rocha", cpf: "741.852.963-00", email: "patricia@email.com", telefone: "(81) 92109-8765", vaga_id: 1, vaga_titulo: "Auxiliar de Limpeza", status: "novo", data_cadastro: "2025-01-12", estado: "PE", cidade: "Olinda", bairro: "Casa Caiada" },
-          { id: 11, nome: "Marcos Pereira", cpf: "159.753.486-00", email: "marcos@email.com", telefone: "(11) 98888-7777", vaga_id: 3, vaga_titulo: "Zelador", status: "banco_talentos", data_cadastro: "2024-12-15", estado: "SP", cidade: "São Paulo", bairro: "Tatuapé" },
-        ];
-        
-        let filtered = demoCandidatos;
-        
-        // Filtro por status
-        if (statusFilter !== "all") {
-          filtered = filtered.filter(c => c.status === statusFilter);
-        }
-        
-        // Filtro por localização
-        if (estadoFilter) {
-          filtered = filtered.filter(c => c.estado === estadoFilter);
-        }
-        if (cidadeFilter.trim()) {
-          const cidadeQuery = cidadeFilter.toLowerCase();
-          filtered = filtered.filter(c => c.cidade?.toLowerCase().includes(cidadeQuery));
-        }
-        if (bairroFilter.trim()) {
-          const bairroQuery = bairroFilter.toLowerCase();
-          filtered = filtered.filter(c => c.bairro?.toLowerCase().includes(bairroQuery));
-        }
-        
-        // Busca por texto
-        if (searchQuery.trim()) {
-          const query = searchQuery.toLowerCase();
-          filtered = filtered.filter(c => 
-            c.nome.toLowerCase().includes(query) ||
-            c.email.toLowerCase().includes(query) ||
-            c.vaga_titulo?.toLowerCase().includes(query) ||
-            c.cidade?.toLowerCase().includes(query) ||
-            c.bairro?.toLowerCase().includes(query)
-          );
-        }
-        
-        // Ordenação por proximidade (simulada - agrupa por estado/cidade)
-        if (sortByProximity) {
-          filtered = [...filtered].sort((a, b) => {
-            // Prioriza: mesmo estado (SP) > mesma cidade (São Paulo) > mesmo bairro (Centro)
-            const scoreA = (a.estado === "SP" ? 100 : 0) + (a.cidade === "São Paulo" ? 50 : 0) + (a.bairro === "Centro" ? 25 : 0);
-            const scoreB = (b.estado === "SP" ? 100 : 0) + (b.cidade === "São Paulo" ? 50 : 0) + (b.bairro === "Centro" ? 25 : 0);
-            return scoreB - scoreA;
-          });
-        }
-        
-        setItems(filtered);
-        setLoading(false);
-        return;
-      }
-
       const data = await apiGet<Candidato[]>("/candidatos", token);
       setItems(data);
     } catch (error) {
@@ -152,15 +89,6 @@ export default function RHCandidatos() {
   };
 
   const handleStatusChange = async (candidatoId: number, newStatus: string) => {
-    // Modo DEMO
-    if (token === "demo-token-temporario") {
-      setItems(prev => prev.map(c => 
-        c.id === candidatoId ? { ...c, status: newStatus } : c
-      ));
-      alert(`✅ Status alterado para: ${STATUS_LABELS[newStatus]}`);
-      return;
-    }
-
     try {
       await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
       await load();

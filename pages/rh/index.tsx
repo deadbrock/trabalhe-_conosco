@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
-import { Briefcase, Users, TrendingUp, UserCheck, Calendar, FileText } from "lucide-react";
+import { Briefcase, Users, TrendingUp, UserCheck } from "lucide-react";
 import Link from "next/link";
 
 type Metrics = {
@@ -16,13 +16,6 @@ export default function RHDashboard() {
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
-    
-    // Modo DEMO - Dados mockados
-    if (token === "demo-token-temporario") {
-      setMetrics({ vagas_abertas: 5, total_candidatos: 47, candidatos_hoje: 3 });
-      return;
-    }
-    
     apiGet<Metrics>("/metrics", token).then(setMetrics).catch(() => setMetrics({ vagas_abertas: 0, total_candidatos: 0, candidatos_hoje: 0 }));
   }, []);
 
@@ -110,36 +103,6 @@ export default function RHDashboard() {
           </div>
         </div>
 
-        {/* Atividades Recentes */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Atividades Recentes</h2>
-            <Calendar className="w-5 h-5 text-gray-400" />
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="flex-grow">
-                <p className="font-medium text-gray-900">Nova candidatura recebida</p>
-                <p className="text-sm text-gray-600">João Silva se candidatou para Auxiliar de Limpeza</p>
-                <p className="text-xs text-gray-400 mt-1">Há 2 horas</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                <Briefcase className="w-5 h-5 text-green-600" />
-              </div>
-              <div className="flex-grow">
-                <p className="font-medium text-gray-900">Vaga publicada</p>
-                <p className="text-sm text-gray-600">Supervisor de Limpeza - São Paulo/SP</p>
-                <p className="text-xs text-gray-400 mt-1">Ontem</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </RHLayout>
   );
