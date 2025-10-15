@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiGet, apiPut } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
-import { Star, Search, Filter, Mail, Phone, Calendar, Eye, MessageCircle, MapPin, Briefcase, CheckCircle, XCircle, ArrowRight } from "lucide-react";
+import { Star, Search, Filter, Mail, Phone, Calendar, Eye, MessageCircle, MapPin, Briefcase, CheckCircle, ArrowRight } from "lucide-react";
 
 export type Talento = {
   id: number;

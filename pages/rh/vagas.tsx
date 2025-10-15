@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
-import { Plus, Search, Edit, Trash2, Eye, EyeOff, RefreshCw, MapPin, Briefcase, FileText } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Eye, EyeOff, RefreshCw, MapPin, Briefcase } from "lucide-react";
 
 export type Vaga = {
   id: number;
