@@ -67,7 +67,7 @@ export default function BancoTalentos() {
       await apiPut(`/candidatos/${talentoId}`, { status: newStatus }, token);
       await load();
       alert(`✅ Talento ativado com sucesso!`);
-    } catch (error) {
+    } catch {
       alert("❌ Erro ao mover talento");
     }
   };

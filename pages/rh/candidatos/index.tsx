@@ -93,7 +93,7 @@ export default function RHCandidatos() {
       await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
       await load();
       alert(`✅ Status alterado com sucesso!`);
-    } catch (error) {
+    } catch {
       alert("❌ Erro ao alterar status");
     }
   };
