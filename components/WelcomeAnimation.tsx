@@ -84,11 +84,11 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
       });
     }, 1000);
 
-    // Auto-fechar após 6 segundos
+    // Auto-fechar após 15 segundos
     const closeTimer = setTimeout(() => {
       setShow(false);
       setTimeout(onClose, 500);
-    }, 6000);
+    }, 15000);
 
     return () => {
       clearInterval(interval);

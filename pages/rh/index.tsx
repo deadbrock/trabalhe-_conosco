@@ -35,7 +35,7 @@ export default function RHDashboard() {
     
     // Verificar se é o primeiro acesso dos usuários especiais
     if (typeof window !== "undefined") {
-      const hasSeenWelcome = localStorage.getItem("rh_welcome_shown");
+      const welcomeCount = parseInt(localStorage.getItem("rh_welcome_count") || "0");
       const storedEmail = localStorage.getItem("rh_user_email");
       
       // Emails dos usuários que devem ver a animação
@@ -57,9 +57,11 @@ export default function RHDashboard() {
           setUserName(nome);
           localStorage.setItem("rh_user_email", email);
           
-          // Se é usuário especial e ainda não viu a animação
-          if (!hasSeenWelcome && specialUsers.includes(email)) {
+          // Se é usuário especial e viu menos de 5 vezes
+          if (welcomeCount < 5 && specialUsers.includes(email)) {
             setShowWelcome(true);
+            // Incrementar contador
+            localStorage.setItem("rh_welcome_count", String(welcomeCount + 1));
           }
         } catch (err) {
           console.error("Erro ao decodificar token:", err);
@@ -76,7 +78,6 @@ export default function RHDashboard() {
   }, []);
 
   const handleCloseWelcome = () => {
-    localStorage.setItem("rh_welcome_shown", "true");
     setShowWelcome(false);
   };
 
