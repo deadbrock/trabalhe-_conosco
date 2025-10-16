@@ -1,11 +1,12 @@
 import { Router } from "express";
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
+import * as cloudinary from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { pool } from "../db";
 
 // Configurar Cloudinary
-cloudinary.config({
+const cld = cloudinary.v2;
+cld.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
@@ -19,7 +20,7 @@ console.log("🔧 Cloudinary Config:", {
 
 // Configurar storage do Multer com Cloudinary
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary: cld,
   params: async (req, file) => {
     // Remove extensão do nome original e adiciona timestamp
     const originalName = file.originalname.replace(/\.[^/.]+$/, "");
@@ -27,9 +28,10 @@ const storage = new CloudinaryStorage({
     
     return {
       folder: "curriculos",
-      public_id: `${sanitizedName}_${Date.now()}`,
+      public_id: `${sanitizedName}_${Date.now()}.pdf`,
       resource_type: "raw" as const,
-      use_filename: true,
+      access_mode: "public" as const, // Permite acesso público ao arquivo
+      use_filename: false,
       unique_filename: false,
     };
   },
@@ -69,27 +71,37 @@ candidatosRouter.post("/", upload.single("curriculo"), async (req, res) => {
   try {
     const { nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, vaga_id } = req.body;
     
-    // Pega a URL do arquivo no Cloudinary
-    let curriculo = req.file ? (req.file as any).path : null;
+    // Verificar se o CPF já se candidatou para esta vaga
+    const { rows: existing } = await pool.query(
+      `SELECT id FROM candidatos WHERE cpf = $1 AND vaga_id = $2`,
+      [cpf, vaga_id]
+    );
+    
+    if (existing.length > 0) {
+      console.log("⚠️ Candidatura duplicada bloqueada:", { cpf, vaga_id });
+      return res.status(400).json({ 
+        error: "Você já se candidatou para esta vaga!", 
+        message: "Não é possível se candidatar novamente para a mesma vaga. Escolha outra vaga disponível."
+      });
+    }
+    
+    // Pega apenas o public_id do Cloudinary, não a URL completa
+    const cloudinaryFile = req.file as any;
+    const publicId = cloudinaryFile?.filename || cloudinaryFile?.public_id || null;
     
     console.log("📤 Upload recebido:", {
       filename: req.file?.originalname,
-      cloudinary_url: curriculo,
+      public_id: publicId,
       size: req.file?.size
     });
-    
-    // Garante que a URL termina com .pdf para download correto
-    if (curriculo && !curriculo.endsWith('.pdf')) {
-      curriculo = curriculo + '.pdf';
-    }
     
     const { rows } = await pool.query(
       `INSERT INTO candidatos (nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, curriculo, vaga_id)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
-      [nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, curriculo, vaga_id]
+      [nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, publicId, vaga_id]
     );
     
-    console.log("✅ Candidato salvo com sucesso:", rows[0].id);
+    console.log("✅ Candidato salvo com sucesso:", rows[0].id, "| Public ID:", publicId);
     res.status(201).json(rows[0]);
   } catch (error) {
     console.error("❌ Erro ao processar candidatura:", error);

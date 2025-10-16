@@ -136,7 +136,10 @@ export default function JobDetailPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao enviar candidatura");
+        // Tentar ler a mensagem de erro do backend
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.message || errorData.error || "Erro ao enviar candidatura. Tente novamente.";
+        throw new Error(errorMessage);
       }
 
       setSuccess(true);
@@ -158,7 +161,7 @@ export default function JobDetailPage() {
 
     } catch (err) {
       console.error("Erro:", err);
-      setError("Erro ao enviar candidatura. Tente novamente.");
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
