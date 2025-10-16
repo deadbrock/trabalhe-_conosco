@@ -68,7 +68,7 @@ export default function RHCandidatos() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusFilter, estadoFilter, cidadeFilter, bairroFilter, sortByProximity]);
+  }, []);
 
   const handleSearch = () => {
     load();
@@ -78,6 +78,68 @@ export default function RHCandidatos() {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("pt-BR");
   };
+
+  // Aplicar filtros aos candidatos
+  const filteredItems = React.useMemo(() => {
+    let filtered = [...items];
+
+    // Filtro de status
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(c => c.status === statusFilter);
+    }
+
+    // Filtro de busca por nome
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(c => 
+        c.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.cpf.includes(searchQuery)
+      );
+    }
+
+    // Filtro de estado
+    if (estadoFilter.trim()) {
+      filtered = filtered.filter(c => 
+        c.estado?.toLowerCase().includes(estadoFilter.toLowerCase())
+      );
+    }
+
+    // Filtro de cidade
+    if (cidadeFilter.trim()) {
+      filtered = filtered.filter(c => 
+        c.cidade?.toLowerCase().includes(cidadeFilter.toLowerCase())
+      );
+    }
+
+    // Filtro de bairro
+    if (bairroFilter.trim()) {
+      filtered = filtered.filter(c => 
+        c.bairro?.toLowerCase().includes(bairroFilter.toLowerCase())
+      );
+    }
+
+    // Ordenar por proximidade (estado > cidade > bairro)
+    if (sortByProximity && (estadoFilter || cidadeFilter || bairroFilter)) {
+      filtered.sort((a, b) => {
+        let scoreA = 0;
+        let scoreB = 0;
+
+        // Pontuação baseada em correspondência
+        if (estadoFilter && a.estado?.toLowerCase() === estadoFilter.toLowerCase()) scoreA += 3;
+        if (estadoFilter && b.estado?.toLowerCase() === estadoFilter.toLowerCase()) scoreB += 3;
+        
+        if (cidadeFilter && a.cidade?.toLowerCase() === cidadeFilter.toLowerCase()) scoreA += 2;
+        if (cidadeFilter && b.cidade?.toLowerCase() === cidadeFilter.toLowerCase()) scoreB += 2;
+        
+        if (bairroFilter && a.bairro?.toLowerCase() === bairroFilter.toLowerCase()) scoreA += 1;
+        if (bairroFilter && b.bairro?.toLowerCase() === bairroFilter.toLowerCase()) scoreB += 1;
+
+        return scoreB - scoreA; // Maior pontuação primeiro
+      });
+    }
+
+    return filtered;
+  }, [items, statusFilter, searchQuery, estadoFilter, cidadeFilter, bairroFilter, sortByProximity]);
 
   const getWhatsAppLink = (telefone?: string) => {
     if (!telefone) return null;
@@ -292,15 +354,19 @@ export default function RHCandidatos() {
 
         {/* Lista de Candidatos */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          {items.length === 0 ? (
+          {filteredItems.length === 0 ? (
             <div className="p-12 text-center">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">Nenhum candidato encontrado</p>
-              <p className="text-gray-400 text-sm mt-2">Aguarde as primeiras candidaturas</p>
+              <p className="text-gray-600 text-lg font-medium">
+                {items.length === 0 ? "Nenhum candidato encontrado" : "Nenhum candidato corresponde aos filtros"}
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                {items.length === 0 ? "Aguarde as primeiras candidaturas" : "Tente ajustar os filtros para ver mais resultados"}
+              </p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
-              {items.map((candidato, idx) => (
+              {filteredItems.map((candidato, idx) => (
                 <motion.div
                   key={candidato.id}
                   initial={{ opacity: 0, y: 10 }}
