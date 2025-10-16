@@ -52,7 +52,7 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
         zIndex: 9999
       };
 
-      function fire(particleRatio: number, opts: any) {
+      function fire(particleRatio: number, opts: confetti.Options) {
         confetti({
           ...defaults2,
           ...opts,
