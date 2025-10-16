@@ -390,7 +390,7 @@ export default function RHCandidatos() {
                       
                       {candidato.curriculo && (
                         <a
-                          href={`${getApiBase()}/uploads/${candidato.curriculo}`}
+                          href={candidato.curriculo.startsWith('http') ? candidato.curriculo : `${getApiBase()}/uploads/${candidato.curriculo}`}
                           target="_blank"
                           rel="noreferrer"
                           className="p-2 rounded-lg hover:bg-purple-50 text-purple-600 transition-all"

@@ -1,8 +1,30 @@
 import { Router } from "express";
 import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { pool } from "../db";
 
-const upload = multer({ dest: "uploads/" });
+// Configurar Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "",
+  api_key: process.env.CLOUDINARY_API_KEY || "",
+  api_secret: process.env.CLOUDINARY_API_SECRET || "",
+});
+
+// Configurar storage do Multer com Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: "curriculos",
+      format: "pdf",
+      public_id: `curriculo_${Date.now()}`,
+      resource_type: "raw" as const,
+    };
+  },
+});
+
+const upload = multer({ storage: storage });
 export const candidatosRouter = Router();
 
 // Listar todos candidatos (com filtros opcionais)
@@ -34,7 +56,8 @@ candidatosRouter.get("/:vagaId", async (req, res) => {
 
 candidatosRouter.post("/", upload.single("curriculo"), async (req, res) => {
   const { nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, vaga_id } = req.body;
-  const curriculo = req.file?.filename || null;
+  // Pega a URL do arquivo no Cloudinary ao invés do filename local
+  const curriculo = req.file ? (req.file as any).path : null;
   const { rows } = await pool.query(
     `INSERT INTO candidatos (nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, curriculo, vaga_id)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,

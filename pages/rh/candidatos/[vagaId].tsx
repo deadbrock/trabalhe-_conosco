@@ -177,7 +177,7 @@ export default function RHCandidatosPorVaga() {
                           {/* Botão de Currículo */}
                           {c.curriculo ? (
                             <a 
-                              href={`${getApiBase()}/uploads/${c.curriculo}`} 
+                              href={c.curriculo.startsWith('http') ? c.curriculo : `${getApiBase()}/uploads/${c.curriculo}`} 
                               target="_blank" 
                               rel="noreferrer" 
                               className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all flex items-center gap-1.5 shadow-sm"
