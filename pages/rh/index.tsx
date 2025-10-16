@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
-import { Briefcase, Users, TrendingUp, UserCheck } from "lucide-react";
+import { Briefcase, Users, TrendingUp, UserCheck, Mail, Phone, Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 type Metrics = {
@@ -11,12 +11,29 @@ type Metrics = {
   candidatos_hoje: number;
 };
 
+type Candidato = {
+  id: number;
+  nome: string;
+  email: string;
+  telefone?: string;
+  vaga_titulo?: string;
+  vaga_id: number;
+  data_cadastro?: string;
+  status: string;
+};
+
 export default function RHDashboard() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [recentCandidatos, setRecentCandidatos] = useState<Candidato[]>([]);
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
     apiGet<Metrics>("/metrics", token).then(setMetrics).catch(() => setMetrics({ vagas_abertas: 0, total_candidatos: 0, candidatos_hoje: 0 }));
+    
+    // Carregar últimos 5 candidatos
+    apiGet<Candidato[]>("/candidatos", token).then((data) => {
+      setRecentCandidatos(data.slice(0, 5)); // Pega os 5 primeiros (já vem ordenado por data_cadastro DESC)
+    }).catch(() => setRecentCandidatos([]));
   }, []);
 
   const cards = [
@@ -101,6 +118,78 @@ export default function RHDashboard() {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* Últimos Candidatos */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-gray-900">Últimas Candidaturas</h2>
+            <Link 
+              href="/rh/candidatos" 
+              className="text-sm text-primary hover:text-red-700 font-semibold flex items-center gap-1 transition-colors"
+            >
+              Ver Todos
+              <ExternalLink className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          {recentCandidatos.length === 0 ? (
+            <div className="p-12 text-center">
+              <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">Nenhuma candidatura recente</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {recentCandidatos.map((candidato, idx) => (
+                <motion.div
+                  key={candidato.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="p-5 hover:bg-gray-50 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-bold text-gray-900">{candidato.nome}</h3>
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                          {candidato.status === "novo" ? "Novo" : candidato.status}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1.5">
+                          <Briefcase className="w-4 h-4" />
+                          <span>{candidato.vaga_titulo || "Vaga não especificada"}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Mail className="w-4 h-4" />
+                          <span>{candidato.email}</span>
+                        </div>
+                        {candidato.telefone && (
+                          <div className="flex items-center gap-1.5">
+                            <Phone className="w-4 h-4" />
+                            <span>{candidato.telefone}</span>
+                          </div>
+                        )}
+                        {candidato.data_cadastro && (
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-4 h-4" />
+                            <span>{new Date(candidato.data_cadastro).toLocaleDateString('pt-BR')}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <Link
+                      href={`/rh/candidatos/${candidato.vaga_id}`}
+                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all hover:scale-105"
+                    >
+                      Ver Kanban
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
