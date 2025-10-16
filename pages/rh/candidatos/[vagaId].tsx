@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { apiGet, apiPut, getApiBase } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
-import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle, ExternalLink, Download } from "lucide-react";
 import Link from "next/link";
 
 export type Candidato = {
@@ -173,40 +173,52 @@ export default function RHCandidatosPorVaga() {
                             </div>
                           )}
                         </div>
-                        <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
+                        <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
+                          {/* Botão de Currículo */}
                           {c.curriculo ? (
                             <a 
                               href={`${getApiBase()}/uploads/${c.curriculo}`} 
                               target="_blank" 
                               rel="noreferrer" 
-                              className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all flex items-center gap-1.5 shadow-sm"
                               onClick={(e) => e.stopPropagation()}
+                              title="Baixar Currículo"
                             >
-                              <FileText className="w-3 h-3" />
-                              Ver CV
+                              <Download className="w-3.5 h-3.5" />
+                              Currículo
                             </a>
-                          ) : <span className="text-xs text-gray-400">Sem CV</span>}
-                          <div className="flex gap-1">
-                            {getWhatsAppLink(c.telefone) && (
-                              <a 
-                                href={getWhatsAppLink(c.telefone)!}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs px-2 py-1.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all flex items-center gap-1"
-                                onClick={(e) => e.stopPropagation()}
-                                title="WhatsApp"
-                              >
-                                <MessageCircle className="w-3 h-3" />
-                              </a>
-                            )}
+                          ) : (
+                            <span className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-400 flex items-center gap-1.5">
+                              <FileText className="w-3.5 h-3.5" />
+                              Sem CV
+                            </span>
+                          )}
+                          
+                          {/* Botão WhatsApp */}
+                          {getWhatsAppLink(c.telefone) && (
                             <a 
-                              href={`mailto:${c.email}`} 
-                              className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-medium hover:shadow-md transition-all"
+                              href={getWhatsAppLink(c.telefone)!}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs px-3 py-1.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all flex items-center gap-1.5 shadow-sm"
                               onClick={(e) => e.stopPropagation()}
+                              title="WhatsApp"
                             >
-                              Email
+                              <MessageCircle className="w-3.5 h-3.5" />
+                              WhatsApp
                             </a>
-                          </div>
+                          )}
+                          
+                          {/* Botão Email */}
+                          <a 
+                            href={`mailto:${c.email}`} 
+                            className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-medium hover:shadow-md transition-all flex items-center gap-1.5"
+                            onClick={(e) => e.stopPropagation()}
+                            title="Enviar Email"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            Email
+                          </a>
                         </div>
                       </div>
                     </motion.div>
