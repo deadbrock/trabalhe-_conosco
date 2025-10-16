@@ -17,20 +17,13 @@ export default function RHLogin() {
     setError(null);
     setLoading(true);
     try {
-      // Modo DEMO - Remove isso quando o backend estiver configurado
-      if (email === "admin@fgservices.com" && senha === "admin123") {
-        localStorage.setItem("rh_token", "demo-token-temporario");
-        router.push("/rh");
-        return;
-      }
-
-      // Tentativa de login real com backend
+      // Login real com backend
       const data = await apiPost<{ token: string }>("/auth/login", { email, senha });
       localStorage.setItem("rh_token", data.token);
       router.push("/rh");
     } catch (err) {
       console.error("Erro de login:", err);
-      setError("Credenciais inválidas ou servidor offline. Use: admin@fgservices.com / admin123 para modo demo");
+      setError("Credenciais inválidas. Verifique seu email e senha.");
     } finally {
       setLoading(false);
     }
