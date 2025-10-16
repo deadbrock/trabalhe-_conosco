@@ -55,6 +55,22 @@ export default function BancoTalentos() {
     return new Date(date).toLocaleDateString("pt-BR");
   };
 
+  // Filtrar talentos pela busca
+  const filteredItems = React.useMemo(() => {
+    if (!searchQuery.trim()) {
+      return items;
+    }
+
+    return items.filter(talento => 
+      talento.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      talento.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      talento.cpf.includes(searchQuery) ||
+      talento.vaga_titulo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      talento.cidade?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      talento.estado?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [items, searchQuery]);
+
   const getWhatsAppLink = (telefone?: string) => {
     if (!telefone) return null;
     const numeroLimpo = telefone.replace(/\D/g, '');
@@ -163,15 +179,19 @@ export default function BancoTalentos() {
 
         {/* Lista de Talentos */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          {items.length === 0 ? (
+          {filteredItems.length === 0 ? (
             <div className="p-12 text-center">
               <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">Nenhum talento no banco</p>
-              <p className="text-gray-400 text-sm mt-2">Adicione candidatos com potencial para futuras vagas</p>
+              <p className="text-gray-600 text-lg font-medium">
+                {items.length === 0 ? "Nenhum talento no banco" : "Nenhum talento encontrado"}
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                {items.length === 0 ? "Adicione candidatos com potencial para futuras vagas" : "Tente ajustar sua busca"}
+              </p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
-              {items.map((talento, idx) => (
+              {filteredItems.map((talento, idx) => (
                 <motion.div
                   key={talento.id}
                   initial={{ opacity: 0, y: 10 }}
