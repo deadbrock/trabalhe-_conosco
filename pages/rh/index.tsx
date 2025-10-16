@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
+import WelcomeAnimation from "@/components/WelcomeAnimation";
 import { Briefcase, Users, TrendingUp, UserCheck, Mail, Phone, Calendar, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
@@ -25,16 +26,59 @@ type Candidato = {
 export default function RHDashboard() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [recentCandidatos, setRecentCandidatos] = useState<Candidato[]>([]);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
+    
+    // Verificar se é o primeiro acesso dos usuários especiais
+    if (typeof window !== "undefined") {
+      const hasSeenWelcome = localStorage.getItem("rh_welcome_shown");
+      const storedEmail = localStorage.getItem("rh_user_email");
+      
+      // Emails dos usuários que devem ver a animação
+      const specialUsers = [
+        "rh@fgservices.com.br",
+        "rh-2@fgservices.com.br",
+        "rh-3@fgservices.com.br",
+        "gestaorh@fgservices.com.br"
+      ];
+      
+      // Pegar nome do usuário do token JWT
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const email = payload.email || storedEmail || "";
+          const nome = payload.nome || "Usuário";
+          
+          setUserEmail(email);
+          setUserName(nome);
+          localStorage.setItem("rh_user_email", email);
+          
+          // Se é usuário especial e ainda não viu a animação
+          if (!hasSeenWelcome && specialUsers.includes(email)) {
+            setShowWelcome(true);
+          }
+        } catch (err) {
+          console.error("Erro ao decodificar token:", err);
+        }
+      }
+    }
+    
     apiGet<Metrics>("/metrics", token).then(setMetrics).catch(() => setMetrics({ vagas_abertas: 0, total_candidatos: 0, candidatos_hoje: 0 }));
     
     // Carregar últimos 5 candidatos
     apiGet<Candidato[]>("/candidatos", token).then((data) => {
-      setRecentCandidatos(data.slice(0, 5)); // Pega os 5 primeiros (já vem ordenado por data_cadastro DESC)
+      setRecentCandidatos(data.slice(0, 5));
     }).catch(() => setRecentCandidatos([]));
   }, []);
+
+  const handleCloseWelcome = () => {
+    localStorage.setItem("rh_welcome_shown", "true");
+    setShowWelcome(false);
+  };
 
   const cards = [
     { 
@@ -70,6 +114,15 @@ export default function RHDashboard() {
 
   return (
     <RHLayout>
+      {/* Animação de Boas-Vindas */}
+      {showWelcome && (
+        <WelcomeAnimation 
+          userName={userName}
+          userEmail={userEmail}
+          onClose={handleCloseWelcome}
+        />
+      )}
+      
       <div className="space-y-8">
         {/* Header */}
         <div>
