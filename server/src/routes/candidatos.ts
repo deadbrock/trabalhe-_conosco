@@ -15,11 +15,17 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
+    // Remove extensão do nome original e adiciona timestamp
+    const originalName = file.originalname.replace(/\.[^/.]+$/, "");
+    const sanitizedName = originalName.replace(/[^a-zA-Z0-9_-]/g, "_");
+    
     return {
       folder: "curriculos",
-      format: "pdf",
-      public_id: `curriculo_${Date.now()}`,
+      public_id: `${sanitizedName}_${Date.now()}`,
       resource_type: "raw" as const,
+      // Força o nome do arquivo com extensão .pdf no download
+      use_filename: true,
+      unique_filename: false,
     };
   },
 });
@@ -56,8 +62,15 @@ candidatosRouter.get("/:vagaId", async (req, res) => {
 
 candidatosRouter.post("/", upload.single("curriculo"), async (req, res) => {
   const { nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, vaga_id } = req.body;
+  
   // Pega a URL do arquivo no Cloudinary ao invés do filename local
-  const curriculo = req.file ? (req.file as any).path : null;
+  let curriculo = req.file ? (req.file as any).path : null;
+  
+  // Garante que a URL termina com .pdf para download correto
+  if (curriculo && !curriculo.endsWith('.pdf')) {
+    curriculo = curriculo + '.pdf';
+  }
+  
   const { rows } = await pool.query(
     `INSERT INTO candidatos (nome, cpf, data_nascimento, email, telefone, estado, cidade, bairro, curriculo, vaga_id)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
