@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { apiGet, apiPut } from "@/lib/api";
+import { apiGet, apiPut, getApiBase } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
 import { Search, Filter, Users, FileText, Mail, Phone, Calendar, Download, Eye, MessageCircle, CheckCircle, XCircle, Clock, MapPin, Navigation, Star } from "lucide-react";
@@ -389,12 +389,15 @@ export default function RHCandidatos() {
                       </a>
                       
                       {candidato.curriculo && (
-                        <button
+                        <a
+                          href={`${getApiBase()}/uploads/${candidato.curriculo}`}
+                          target="_blank"
+                          rel="noreferrer"
                           className="p-2 rounded-lg hover:bg-purple-50 text-purple-600 transition-all"
                           title="Baixar currículo"
                         >
                           <Download className="w-5 h-5" />
-                        </button>
+                        </a>
                       )}
 
                       {/* Ações de Status */}

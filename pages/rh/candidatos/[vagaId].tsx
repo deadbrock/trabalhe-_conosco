@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { apiGet, apiPut } from "@/lib/api";
+import { apiGet, apiPut, getApiBase } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
 import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle, ExternalLink } from "lucide-react";
@@ -176,7 +176,7 @@ export default function RHCandidatosPorVaga() {
                         <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
                           {c.curriculo ? (
                             <a 
-                              href={`http://localhost:3333/uploads/${c.curriculo}`} 
+                              href={`${getApiBase()}/uploads/${c.curriculo}`} 
                               target="_blank" 
                               rel="noreferrer" 
                               className="text-xs text-blue-600 hover:underline flex items-center gap-1"
