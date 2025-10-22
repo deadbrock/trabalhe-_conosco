@@ -16,6 +16,7 @@ export type Candidato = {
   vaga_titulo?: string;
   status: string;
   data_cadastro?: string;
+  data_nascimento?: string;
   estado?: string;
   cidade?: string;
   bairro?: string;
@@ -413,8 +414,14 @@ export default function RHCandidatos() {
                         )}
                         <span className="flex items-center gap-2 text-gray-500">
                           <Calendar className="w-4 h-4" />
-                          {formatDate(candidato.data_cadastro)}
+                          Inscrito: {formatDate(candidato.data_cadastro)}
                         </span>
+                        {candidato.data_nascimento && (
+                          <span className="flex items-center gap-2 text-gray-500">
+                            <Calendar className="w-4 h-4" />
+                            Nascimento: {formatDate(candidato.data_nascimento)}
+                          </span>
+                        )}
                         {sortByProximity && candidato.estado === "SP" && candidato.cidade === "São Paulo" && (
                           <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                             <Navigation className="w-3 h-3" />

@@ -17,6 +17,7 @@ export type Candidato = {
   vaga_titulo?: string;
   status: string;
   data_cadastro?: string;
+  data_nascimento?: string;
   estado?: string;
   cidade?: string;
   bairro?: string;
@@ -169,7 +170,13 @@ export default function RHCandidatosPorVaga() {
                           {c.data_cadastro && (
                             <div className="flex items-center gap-1.5">
                               <Calendar className="w-3.5 h-3.5" />
-                              <span>{new Date(c.data_cadastro).toLocaleDateString('pt-BR')}</span>
+                              <span>Inscrito: {new Date(c.data_cadastro).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                          )}
+                          {c.data_nascimento && (
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5" />
+                              <span>Nasc: {new Date(c.data_nascimento).toLocaleDateString('pt-BR')}</span>
                             </div>
                           )}
                         </div>

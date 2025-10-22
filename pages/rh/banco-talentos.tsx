@@ -15,6 +15,7 @@ export type Talento = {
   vaga_titulo?: string;
   status: string;
   data_cadastro?: string;
+  data_nascimento?: string;
   estado?: string;
   cidade?: string;
   bairro?: string;
@@ -234,9 +235,17 @@ export default function BancoTalentos() {
                         )}
                       </div>
                       
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Calendar className="w-4 h-4" />
-                        <span>Adicionado em: {formatDate(talento.data_cadastro)}</span>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                        <span className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          Adicionado em: {formatDate(talento.data_cadastro)}
+                        </span>
+                        {talento.data_nascimento && (
+                          <span className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            Nascimento: {formatDate(talento.data_nascimento)}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -336,6 +345,13 @@ export default function BancoTalentos() {
                   <p className="text-gray-900 mt-1">{formatDate(selectedTalento.data_cadastro)}</p>
                 </div>
               </div>
+              
+              {selectedTalento.data_nascimento && (
+                <div>
+                  <label className="text-sm font-semibold text-gray-600">Data de Nascimento</label>
+                  <p className="text-gray-900 mt-1">{formatDate(selectedTalento.data_nascimento)}</p>
+                </div>
+              )}
               
               <div>
                 <label className="text-sm font-semibold text-gray-600">Vaga Anterior</label>
