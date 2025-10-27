@@ -4,13 +4,24 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { Mail, Lock, Shield } from "lucide-react";
 import Link from "next/link";
+import ChristmasAnimation from "@/components/ChristmasAnimation";
 
 export default function RHLogin() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
+  const [showChristmas, setShowChristmas] = useState(false);
+  const [userName, setUserName] = useState<string>("");
   const router = useRouter();
+
+  // Verificar se sessão expirou
+  React.useEffect(() => {
+    if (router.query.expired === "true") {
+      setSessionExpired(true);
+    }
+  }, [router.query]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,13 +31,28 @@ export default function RHLogin() {
       // Login real com backend
       const data = await apiPost<{ token: string }>("/auth/login", { email, senha });
       localStorage.setItem("rh_token", data.token);
-      router.push("/rh");
+      
+      // Decodificar token para pegar o nome do usuário
+      try {
+        const payload = JSON.parse(atob(data.token.split('.')[1]));
+        setUserName(payload.nome || "");
+      } catch {
+        setUserName("");
+      }
+      
+      // Mostrar animação de Natal
+      setShowChristmas(true);
     } catch (err) {
       console.error("Erro de login:", err);
       setError("Credenciais inválidas. Verifique seu email e senha.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseChristmas = () => {
+    setShowChristmas(false);
+    router.push("/rh");
   };
 
   return (
@@ -98,6 +124,16 @@ export default function RHLogin() {
                 </div>
               </div>
 
+              {sessionExpired && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-lg text-sm"
+                >
+                  ⏰ Sua sessão expirou. Por favor, faça login novamente.
+                </motion.div>
+              )}
+
               {error && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
@@ -129,6 +165,14 @@ export default function RHLogin() {
           </p>
         </div>
       </motion.div>
+
+      {/* Animação de Natal */}
+      {showChristmas && (
+        <ChristmasAnimation 
+          userName={userName}
+          onClose={handleCloseChristmas}
+        />
+      )}
     </section>
   );
 }
