@@ -129,6 +129,17 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
   }
   const diasAteNatal = Math.ceil((natal.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
 
+  // Verificar se está nos dias de Natal (24, 25, 26, 27 de dezembro)
+  const diaAtual = hoje.getDate();
+  const mesAtual = hoje.getMonth(); // 11 = dezembro (0-indexed)
+  const isDiasDeNatal = mesAtual === 11 && (diaAtual >= 24 && diaAtual <= 27);
+
+  // Definir título e mensagem baseado na data
+  const titulo = isDiasDeNatal ? "🎄 Feliz Natal! 🎄" : "🎄 Espírito Natalino! 🎄";
+  const mensagemBemVindo = isDiasDeNatal 
+    ? "Que esta época festiva traga muita alegria e sucesso! 🎅✨"
+    : "A magia do Natal está chegando! Prepare-se para as festividades! ✨🎁";
+
   return (
     <AnimatePresence>
       <motion.div
@@ -249,7 +260,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
-              🎄 Feliz Natal! 🎄
+              {titulo}
             </h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -265,7 +276,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               transition={{ delay: 1 }}
               className="text-lg text-gray-600 mb-6"
             >
-              Que esta época festiva traga muita alegria e sucesso! 🎅✨
+              {mensagemBemVindo}
             </motion.p>
           </motion.div>
 
