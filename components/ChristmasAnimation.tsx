@@ -319,7 +319,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             transition={{ delay: 2 }}
             className="mt-6 text-sm text-gray-500 italic"
           >
-            "O espírito natalino está no ar! Ho Ho Ho!" 🎅🎄
+            &quot;O espírito natalino está no ar! Ho Ho Ho!&quot; 🎅🎄
           </motion.p>
         </motion.div>
       </motion.div>
