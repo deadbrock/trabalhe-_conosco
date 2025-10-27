@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { apiGet, apiPut, getApiBase } from "@/lib/api";
+import React, { useEffect, useState, useMemo } from "react";
+import { apiGet } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
-import { Search, Filter, Users, FileText, Mail, Phone, Calendar, Download, Eye, MessageCircle, CheckCircle, XCircle, Clock, MapPin, Navigation, Star } from "lucide-react";
+import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock } from "lucide-react";
 import Link from "next/link";
+
+export type Vaga = {
+  id: number;
+  titulo: string;
+  tipo_contrato: string;
+  endereco: string;
+  descricao?: string;
+  status: string;
+  criado_em?: string;
+};
 
 export type Candidato = {
   id: number;
@@ -22,45 +32,35 @@ export type Candidato = {
   bairro?: string;
 };
 
-const STATUS_COLORS: Record<string, string> = {
-  "novo": "bg-blue-100 text-blue-700",
-  "em_analise": "bg-yellow-100 text-yellow-700",
-  "entrevista": "bg-purple-100 text-purple-700",
-  "aprovado": "bg-green-100 text-green-700",
-  "reprovado": "bg-red-100 text-red-700",
-  "banco_talentos": "bg-indigo-100 text-indigo-700",
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  "novo": "Novo",
-  "em_analise": "Em Análise",
-  "entrevista": "Entrevista",
-  "aprovado": "Aprovado",
-  "reprovado": "Reprovado",
-  "banco_talentos": "Banco de Talentos",
+type VagaComCandidatos = Vaga & {
+  total_candidatos: number;
+  novos: number;
+  em_analise: number;
+  aprovados: number;
 };
 
 export default function RHCandidatos() {
-  const [items, setItems] = useState<Candidato[]>([]);
+  const [vagas, setVagas] = useState<Vaga[]>([]);
+  const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
-  const [estadoFilter, setEstadoFilter] = useState("");
-  const [cidadeFilter, setCidadeFilter] = useState("");
-  const [bairroFilter, setBairroFilter] = useState("");
-  const [sortByProximity, setSortByProximity] = useState(false);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
 
   const load = async () => {
     setLoading(true);
     try {
-      const data = await apiGet<Candidato[]>("/candidatos", token);
-      setItems(data);
+      // Buscar vagas ativas
+      const vagasData = await apiGet<Vaga[]>("/vagas?status=ativa", token);
+      setVagas(vagasData);
+
+      // Buscar todos os candidatos
+      const candidatosData = await apiGet<Candidato[]>("/candidatos", token);
+      setCandidatos(candidatosData);
     } catch (error) {
-      console.error("Erro ao carregar candidatos:", error);
-      setItems([]);
+      console.error("Erro ao carregar dados:", error);
+      setVagas([]);
+      setCandidatos([]);
     } finally {
       setLoading(false);
     }
@@ -71,103 +71,50 @@ export default function RHCandidatos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSearch = () => {
-    load();
-  };
+  // Agrupar candidatos por vaga e calcular estatísticas
+  const vagasComCandidatos = useMemo<VagaComCandidatos[]>(() => {
+    return vagas.map(vaga => {
+      const candidatosDaVaga = candidatos.filter(c => c.vaga_id === vaga.id);
+      return {
+        ...vaga,
+        total_candidatos: candidatosDaVaga.length,
+        novos: candidatosDaVaga.filter(c => c.status === "novo").length,
+        em_analise: candidatosDaVaga.filter(c => c.status === "em_analise").length,
+        aprovados: candidatosDaVaga.filter(c => c.status === "aprovado").length,
+      };
+    });
+  }, [vagas, candidatos]);
+
+  // Filtrar vagas por busca
+  const filteredVagas = useMemo(() => {
+    if (!searchQuery.trim()) return vagasComCandidatos;
+    
+    const query = searchQuery.toLowerCase();
+    return vagasComCandidatos.filter(vaga => 
+      vaga.titulo.toLowerCase().includes(query) ||
+      vaga.endereco.toLowerCase().includes(query) ||
+      vaga.tipo_contrato.toLowerCase().includes(query)
+    );
+  }, [vagasComCandidatos, searchQuery]);
 
   const formatDate = (date?: string) => {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("pt-BR");
   };
 
-  // Aplicar filtros aos candidatos
-  const filteredItems = React.useMemo(() => {
-    let filtered = [...items];
-
-    // Filtro de status
-    if (statusFilter !== "all") {
-      filtered = filtered.filter(c => c.status === statusFilter);
-    }
-
-    // Filtro de busca por nome
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(c => 
-        c.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.cpf.includes(searchQuery)
-      );
-    }
-
-    // Filtro de estado
-    if (estadoFilter.trim()) {
-      filtered = filtered.filter(c => 
-        c.estado?.toLowerCase().includes(estadoFilter.toLowerCase())
-      );
-    }
-
-    // Filtro de cidade
-    if (cidadeFilter.trim()) {
-      filtered = filtered.filter(c => 
-        c.cidade?.toLowerCase().includes(cidadeFilter.toLowerCase())
-      );
-    }
-
-    // Filtro de bairro
-    if (bairroFilter.trim()) {
-      filtered = filtered.filter(c => 
-        c.bairro?.toLowerCase().includes(bairroFilter.toLowerCase())
-      );
-    }
-
-    // Ordenar por proximidade (estado > cidade > bairro)
-    if (sortByProximity && (estadoFilter || cidadeFilter || bairroFilter)) {
-      filtered.sort((a, b) => {
-        let scoreA = 0;
-        let scoreB = 0;
-
-        // Pontuação baseada em correspondência
-        if (estadoFilter && a.estado?.toLowerCase() === estadoFilter.toLowerCase()) scoreA += 3;
-        if (estadoFilter && b.estado?.toLowerCase() === estadoFilter.toLowerCase()) scoreB += 3;
-        
-        if (cidadeFilter && a.cidade?.toLowerCase() === cidadeFilter.toLowerCase()) scoreA += 2;
-        if (cidadeFilter && b.cidade?.toLowerCase() === cidadeFilter.toLowerCase()) scoreB += 2;
-        
-        if (bairroFilter && a.bairro?.toLowerCase() === bairroFilter.toLowerCase()) scoreA += 1;
-        if (bairroFilter && b.bairro?.toLowerCase() === bairroFilter.toLowerCase()) scoreB += 1;
-
-        return scoreB - scoreA; // Maior pontuação primeiro
-      });
-    }
-
-    return filtered;
-  }, [items, statusFilter, searchQuery, estadoFilter, cidadeFilter, bairroFilter, sortByProximity]);
-
-  const getWhatsAppLink = (telefone?: string) => {
-    if (!telefone) return null;
-    // Remove caracteres não numéricos
-    const numeroLimpo = telefone.replace(/\D/g, '');
-    // Se não tiver o código do país (55), adiciona
-    const numeroCompleto = numeroLimpo.startsWith('55') ? numeroLimpo : `55${numeroLimpo}`;
-    return `https://wa.me/${numeroCompleto}`;
-  };
-
-  const handleStatusChange = async (candidatoId: number, newStatus: string) => {
-    try {
-      await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
-      await load();
-      alert(`✅ Status alterado com sucesso!`);
-    } catch {
-      alert("❌ Erro ao alterar status");
-    }
-  };
+  // Estatísticas gerais
+  const totalCandidatos = candidatos.length;
+  const totalNovos = candidatos.filter(c => c.status === "novo").length;
+  const totalEmAnalise = candidatos.filter(c => c.status === "em_analise").length;
+  const totalAprovados = candidatos.filter(c => c.status === "aprovado").length;
 
   return (
     <RHLayout>
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Candidatos</h1>
-          <p className="text-gray-600">Gerencie todos os candidatos das vagas</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Candidatos por Vaga</h1>
+          <p className="text-gray-600">Selecione uma vaga para ver os candidatos</p>
         </div>
 
         {/* Stats Cards */}
@@ -175,8 +122,8 @@ export default function RHCandidatos() {
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Total</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">{items.length}</p>
+                <p className="text-sm text-gray-600 font-medium">Total de Candidatos</p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">{totalCandidatos}</p>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6 text-blue-600" />
@@ -188,9 +135,7 @@ export default function RHCandidatos() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Novos</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">
-                  {items.filter(c => c.status === "novo").length}
-                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">{totalNovos}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                 <FileText className="w-6 h-6 text-green-600" />
@@ -202,12 +147,10 @@ export default function RHCandidatos() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Em Análise</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">
-                  {items.filter(c => c.status === "em_analise").length}
-                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">{totalEmAnalise}</p>
               </div>
               <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <Search className="w-6 h-6 text-yellow-600" />
+                <Clock className="w-6 h-6 text-yellow-600" />
               </div>
             </div>
           </div>
@@ -216,503 +159,130 @@ export default function RHCandidatos() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Aprovados</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">
-                  {items.filter(c => c.status === "aprovado").length}
-                </p>
+                <p className="text-3xl font-bold text-gray-900 mt-1">{totalAprovados}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 font-medium">Banco de Talentos</p>
-                <p className="text-3xl font-bold text-gray-900 mt-1">
-                  {items.filter(c => c.status === "banco_talentos").length}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                <Star className="w-6 h-6 text-indigo-600" />
+                <Users className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Filtros */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 space-y-4">
-          {/* Linha 1: Busca e Status */}
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex-grow min-w-[280px]">
+        {/* Barra de Busca */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="flex items-center gap-4">
+            <div className="flex-grow">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="Buscar por nome, email, vaga ou localização..."
+                  placeholder="Buscar vagas por título, endereço ou tipo de contrato..."
                   className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
                 />
               </div>
             </div>
-
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium min-w-[180px]"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="novo">Novos</option>
-              <option value="em_analise">Em Análise</option>
-              <option value="entrevista">Entrevista</option>
-              <option value="aprovado">Aprovados</option>
-              <option value="reprovado">Reprovados</option>
-              <option value="banco_talentos">🌟 Banco de Talentos</option>
-            </select>
-
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50"
-            >
-              <Filter className="w-5 h-5" />
-              {loading ? "Buscando..." : "Buscar"}
-            </button>
-          </div>
-
-          {/* Linha 2: Filtros de Localização */}
-          <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-200">
-            <div className="flex items-center gap-2 text-gray-700 font-semibold">
-              <MapPin className="w-5 h-5 text-primary" />
-              <span>Localização:</span>
-            </div>
-
-            <select
-              value={estadoFilter}
-              onChange={(e) => setEstadoFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium min-w-[140px]"
-            >
-              <option value="">Todos Estados</option>
-              <option value="SP">São Paulo</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="PE">Pernambuco</option>
-              <option value="CE">Ceará</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="BA">Bahia</option>
-              <option value="PR">Paraná</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="DF">Distrito Federal</option>
-            </select>
-
-            <input
-              type="text"
-              value={cidadeFilter}
-              onChange={(e) => setCidadeFilter(e.target.value)}
-              placeholder="Filtrar por cidade..."
-              className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-w-[180px]"
-            />
-
-            <input
-              type="text"
-              value={bairroFilter}
-              onChange={(e) => setBairroFilter(e.target.value)}
-              placeholder="Filtrar por bairro..."
-              className="px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-w-[180px]"
-            />
-
-            <button
-              onClick={() => {
-                setSortByProximity(!sortByProximity);
-              }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 font-semibold transition-all ${
-                sortByProximity 
-                  ? 'bg-gradient-to-r from-primary to-red-700 text-white border-transparent shadow-lg' 
-                  : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Navigation className={`w-4 h-4 ${sortByProximity ? 'animate-pulse' : ''}`} />
-              {sortByProximity ? 'Ordenado por Proximidade' : 'Ordenar por Proximidade'}
-            </button>
-
-            {(estadoFilter || cidadeFilter || bairroFilter || sortByProximity) && (
+            {searchQuery && (
               <button
-                onClick={() => {
-                  setEstadoFilter("");
-                  setCidadeFilter("");
-                  setBairroFilter("");
-                  setSortByProximity(false);
-                }}
-                className="text-sm text-gray-600 hover:text-red-600 font-medium underline transition-colors"
+                onClick={() => setSearchQuery("")}
+                className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 hover:bg-white transition-all text-gray-700 font-medium"
               >
-                Limpar Filtros de Localização
+                Limpar
               </button>
             )}
           </div>
         </div>
 
-        {/* Lista de Candidatos */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          {filteredItems.length === 0 ? (
-            <div className="p-12 text-center">
-              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">
-                {items.length === 0 ? "Nenhum candidato encontrado" : "Nenhum candidato corresponde aos filtros"}
-              </p>
-              <p className="text-gray-400 text-sm mt-2">
-                {items.length === 0 ? "Aguarde as primeiras candidaturas" : "Tente ajustar os filtros para ver mais resultados"}
-              </p>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-100">
-              {filteredItems.map((candidato, idx) => (
+        {/* Grid de Vagas com Candidatos */}
+        {loading ? (
+          <div className="flex items-center justify-center p-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+          </div>
+        ) : filteredVagas.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
+            <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-600 text-lg font-medium">
+              {vagas.length === 0 ? "Nenhuma vaga ativa encontrada" : "Nenhuma vaga corresponde à busca"}
+            </p>
+            <p className="text-gray-400 text-sm mt-2">
+              {vagas.length === 0 ? "Publique vagas para começar a receber candidaturas" : "Tente ajustar sua busca"}
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredVagas.map((vaga, idx) => (
+              <Link key={vaga.id} href={`/rh/candidatos/${vaga.id}`}>
                 <motion.div
-                  key={candidato.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="p-6 hover:bg-gray-50 transition-all"
+                  className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-grow">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="text-xl font-bold text-gray-900">{candidato.nome}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[candidato.status] || 'bg-gray-100 text-gray-600'}`}>
-                          {STATUS_LABELS[candidato.status] || candidato.status}
-                        </span>
+                  {/* Badge de Candidatos */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-red-700 rounded-xl flex items-center justify-center">
+                        <Briefcase className="w-6 h-6 text-white" />
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-gray-600 mb-2">
-                        <span className="flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          {candidato.email}
-                        </span>
-                        {candidato.telefone && (
-                          <span className="flex items-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            {candidato.telefone}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-2">
-                          <FileText className="w-4 h-4" />
-                          {candidato.vaga_titulo || `Vaga #${candidato.vaga_id}`}
-                        </span>
-                      </div>
-                      
-                      <div className="flex flex-wrap items-center gap-3 text-sm">
-                        {(candidato.cidade || candidato.bairro) && (
-                          <span className="flex items-center gap-2 text-gray-600">
-                            <MapPin className="w-4 h-4 text-primary" />
-                            <span className="font-medium">
-                              {candidato.bairro && `${candidato.bairro}, `}
-                              {candidato.cidade && `${candidato.cidade}`}
-                              {candidato.estado && ` - ${candidato.estado}`}
-                            </span>
-                          </span>
-                        )}
-                        <span className="flex items-center gap-2 text-gray-500">
-                          <Calendar className="w-4 h-4" />
-                          Inscrito: {formatDate(candidato.data_cadastro)}
-                        </span>
-                        {candidato.data_nascimento && (
-                          <span className="flex items-center gap-2 text-gray-500">
-                            <Calendar className="w-4 h-4" />
-                            Nascimento: {formatDate(candidato.data_nascimento)}
-                          </span>
-                        )}
-                        {sortByProximity && candidato.estado === "SP" && candidato.cidade === "São Paulo" && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
-                            <Navigation className="w-3 h-3" />
-                            Próximo
-                          </span>
-                        )}
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Total de Candidatos</p>
+                        <p className="text-2xl font-bold text-gray-900">{vaga.total_candidatos}</p>
                       </div>
                     </div>
+                    <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        onClick={() => setSelectedCandidato(candidato)}
-                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
-                        title="Ver detalhes"
-                      >
-                        <Eye className="w-5 h-5" />
-                      </button>
-                      
-                      {/* WhatsApp */}
-                      {getWhatsAppLink(candidato.telefone) && (
-                        <a
-                          href={getWhatsAppLink(candidato.telefone)!}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-all"
-                          title="WhatsApp"
-                        >
-                          <MessageCircle className="w-5 h-5" />
-                        </a>
-                      )}
-                      
-                      <a
-                        href={`mailto:${candidato.email}`}
-                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
-                        title="Enviar email"
-                      >
-                        <Mail className="w-5 h-5" />
-                      </a>
-                      
-                      {candidato.curriculo && (
-                        <a
-                          href={candidato.curriculo.startsWith('http') ? candidato.curriculo : `${getApiBase()}/uploads/${candidato.curriculo}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="p-2 rounded-lg hover:bg-purple-50 text-purple-600 transition-all"
-                          title="Baixar currículo"
-                        >
-                          <Download className="w-5 h-5" />
-                        </a>
-                      )}
+                  {/* Título da Vaga */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                    {vaga.titulo}
+                  </h3>
 
-                      {/* Ações de Status */}
-                      <div className="flex items-center gap-1 ml-2 border-l pl-2">
-                        {candidato.status !== "aprovado" && (
-                          <button
-                            onClick={() => handleStatusChange(candidato.id, "aprovado")}
-                            className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-all"
-                            title="Aprovar"
-                          >
-                            <CheckCircle className="w-5 h-5" />
-                          </button>
-                        )}
-                        {candidato.status !== "banco_talentos" && (
-                          <button
-                            onClick={() => handleStatusChange(candidato.id, "banco_talentos")}
-                            className="p-2 rounded-lg hover:bg-indigo-50 text-indigo-600 transition-all"
-                            title="Adicionar ao Banco de Talentos"
-                          >
-                            <Star className="w-5 h-5" />
-                          </button>
-                        )}
-                        {candidato.status !== "reprovado" && (
-                          <button
-                            onClick={() => handleStatusChange(candidato.id, "reprovado")}
-                            className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
-                            title="Reprovar"
-                          >
-                            <XCircle className="w-5 h-5" />
-                          </button>
-                        )}
-                        {candidato.status === "novo" && (
-                          <button
-                            onClick={() => handleStatusChange(candidato.id, "em_analise")}
-                            className="p-2 rounded-lg hover:bg-yellow-50 text-yellow-600 transition-all"
-                            title="Colocar em análise"
-                          >
-                            <Clock className="w-5 h-5" />
-                          </button>
-                        )}
+                  {/* Informações */}
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Briefcase className="w-4 h-4 text-primary" />
+                      <span className="font-medium">{vaga.tipo_contrato}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <MapPin className="w-4 h-4 text-primary" />
+                      <span className="line-clamp-1">{vaga.endereco}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <Clock className="w-4 h-4" />
+                      <span>Publicada em {formatDate(vaga.criado_em)}</span>
+                    </div>
+                  </div>
+
+                  {/* Estatísticas de Candidatos */}
+                  <div className="border-t border-gray-100 pt-4 grid grid-cols-3 gap-2">
+                    <div className="text-center">
+                      <div className="w-8 h-8 bg-green-100 rounded-lg mx-auto mb-1 flex items-center justify-center">
+                        <Users className="w-4 h-4 text-green-600" />
                       </div>
+                      <p className="text-lg font-bold text-gray-900">{vaga.novos}</p>
+                      <p className="text-xs text-gray-500">Novos</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-lg mx-auto mb-1 flex items-center justify-center">
+                        <Clock className="w-4 h-4 text-yellow-600" />
+                      </div>
+                      <p className="text-lg font-bold text-gray-900">{vaga.em_analise}</p>
+                      <p className="text-xs text-gray-500">Em Análise</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg mx-auto mb-1 flex items-center justify-center">
+                        <Users className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <p className="text-lg font-bold text-gray-900">{vaga.aprovados}</p>
+                      <p className="text-xs text-gray-500">Aprovados</p>
                     </div>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Link para Kanban */}
-        {items.length > 0 && (
-          <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-6 border border-primary/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Visualização Kanban</h3>
-                <p className="text-gray-600">Gerencie candidatos por vaga com arrastar e soltar</p>
-              </div>
-              <Link
-                href="/rh/candidatos/1"
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all"
-              >
-                Abrir Kanban
               </Link>
-            </div>
+            ))}
           </div>
         )}
       </div>
-
-      {/* Modal de Detalhes */}
-      {selectedCandidato && (
-        <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedCandidato(null)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-primary to-secondary p-6">
-              <h2 className="text-2xl font-bold text-white">Detalhes do Candidato</h2>
-            </div>
-
-            {/* Content */}
-            <div className="p-8 space-y-5">
-              <div>
-                <label className="text-sm font-semibold text-gray-600">Nome Completo</label>
-                <p className="text-lg font-bold text-gray-900 mt-1">{selectedCandidato.nome}</p>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-semibold text-gray-600">Email</label>
-                  <p className="text-gray-900 mt-1">{selectedCandidato.email}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-semibold text-gray-600">Telefone</label>
-                  <p className="text-gray-900 mt-1">{selectedCandidato.telefone || "-"}</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-semibold text-gray-600">CPF</label>
-                  <p className="text-gray-900 mt-1">{selectedCandidato.cpf}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-semibold text-gray-600">Data de Cadastro</label>
-                  <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_cadastro)}</p>
-                </div>
-              </div>
-              
-              <div>
-                <label className="text-sm font-semibold text-gray-600">Vaga</label>
-                <p className="text-gray-900 mt-1">{selectedCandidato.vaga_titulo || `Vaga #${selectedCandidato.vaga_id}`}</p>
-              </div>
-              
-              {(selectedCandidato.cidade || selectedCandidato.bairro || selectedCandidato.estado) && (
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    Localização
-                  </label>
-                  <div className="grid grid-cols-3 gap-3 text-sm">
-                    {selectedCandidato.estado && (
-                      <div>
-                        <span className="text-gray-600 block text-xs">Estado</span>
-                        <span className="font-semibold text-gray-900">{selectedCandidato.estado}</span>
-                      </div>
-                    )}
-                    {selectedCandidato.cidade && (
-                      <div>
-                        <span className="text-gray-600 block text-xs">Cidade</span>
-                        <span className="font-semibold text-gray-900">{selectedCandidato.cidade}</span>
-                      </div>
-                    )}
-                    {selectedCandidato.bairro && (
-                      <div>
-                        <span className="text-gray-600 block text-xs">Bairro</span>
-                        <span className="font-semibold text-gray-900">{selectedCandidato.bairro}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-              
-              <div>
-                <label className="text-sm font-semibold text-gray-600 block mb-2">Status Atual</label>
-                <span className={`inline-block px-4 py-2 rounded-lg text-sm font-semibold ${STATUS_COLORS[selectedCandidato.status]}`}>
-                  {STATUS_LABELS[selectedCandidato.status]}
-                </span>
-              </div>
-
-              {/* Ações de Status */}
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <label className="text-sm font-semibold text-gray-700 block mb-3">Alterar Status</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => {
-                      handleStatusChange(selectedCandidato.id, "em_analise");
-                      setSelectedCandidato(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all"
-                  >
-                    Em Análise
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleStatusChange(selectedCandidato.id, "entrevista");
-                      setSelectedCandidato(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-purple-100 text-purple-700 font-semibold hover:bg-purple-200 transition-all"
-                  >
-                    Agendar Entrevista
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleStatusChange(selectedCandidato.id, "aprovado");
-                      setSelectedCandidato(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-all"
-                  >
-                    ✓ Aprovar
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleStatusChange(selectedCandidato.id, "banco_talentos");
-                      setSelectedCandidato(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition-all flex items-center justify-center gap-2"
-                  >
-                    <Star className="w-4 h-4" />
-                    Banco de Talentos
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleStatusChange(selectedCandidato.id, "reprovado");
-                      setSelectedCandidato(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
-                  >
-                    ✗ Reprovar
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer Actions */}
-            <div className="bg-gray-50 px-8 py-4 flex justify-between gap-3">
-              <button
-                onClick={() => setSelectedCandidato(null)}
-                className="px-6 py-3 rounded-xl border-2 border-gray-200 hover:bg-white transition-all font-semibold text-gray-700"
-              >
-                Fechar
-              </button>
-              <div className="flex gap-2">
-                {getWhatsAppLink(selectedCandidato.telefone) && (
-                  <a
-                    href={getWhatsAppLink(selectedCandidato.telefone)!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    WhatsApp
-                  </a>
-                )}
-                <a
-                  href={`mailto:${selectedCandidato.email}`}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all"
-                >
-                  <Mail className="w-5 h-5" />
-                  Email
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </RHLayout>
   );
 }
-
