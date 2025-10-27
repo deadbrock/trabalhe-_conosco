@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { apiGet } from "@/lib/api";
+import { apiGet, apiPut, getApiBase } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
-import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock } from "lucide-react";
+import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock, ArrowLeft, Mail, Phone, Download, MessageCircle, CheckCircle, XCircle, Star, Eye, Calendar } from "lucide-react";
 import Link from "next/link";
 
 export type Vaga = {
@@ -39,11 +39,31 @@ type VagaComCandidatos = Vaga & {
   aprovados: number;
 };
 
+const STATUS_COLORS: Record<string, string> = {
+  "novo": "bg-blue-100 text-blue-700",
+  "em_analise": "bg-yellow-100 text-yellow-700",
+  "entrevista": "bg-purple-100 text-purple-700",
+  "aprovado": "bg-green-100 text-green-700",
+  "reprovado": "bg-red-100 text-red-700",
+  "banco_talentos": "bg-indigo-100 text-indigo-700",
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  "novo": "Novo",
+  "em_analise": "Em Análise",
+  "entrevista": "Entrevista",
+  "aprovado": "Aprovado",
+  "reprovado": "Reprovado",
+  "banco_talentos": "Banco de Talentos",
+};
+
 export default function RHCandidatos() {
   const [vagas, setVagas] = useState<Vaga[]>([]);
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [vagaSelecionada, setVagaSelecionada] = useState<VagaComCandidatos | null>(null);
+  const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
 
@@ -108,6 +128,395 @@ export default function RHCandidatos() {
   const totalEmAnalise = candidatos.filter(c => c.status === "em_analise").length;
   const totalAprovados = candidatos.filter(c => c.status === "aprovado").length;
 
+  // Candidatos da vaga selecionada
+  const candidatosDaVaga = useMemo(() => {
+    if (!vagaSelecionada) return [];
+    return candidatos.filter(c => c.vaga_id === vagaSelecionada.id);
+  }, [candidatos, vagaSelecionada]);
+
+  const getWhatsAppLink = (telefone?: string) => {
+    if (!telefone) return null;
+    const numeroLimpo = telefone.replace(/\D/g, '');
+    const numeroCompleto = numeroLimpo.startsWith('55') ? numeroLimpo : `55${numeroLimpo}`;
+    return `https://wa.me/${numeroCompleto}`;
+  };
+
+  const handleStatusChange = async (candidatoId: number, newStatus: string) => {
+    try {
+      await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
+      await load();
+      setSelectedCandidato(null);
+      alert(`✅ Status alterado com sucesso!`);
+    } catch {
+      alert("❌ Erro ao alterar status");
+    }
+  };
+
+  // Se uma vaga foi selecionada, mostra os candidatos
+  if (vagaSelecionada) {
+    return (
+      <RHLayout>
+        <div className="space-y-6">
+          {/* Header com botão Voltar */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setVagaSelecionada(null)}
+              className="p-2 rounded-xl hover:bg-gray-100 transition-all"
+            >
+              <ArrowLeft className="w-6 h-6 text-gray-700" />
+            </button>
+            <div className="flex-grow">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{vagaSelecionada.titulo}</h1>
+              <div className="flex items-center gap-4 text-sm text-gray-600">
+                <span className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4" />
+                  {vagaSelecionada.tipo_contrato}
+                </span>
+                <span className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  {vagaSelecionada.endereco}
+                </span>
+                <span className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  {vagaSelecionada.total_candidatos} candidatos
+                </span>
+              </div>
+            </div>
+            <Link
+              href={`/rh/candidatos/${vagaSelecionada.id}`}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all flex items-center gap-2"
+            >
+              <Briefcase className="w-5 h-5" />
+              Abrir Kanban
+            </Link>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Total</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{candidatosDaVaga.length}</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Novos</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.novos}</p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Em Análise</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.em_analise}</p>
+                </div>
+                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-yellow-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 font-medium">Aprovados</p>
+                  <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.aprovados}</p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Lista de Candidatos */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            {candidatosDaVaga.length === 0 ? (
+              <div className="p-12 text-center">
+                <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-600 text-lg font-medium">Nenhum candidato ainda</p>
+                <p className="text-gray-400 text-sm mt-2">Aguarde as primeiras candidaturas</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {candidatosDaVaga.map((candidato, idx) => (
+                  <motion.div
+                    key={candidato.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="p-6 hover:bg-gray-50 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-grow">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-xl font-bold text-gray-900">{candidato.nome}</h3>
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[candidato.status] || 'bg-gray-100 text-gray-600'}`}>
+                            {STATUS_LABELS[candidato.status] || candidato.status}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-gray-600 mb-2">
+                          <span className="flex items-center gap-2">
+                            <Mail className="w-4 h-4" />
+                            {candidato.email}
+                          </span>
+                          {candidato.telefone && (
+                            <span className="flex items-center gap-2">
+                              <Phone className="w-4 h-4" />
+                              {candidato.telefone}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            Inscrito: {formatDate(candidato.data_cadastro)}
+                          </span>
+                        </div>
+
+                        {candidato.data_nascimento && (
+                          <div className="text-sm text-gray-500">
+                            <span className="flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              Nascimento: {formatDate(candidato.data_nascimento)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => setSelectedCandidato(candidato)}
+                          className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
+                          title="Ver detalhes"
+                        >
+                          <Eye className="w-5 h-5" />
+                        </button>
+                        
+                        {getWhatsAppLink(candidato.telefone) && (
+                          <a
+                            href={getWhatsAppLink(candidato.telefone)!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-all"
+                            title="WhatsApp"
+                          >
+                            <MessageCircle className="w-5 h-5" />
+                          </a>
+                        )}
+                        
+                        <a
+                          href={`mailto:${candidato.email}`}
+                          className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
+                          title="Enviar email"
+                        >
+                          <Mail className="w-5 h-5" />
+                        </a>
+                        
+                        {candidato.curriculo && (
+                          <a
+                            href={candidato.curriculo.startsWith('http') ? candidato.curriculo : `${getApiBase()}/uploads/${candidato.curriculo}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="p-2 rounded-lg hover:bg-purple-50 text-purple-600 transition-all"
+                            title="Baixar currículo"
+                          >
+                            <Download className="w-5 h-5" />
+                          </a>
+                        )}
+
+                        {/* Ações de Status */}
+                        <div className="flex items-center gap-1 ml-2 border-l pl-2">
+                          {candidato.status !== "aprovado" && (
+                            <button
+                              onClick={() => handleStatusChange(candidato.id, "aprovado")}
+                              className="p-2 rounded-lg hover:bg-green-50 text-green-600 transition-all"
+                              title="Aprovar"
+                            >
+                              <CheckCircle className="w-5 h-5" />
+                            </button>
+                          )}
+                          {candidato.status !== "banco_talentos" && (
+                            <button
+                              onClick={() => handleStatusChange(candidato.id, "banco_talentos")}
+                              className="p-2 rounded-lg hover:bg-indigo-50 text-indigo-600 transition-all"
+                              title="Adicionar ao Banco de Talentos"
+                            >
+                              <Star className="w-5 h-5" />
+                            </button>
+                          )}
+                          {candidato.status !== "reprovado" && (
+                            <button
+                              onClick={() => handleStatusChange(candidato.id, "reprovado")}
+                              className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
+                              title="Reprovar"
+                            >
+                              <XCircle className="w-5 h-5" />
+                            </button>
+                          )}
+                          {candidato.status === "novo" && (
+                            <button
+                              onClick={() => handleStatusChange(candidato.id, "em_analise")}
+                              className="p-2 rounded-lg hover:bg-yellow-50 text-yellow-600 transition-all"
+                              title="Colocar em análise"
+                            >
+                              <Clock className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Modal de Detalhes do Candidato */}
+          {selectedCandidato && (
+            <div 
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setSelectedCandidato(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="bg-gradient-to-r from-primary to-red-700 p-6">
+                  <h2 className="text-2xl font-bold text-white">Detalhes do Candidato</h2>
+                </div>
+
+                <div className="p-8 space-y-5">
+                  <div>
+                    <label className="text-sm font-semibold text-gray-600">Nome Completo</label>
+                    <p className="text-lg font-bold text-gray-900 mt-1">{selectedCandidato.nome}</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-semibold text-gray-600">Email</label>
+                      <p className="text-gray-900 mt-1">{selectedCandidato.email}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-gray-600">Telefone</label>
+                      <p className="text-gray-900 mt-1">{selectedCandidato.telefone || "-"}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-semibold text-gray-600">CPF</label>
+                      <p className="text-gray-900 mt-1">{selectedCandidato.cpf}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-gray-600">Data de Cadastro</label>
+                      <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_cadastro)}</p>
+                    </div>
+                  </div>
+
+                  {selectedCandidato.data_nascimento && (
+                    <div>
+                      <label className="text-sm font-semibold text-gray-600">Data de Nascimento</label>
+                      <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_nascimento)}</p>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <label className="text-sm font-semibold text-gray-600 block mb-2">Status Atual</label>
+                    <span className={`inline-block px-4 py-2 rounded-lg text-sm font-semibold ${STATUS_COLORS[selectedCandidato.status]}`}>
+                      {STATUS_LABELS[selectedCandidato.status]}
+                    </span>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <label className="text-sm font-semibold text-gray-700 block mb-3">Alterar Status</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => handleStatusChange(selectedCandidato.id, "em_analise")}
+                        className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all"
+                      >
+                        Em Análise
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(selectedCandidato.id, "entrevista")}
+                        className="px-4 py-2 rounded-lg bg-purple-100 text-purple-700 font-semibold hover:bg-purple-200 transition-all"
+                      >
+                        Entrevista
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(selectedCandidato.id, "aprovado")}
+                        className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-all"
+                      >
+                        ✓ Aprovar
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(selectedCandidato.id, "banco_talentos")}
+                        className="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Star className="w-4 h-4" />
+                        Banco de Talentos
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(selectedCandidato.id, "reprovado")}
+                        className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
+                      >
+                        ✗ Reprovar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 px-8 py-4 flex justify-between gap-3">
+                  <button
+                    onClick={() => setSelectedCandidato(null)}
+                    className="px-6 py-3 rounded-xl border-2 border-gray-200 hover:bg-white transition-all font-semibold text-gray-700"
+                  >
+                    Fechar
+                  </button>
+                  <div className="flex gap-2">
+                    {getWhatsAppLink(selectedCandidato.telefone) && (
+                      <a
+                        href={getWhatsAppLink(selectedCandidato.telefone)!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        WhatsApp
+                      </a>
+                    )}
+                    <a
+                      href={`mailto:${selectedCandidato.email}`}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all"
+                    >
+                      <Mail className="w-5 h-5" />
+                      Email
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      </RHLayout>
+    );
+  }
+
+  // Visualização principal: Grid de vagas
   return (
     <RHLayout>
       <div className="space-y-6">
@@ -211,13 +620,14 @@ export default function RHCandidatos() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredVagas.map((vaga, idx) => (
-              <Link key={vaga.id} href={`/rh/candidatos/${vaga.id}`}>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
-                >
+              <motion.div
+                key={vaga.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                onClick={() => setVagaSelecionada(vaga)}
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
+              >
                   {/* Badge de Candidatos */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
@@ -277,8 +687,7 @@ export default function RHCandidatos() {
                       <p className="text-xs text-gray-500">Aprovados</p>
                     </div>
                   </div>
-                </motion.div>
-              </Link>
+              </motion.div>
             ))}
           </div>
         )}
