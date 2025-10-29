@@ -8,6 +8,10 @@ import { candidatosRouter } from "./routes/candidatos";
 import { authRouter } from "./routes/auth";
 import { metricsRouter } from "./routes/metrics";
 import { setupRouter } from "./routes/setup";
+import comentariosRouter from "./routes/comentarios";
+import tagsRouter from "./routes/tags";
+import agendamentosRouter from "./routes/agendamentos";
+import pontuacaoRouter from "./routes/pontuacao";
 import { requireAuth } from "./middleware/auth";
 
 dotenv.config();
@@ -61,6 +65,12 @@ app.use("/candidatos", candidatosCombinedRouter);
 
 // protegidas (RH apenas)
 app.use("/metrics", requireAuth, metricsRouter);
+
+// Novas rotas FASE 1 - Todas protegidas (RH apenas)
+app.use("/comentarios", requireAuth, comentariosRouter);
+app.use("/tags", requireAuth, tagsRouter);
+app.use("/agendamentos", requireAuth, agendamentosRouter);
+app.use("/pontuacao", requireAuth, pontuacaoRouter);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
