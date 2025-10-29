@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, Send, Trash2, Star, StarOff } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
 
@@ -28,19 +28,19 @@ export default function ComentariosCandidato({
   const [importante, setImportante] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Carregar comentários
-  useEffect(() => {
-    carregarComentarios();
-  }, [candidatoId]);
-
-  const carregarComentarios = async () => {
+  const carregarComentarios = useCallback(async () => {
     try {
       const data = await apiGet(`/comentarios/${candidatoId}`);
       setComentarios(data);
     } catch (error) {
       console.error('Erro ao carregar comentários:', error);
     }
-  };
+  }, [candidatoId]);
+
+  // Carregar comentários
+  useEffect(() => {
+    carregarComentarios();
+  }, [carregarComentarios]);
 
   const adicionarComentario = async () => {
     if (!novoComentario.trim()) return;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Tag, Plus, X } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
 
@@ -20,28 +20,28 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
   const [mostrarSeletor, setMostrarSeletor] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    carregarTags();
-    carregarTagsCandidato();
-  }, [candidatoId]);
-
-  const carregarTags = async () => {
+  const carregarTags = useCallback(async () => {
     try {
       const data = await apiGet('/tags');
       setTodasTags(data);
     } catch (error) {
       console.error('Erro ao carregar tags:', error);
     }
-  };
+  }, []);
 
-  const carregarTagsCandidato = async () => {
+  const carregarTagsCandidato = useCallback(async () => {
     try {
       const data = await apiGet(`/tags/candidato/${candidatoId}`);
       setTagsCandidato(data);
     } catch (error) {
       console.error('Erro ao carregar tags do candidato:', error);
     }
-  };
+  }, [candidatoId]);
+
+  useEffect(() => {
+    carregarTags();
+    carregarTagsCandidato();
+  }, [carregarTags, carregarTagsCandidato]);
 
   const adicionarTag = async (tagId: number) => {
     setLoading(true);

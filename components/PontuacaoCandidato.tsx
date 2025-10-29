@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star, TrendingUp, Award } from 'lucide-react';
-import { apiGet, apiPost } from '@/lib/api';
+import { apiPost } from '@/lib/api';
 
 interface PontuacaoCandidatoProps {
   candidatoId: number;

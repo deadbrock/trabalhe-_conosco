@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar, Clock, MapPin, Video, Plus, Trash2, Edit2 } from 'lucide-react';
 import { apiGet, apiPost, apiDelete, apiPut } from '@/lib/api';
 
@@ -41,18 +41,18 @@ export default function AgendamentosCandidato({
     status: 'agendado' as const,
   });
 
-  useEffect(() => {
-    carregarAgendamentos();
-  }, [candidatoId]);
-
-  const carregarAgendamentos = async () => {
+  const carregarAgendamentos = useCallback(async () => {
     try {
       const data = await apiGet(`/agendamentos?candidato_id=${candidatoId}`);
       setAgendamentos(data);
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error);
     }
-  };
+  }, [candidatoId]);
+
+  useEffect(() => {
+    carregarAgendamentos();
+  }, [carregarAgendamentos]);
 
   const salvarAgendamento = async () => {
     if (!form.titulo || !form.data_hora) {
@@ -200,7 +200,7 @@ export default function AgendamentosCandidato({
               <select
                 value={form.status}
                 onChange={(e) =>
-                  setForm({ ...form, status: e.target.value as any })
+                  setForm({ ...form, status: e.target.value as 'agendado' | 'confirmado' | 'realizado' | 'cancelado' })
                 }
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               >

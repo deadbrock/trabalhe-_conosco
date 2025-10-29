@@ -34,6 +34,7 @@ export type Candidato = {
   estado?: string;
   cidade?: string;
   bairro?: string;
+  score?: number;
 };
 
 type VagaComCandidatos = Vaga & {
@@ -658,7 +659,7 @@ export default function RHCandidatos() {
                   {abaAtiva === 'pontuacao' && (
                     <PontuacaoCandidato
                       candidatoId={selectedCandidato.id}
-                      scoreAtual={(selectedCandidato as any).score || 0}
+                      scoreAtual={selectedCandidato.score || 0}
                     />
                   )}
                 </div>
