@@ -4,6 +4,10 @@ import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
 import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock, ArrowLeft, Mail, Phone, Download, MessageCircle, CheckCircle, XCircle, Star, Eye, Calendar } from "lucide-react";
 import Link from "next/link";
+import ComentariosCandidato from "@/components/ComentariosCandidato";
+import TagsCandidato from "@/components/TagsCandidato";
+import AgendamentosCandidato from "@/components/AgendamentosCandidato";
+import PontuacaoCandidato from "@/components/PontuacaoCandidato";
 
 export type Vaga = {
   id: number;
@@ -65,8 +69,11 @@ export default function RHCandidatos() {
   const [searchCandidato, setSearchCandidato] = useState("");
   const [vagaSelecionada, setVagaSelecionada] = useState<VagaComCandidatos | null>(null);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
+  const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao'>('detalhes');
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
+  const userId = typeof window !== "undefined" ? parseInt(localStorage.getItem("rh_user_id") || "1") : 1;
+  const userName = typeof window !== "undefined" ? localStorage.getItem("rh_user_name") || "Usuário RH" : "Usuário RH";
 
   const load = async () => {
     setLoading(true);
@@ -440,126 +447,220 @@ export default function RHCandidatos() {
           {selectedCandidato && (
             <div 
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setSelectedCandidato(null)}
+              onClick={() => {
+                setSelectedCandidato(null);
+                setAbaAtiva('detalhes');
+              }}
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden"
+                className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="bg-gradient-to-r from-primary to-red-700 p-6">
-                  <h2 className="text-2xl font-bold text-white">Detalhes do Candidato</h2>
+                  <h2 className="text-2xl font-bold text-white">{selectedCandidato.nome}</h2>
+                  <p className="text-white/90 text-sm mt-1">{selectedCandidato.email}</p>
                 </div>
 
-                <div className="p-8 space-y-5">
-                  <div>
-                    <label className="text-sm font-semibold text-gray-600">Nome Completo</label>
-                    <p className="text-lg font-bold text-gray-900 mt-1">{selectedCandidato.nome}</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">Email</label>
-                      <p className="text-gray-900 mt-1">{selectedCandidato.email}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">Telefone</label>
-                      <p className="text-gray-900 mt-1">{selectedCandidato.telefone || "-"}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">CPF</label>
-                      <p className="text-gray-900 mt-1">{selectedCandidato.cpf}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">Data de Cadastro</label>
-                      <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_cadastro)}</p>
-                    </div>
-                  </div>
+                {/* Abas */}
+                <div className="bg-gray-100 px-8 py-2 flex gap-2 overflow-x-auto border-b border-gray-200">
+                  <button
+                    onClick={() => setAbaAtiva('detalhes')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'detalhes'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    📋 Detalhes
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('comentarios')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'comentarios'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    💬 Comentários
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('tags')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'tags'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    🏷️ Tags
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('agendamentos')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'agendamentos'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    📅 Agendamentos
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('pontuacao')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'pontuacao'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    ⭐ Pontuação
+                  </button>
+                </div>
 
-                  {selectedCandidato.data_nascimento && (
-                    <div>
-                      <label className="text-sm font-semibold text-gray-600">Data de Nascimento</label>
-                      <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_nascimento)}</p>
-                    </div>
-                  )}
-
-                  {/* Endereço */}
-                  {(selectedCandidato.cidade || selectedCandidato.estado || selectedCandidato.bairro) && (
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
-                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
-                        <MapPin className="w-4 h-4 text-primary" />
-                        Endereço
-                      </label>
-                      <div className="grid grid-cols-3 gap-3 text-sm">
-                        {selectedCandidato.estado && (
-                          <div>
-                            <span className="text-gray-600 block text-xs">Estado</span>
-                            <span className="font-semibold text-gray-900">{selectedCandidato.estado}</span>
-                          </div>
-                        )}
-                        {selectedCandidato.cidade && (
-                          <div>
-                            <span className="text-gray-600 block text-xs">Cidade</span>
-                            <span className="font-semibold text-gray-900">{selectedCandidato.cidade}</span>
-                          </div>
-                        )}
-                        {selectedCandidato.bairro && (
-                          <div>
-                            <span className="text-gray-600 block text-xs">Bairro</span>
-                            <span className="font-semibold text-gray-900">{selectedCandidato.bairro}</span>
-                          </div>
-                        )}
+                <div className="p-8 space-y-5 overflow-y-auto flex-1">
+                  {/* Aba Detalhes */}
+                  {abaAtiva === 'detalhes' && (
+                    <>
+                      <div>
+                        <label className="text-sm font-semibold text-gray-600">Nome Completo</label>
+                        <p className="text-lg font-bold text-gray-900 mt-1">{selectedCandidato.nome}</p>
                       </div>
-                    </div>
-                  )}
-                  
-                  <div>
-                    <label className="text-sm font-semibold text-gray-600 block mb-2">Status Atual</label>
-                    <span className={`inline-block px-4 py-2 rounded-lg text-sm font-semibold ${STATUS_COLORS[selectedCandidato.status]}`}>
-                      {STATUS_LABELS[selectedCandidato.status]}
-                    </span>
-                  </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-semibold text-gray-600">Email</label>
+                          <p className="text-gray-900 mt-1">{selectedCandidato.email}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-semibold text-gray-600">Telefone</label>
+                          <p className="text-gray-900 mt-1">{selectedCandidato.telefone || "-"}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-semibold text-gray-600">CPF</label>
+                          <p className="text-gray-900 mt-1">{selectedCandidato.cpf}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-semibold text-gray-600">Data de Cadastro</label>
+                          <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_cadastro)}</p>
+                        </div>
+                      </div>
 
-                  <div className="bg-gray-50 rounded-2xl p-4">
-                    <label className="text-sm font-semibold text-gray-700 block mb-3">Alterar Status</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => handleStatusChange(selectedCandidato.id, "em_analise")}
-                        className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all"
-                      >
-                        Em Análise
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedCandidato.id, "entrevista")}
-                        className="px-4 py-2 rounded-lg bg-purple-100 text-purple-700 font-semibold hover:bg-purple-200 transition-all"
-                      >
-                        Entrevista
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedCandidato.id, "aprovado")}
-                        className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-all"
-                      >
-                        ✓ Aprovar
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedCandidato.id, "banco_talentos")}
-                        className="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition-all flex items-center justify-center gap-2"
-                      >
-                        <Star className="w-4 h-4" />
-                        Banco de Talentos
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedCandidato.id, "reprovado")}
-                        className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
-                      >
-                        ✗ Reprovar
-                      </button>
-                    </div>
-                  </div>
+                      {selectedCandidato.data_nascimento && (
+                        <div>
+                          <label className="text-sm font-semibold text-gray-600">Data de Nascimento</label>
+                          <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_nascimento)}</p>
+                        </div>
+                      )}
+
+                      {/* Endereço */}
+                      {(selectedCandidato.cidade || selectedCandidato.estado || selectedCandidato.bairro) && (
+                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
+                          <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                            <MapPin className="w-4 h-4 text-primary" />
+                            Endereço
+                          </label>
+                          <div className="grid grid-cols-3 gap-3 text-sm">
+                            {selectedCandidato.estado && (
+                              <div>
+                                <span className="text-gray-600 block text-xs">Estado</span>
+                                <span className="font-semibold text-gray-900">{selectedCandidato.estado}</span>
+                              </div>
+                            )}
+                            {selectedCandidato.cidade && (
+                              <div>
+                                <span className="text-gray-600 block text-xs">Cidade</span>
+                                <span className="font-semibold text-gray-900">{selectedCandidato.cidade}</span>
+                              </div>
+                            )}
+                            {selectedCandidato.bairro && (
+                              <div>
+                                <span className="text-gray-600 block text-xs">Bairro</span>
+                                <span className="font-semibold text-gray-900">{selectedCandidato.bairro}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div>
+                        <label className="text-sm font-semibold text-gray-600 block mb-2">Status Atual</label>
+                        <span className={`inline-block px-4 py-2 rounded-lg text-sm font-semibold ${STATUS_COLORS[selectedCandidato.status]}`}>
+                          {STATUS_LABELS[selectedCandidato.status]}
+                        </span>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-2xl p-4">
+                        <label className="text-sm font-semibold text-gray-700 block mb-3">Alterar Status</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            onClick={() => handleStatusChange(selectedCandidato.id, "em_analise")}
+                            className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all"
+                          >
+                            Em Análise
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(selectedCandidato.id, "entrevista")}
+                            className="px-4 py-2 rounded-lg bg-purple-100 text-purple-700 font-semibold hover:bg-purple-200 transition-all"
+                          >
+                            Entrevista
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(selectedCandidato.id, "aprovado")}
+                            className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-all"
+                          >
+                            ✓ Aprovar
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(selectedCandidato.id, "banco_talentos")}
+                            className="px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-semibold hover:bg-indigo-200 transition-all flex items-center justify-center gap-2"
+                          >
+                            <Star className="w-4 h-4" />
+                            Banco de Talentos
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(selectedCandidato.id, "reprovado")}
+                            className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
+                          >
+                            ✗ Reprovar
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Aba Comentários */}
+                  {abaAtiva === 'comentarios' && (
+                    <ComentariosCandidato
+                      candidatoId={selectedCandidato.id}
+                      usuarioId={userId}
+                      usuarioNome={userName}
+                    />
+                  )}
+
+                  {/* Aba Tags */}
+                  {abaAtiva === 'tags' && (
+                    <TagsCandidato candidatoId={selectedCandidato.id} />
+                  )}
+
+                  {/* Aba Agendamentos */}
+                  {abaAtiva === 'agendamentos' && (
+                    <AgendamentosCandidato
+                      candidatoId={selectedCandidato.id}
+                      vagaId={selectedCandidato.vaga_id}
+                      usuarioId={userId}
+                    />
+                  )}
+
+                  {/* Aba Pontuação */}
+                  {abaAtiva === 'pontuacao' && (
+                    <PontuacaoCandidato
+                      candidatoId={selectedCandidato.id}
+                      scoreAtual={(selectedCandidato as any).score || 0}
+                    />
+                  )}
                 </div>
 
                 <div className="bg-gray-50 px-8 py-4 flex justify-between gap-3">
