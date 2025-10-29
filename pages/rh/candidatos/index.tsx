@@ -8,6 +8,8 @@ import ComentariosCandidato from "@/components/ComentariosCandidato";
 import TagsCandidato from "@/components/TagsCandidato";
 import AgendamentosCandidato from "@/components/AgendamentosCandidato";
 import PontuacaoCandidato from "@/components/PontuacaoCandidato";
+import { StatusBadge, StatusEmoji } from "@/components/StatusEmoji";
+import CandidateTimeline from "@/components/CandidateTimeline";
 
 export type Vaga = {
   id: number;
@@ -233,7 +235,9 @@ export default function RHCandidatos() {
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Novos</p>
+                  <p className="text-sm text-gray-600 font-medium flex items-center gap-2">
+                    Novos <StatusEmoji status="novo" size="sm" />
+                  </p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.novos}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -245,7 +249,9 @@ export default function RHCandidatos() {
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Em Análise</p>
+                  <p className="text-sm text-gray-600 font-medium flex items-center gap-2">
+                    Em Análise <StatusEmoji status="em_analise" size="sm" />
+                  </p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.em_analise}</p>
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
@@ -257,7 +263,9 @@ export default function RHCandidatos() {
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Aprovados</p>
+                  <p className="text-sm text-gray-600 font-medium flex items-center gap-2">
+                    Aprovados <StatusEmoji status="aprovado" size="sm" />
+                  </p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.aprovados}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -314,9 +322,7 @@ export default function RHCandidatos() {
                       <div className="flex-grow">
                         <div className="flex items-center gap-3 mb-3">
                           <h3 className="text-xl font-bold text-gray-900">{candidato.nome}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[candidato.status] || 'bg-gray-100 text-gray-600'}`}>
-                            {STATUS_LABELS[candidato.status] || candidato.status}
-                          </span>
+                          <StatusBadge status={candidato.status} showEmoji={true} showText={true} />
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-gray-600 mb-2">
@@ -522,6 +528,12 @@ export default function RHCandidatos() {
                   {/* Aba Detalhes */}
                   {abaAtiva === 'detalhes' && (
                     <>
+                      {/* Timeline de Progresso */}
+                      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 mb-6">
+                        <h3 className="text-lg font-bold text-gray-900 mb-4">Progresso no Processo Seletivo</h3>
+                        <CandidateTimeline currentStatus={selectedCandidato.status} />
+                      </div>
+
                       <div>
                         <label className="text-sm font-semibold text-gray-600">Nome Completo</label>
                         <p className="text-lg font-bold text-gray-900 mt-1">{selectedCandidato.nome}</p>
@@ -588,9 +600,7 @@ export default function RHCandidatos() {
                       
                       <div>
                         <label className="text-sm font-semibold text-gray-600 block mb-2">Status Atual</label>
-                        <span className={`inline-block px-4 py-2 rounded-lg text-sm font-semibold ${STATUS_COLORS[selectedCandidato.status]}`}>
-                          {STATUS_LABELS[selectedCandidato.status]}
-                        </span>
+                        <StatusBadge status={selectedCandidato.status} showEmoji={true} showText={true} />
                       </div>
 
                       <div className="bg-gray-50 rounded-2xl p-4">

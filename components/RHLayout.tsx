@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star } from "lucide-react";
+import { ThemeToggleCompact } from "./ThemeToggle";
+import DelicateAnimations from "./DelicateAnimations";
 
 export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -35,6 +37,9 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Animações Delicadas (apenas tema feminino) */}
+      <DelicateAnimations />
+      
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,6 +74,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
+              <ThemeToggleCompact />
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all ml-2"
@@ -110,6 +116,9 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
+              <div className="flex items-center justify-center py-2">
+                <ThemeToggleCompact />
+              </div>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all"
