@@ -32,13 +32,20 @@ export default function AgendamentosCandidato({
   const [editando, setEditando] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    titulo: string;
+    descricao: string;
+    data_hora: string;
+    local: string;
+    link_video: string;
+    status: 'agendado' | 'confirmado' | 'realizado' | 'cancelado';
+  }>({
     titulo: '',
     descricao: '',
     data_hora: '',
     local: '',
     link_video: '',
-    status: 'agendado' as const,
+    status: 'agendado',
   });
 
   const carregarAgendamentos = useCallback(async () => {
