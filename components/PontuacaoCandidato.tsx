@@ -21,7 +21,7 @@ export default function PontuacaoCandidato({
   const recalcularPontuacao = async () => {
     setLoading(true);
     try {
-      const result = await apiPost(`/pontuacao/calcular/${candidatoId}`, {});
+      const result = await apiPost<{ candidatoId: string; score: number; message: string }>(`/pontuacao/calcular/${candidatoId}`, {});
       setScore(result.score);
       alert(`Pontuação atualizada: ${result.score} pontos`);
     } catch (error) {

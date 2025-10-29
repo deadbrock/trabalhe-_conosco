@@ -22,7 +22,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
 
   const carregarTags = useCallback(async () => {
     try {
-      const data = await apiGet('/tags');
+      const data = await apiGet<TagType[]>('/tags');
       setTodasTags(data);
     } catch (error) {
       console.error('Erro ao carregar tags:', error);
@@ -31,7 +31,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
 
   const carregarTagsCandidato = useCallback(async () => {
     try {
-      const data = await apiGet(`/tags/candidato/${candidatoId}`);
+      const data = await apiGet<TagType[]>(`/tags/candidato/${candidatoId}`);
       setTagsCandidato(data);
     } catch (error) {
       console.error('Erro ao carregar tags do candidato:', error);
@@ -46,7 +46,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
   const adicionarTag = async (tagId: number) => {
     setLoading(true);
     try {
-      const tagAdicionada = await apiPost('/tags/candidato', {
+      const tagAdicionada = await apiPost<TagType>('/tags/candidato', {
         candidato_id: candidatoId,
         tag_id: tagId,
       });

@@ -30,7 +30,7 @@ export default function ComentariosCandidato({
 
   const carregarComentarios = useCallback(async () => {
     try {
-      const data = await apiGet(`/comentarios/${candidatoId}`);
+      const data = await apiGet<Comentario[]>(`/comentarios/${candidatoId}`);
       setComentarios(data);
     } catch (error) {
       console.error('Erro ao carregar comentários:', error);
@@ -47,7 +47,7 @@ export default function ComentariosCandidato({
 
     setLoading(true);
     try {
-      const comentarioCriado = await apiPost('/comentarios', {
+      const comentarioCriado = await apiPost<Comentario>('/comentarios', {
         candidato_id: candidatoId,
         usuario_id: usuarioId,
         usuario_nome: usuarioNome,

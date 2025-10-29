@@ -43,7 +43,7 @@ export default function AgendamentosCandidato({
 
   const carregarAgendamentos = useCallback(async () => {
     try {
-      const data = await apiGet(`/agendamentos?candidato_id=${candidatoId}`);
+      const data = await apiGet<Agendamento[]>(`/agendamentos?candidato_id=${candidatoId}`);
       setAgendamentos(data);
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error);
