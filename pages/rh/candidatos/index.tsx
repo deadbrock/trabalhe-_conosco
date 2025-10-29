@@ -62,6 +62,7 @@ export default function RHCandidatos() {
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchCandidato, setSearchCandidato] = useState("");
   const [vagaSelecionada, setVagaSelecionada] = useState<VagaComCandidatos | null>(null);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
 
@@ -131,8 +132,24 @@ export default function RHCandidatos() {
   // Candidatos da vaga selecionada
   const candidatosDaVaga = useMemo(() => {
     if (!vagaSelecionada) return [];
-    return candidatos.filter(c => c.vaga_id === vagaSelecionada.id);
-  }, [candidatos, vagaSelecionada]);
+    let filtered = candidatos.filter(c => c.vaga_id === vagaSelecionada.id);
+    
+    // Aplicar filtro de busca
+    if (searchCandidato.trim()) {
+      const query = searchCandidato.toLowerCase();
+      filtered = filtered.filter(c => 
+        c.nome.toLowerCase().includes(query) ||
+        c.email.toLowerCase().includes(query) ||
+        c.cpf.includes(query) ||
+        c.telefone?.includes(query) ||
+        c.cidade?.toLowerCase().includes(query) ||
+        c.estado?.toLowerCase().includes(query) ||
+        c.bairro?.toLowerCase().includes(query)
+      );
+    }
+    
+    return filtered;
+  }, [candidatos, vagaSelecionada, searchCandidato]);
 
   const getWhatsAppLink = (telefone?: string) => {
     if (!telefone) return null;
@@ -242,6 +259,31 @@ export default function RHCandidatos() {
             </div>
           </div>
 
+          {/* Barra de Busca de Candidatos */}
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="flex items-center gap-4">
+              <div className="flex-grow">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    value={searchCandidato}
+                    onChange={(e) => setSearchCandidato(e.target.value)}
+                    placeholder="Buscar candidato por nome, email, telefone ou localização..."
+                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
+                  />
+                </div>
+              </div>
+              {searchCandidato && (
+                <button
+                  onClick={() => setSearchCandidato("")}
+                  className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 hover:bg-white transition-all text-gray-700 font-medium"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Lista de Candidatos */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             {candidatosDaVaga.length === 0 ? (
@@ -286,14 +328,24 @@ export default function RHCandidatos() {
                           </span>
                         </div>
 
-                        {candidato.data_nascimento && (
-                          <div className="text-sm text-gray-500">
-                            <span className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-3 text-sm">
+                          {(candidato.cidade || candidato.estado || candidato.bairro) && (
+                            <span className="flex items-center gap-2 text-gray-600">
+                              <MapPin className="w-4 h-4 text-primary" />
+                              <span className="font-medium">
+                                {candidato.bairro && `${candidato.bairro}, `}
+                                {candidato.cidade && `${candidato.cidade}`}
+                                {candidato.estado && ` - ${candidato.estado}`}
+                              </span>
+                            </span>
+                          )}
+                          {candidato.data_nascimento && (
+                            <span className="flex items-center gap-2 text-gray-500">
                               <Calendar className="w-4 h-4" />
                               Nascimento: {formatDate(candidato.data_nascimento)}
                             </span>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2">
@@ -432,6 +484,36 @@ export default function RHCandidatos() {
                     <div>
                       <label className="text-sm font-semibold text-gray-600">Data de Nascimento</label>
                       <p className="text-gray-900 mt-1">{formatDate(selectedCandidato.data_nascimento)}</p>
+                    </div>
+                  )}
+
+                  {/* Endereço */}
+                  {(selectedCandidato.cidade || selectedCandidato.estado || selectedCandidato.bairro) && (
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
+                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                        <MapPin className="w-4 h-4 text-primary" />
+                        Endereço
+                      </label>
+                      <div className="grid grid-cols-3 gap-3 text-sm">
+                        {selectedCandidato.estado && (
+                          <div>
+                            <span className="text-gray-600 block text-xs">Estado</span>
+                            <span className="font-semibold text-gray-900">{selectedCandidato.estado}</span>
+                          </div>
+                        )}
+                        {selectedCandidato.cidade && (
+                          <div>
+                            <span className="text-gray-600 block text-xs">Cidade</span>
+                            <span className="font-semibold text-gray-900">{selectedCandidato.cidade}</span>
+                          </div>
+                        )}
+                        {selectedCandidato.bairro && (
+                          <div>
+                            <span className="text-gray-600 block text-xs">Bairro</span>
+                            <span className="font-semibold text-gray-900">{selectedCandidato.bairro}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                   
