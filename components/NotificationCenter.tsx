@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Bell, X, Check, Trash2, Mail, MailOpen } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Bell, X, Check, Trash2, MailOpen } from 'lucide-react';
 import { apiGet, apiPut, apiDelete } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -26,15 +26,7 @@ export default function NotificationCenter() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
-  useEffect(() => {
-    carregarNotificacoes();
-    
-    // Polling a cada 30 segundos
-    const interval = setInterval(carregarNotificacoes, 30000);
-    return () => clearInterval(interval);
-  }, [filter]);
-
-  const carregarNotificacoes = async () => {
+  const carregarNotificacoes = useCallback(async () => {
     try {
       const params = filter === 'unread' ? { lida: 'false' } : {};
       const data = await apiGet<NotificacoesResponse>('/notificacoes', params);
@@ -43,7 +35,15 @@ export default function NotificationCenter() {
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    carregarNotificacoes();
+    
+    // Polling a cada 30 segundos
+    const interval = setInterval(carregarNotificacoes, 30000);
+    return () => clearInterval(interval);
+  }, [carregarNotificacoes]);
 
   const marcarComoLida = async (id: number) => {
     try {

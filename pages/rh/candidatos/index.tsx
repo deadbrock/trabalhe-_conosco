@@ -692,7 +692,6 @@ export default function RHCandidatos() {
                     <NotasRapidas
                       candidatoId={selectedCandidato.id}
                       usuarioId={userId}
-                      usuarioNome={userName}
                     />
                   )}
 
@@ -700,8 +699,6 @@ export default function RHCandidatos() {
                   {abaAtiva === 'avaliacoes' && (
                     <AvaliacaoCandidato
                       candidatoId={selectedCandidato.id}
-                      usuarioId={userId}
-                      usuarioNome={userName}
                     />
                   )}
 

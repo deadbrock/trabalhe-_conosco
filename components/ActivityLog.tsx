@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { History, Filter, User, Calendar, Tag, FileText, MessageCircle, Star, ArrowRight } from 'lucide-react';
 import { apiGet } from '@/lib/api';
 import { motion } from 'framer-motion';
@@ -13,7 +13,7 @@ type Atividade = {
   vaga_titulo?: string;
   tipo: string;
   descricao: string;
-  dados_extras?: any;
+  dados_extras?: Record<string, unknown>;
   criado_em: string;
 };
 
@@ -34,14 +34,10 @@ export default function ActivityLog({
   const [loading, setLoading] = useState(true);
   const [tipoFiltro, setTipoFiltro] = useState<string>('all');
 
-  useEffect(() => {
-    carregarAtividades();
-  }, [candidatoId, vagaId, tipoFiltro]);
-
-  const carregarAtividades = async () => {
+  const carregarAtividades = useCallback(async () => {
     try {
       setLoading(true);
-      const params: any = { limit: limite };
+      const params: Record<string, string | number> = { limit: limite };
       
       if (candidatoId) params.candidato_id = candidatoId;
       if (vagaId) params.vaga_id = vagaId;
@@ -54,10 +50,14 @@ export default function ActivityLog({
     } finally {
       setLoading(false);
     }
-  };
+  }, [candidatoId, vagaId, tipoFiltro, limite]);
+
+  useEffect(() => {
+    carregarAtividades();
+  }, [carregarAtividades]);
 
   const getTipoIcone = (tipo: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       candidato_criado: User,
       status_alterado: ArrowRight,
       comentario_adicionado: MessageCircle,

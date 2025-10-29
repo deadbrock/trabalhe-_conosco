@@ -43,10 +43,9 @@ type AvaliacaoResponse = {
 };
 
 // Componente de Notas Rápidas
-export function NotasRapidas({ candidatoId, usuarioId, usuarioNome }: { 
+export function NotasRapidas({ candidatoId, usuarioId }: { 
   candidatoId: number; 
   usuarioId: number;
-  usuarioNome: string;
 }) {
   const [notas, setNotas] = useState<Nota[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,11 +53,7 @@ export function NotasRapidas({ candidatoId, usuarioId, usuarioNome }: {
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [textoEditando, setTextoEditando] = useState('');
 
-  useEffect(() => {
-    carregarNotas();
-  }, [candidatoId]);
-
-  const carregarNotas = async () => {
+  const carregarNotas = React.useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiGet<Nota[]>(`/notas/candidato/${candidatoId}`);
@@ -68,7 +63,11 @@ export function NotasRapidas({ candidatoId, usuarioId, usuarioNome }: {
     } finally {
       setLoading(false);
     }
-  };
+  }, [candidatoId]);
+
+  React.useEffect(() => {
+    carregarNotas();
+  }, [carregarNotas]);
 
   const adicionarNota = async () => {
     if (!novaNota.trim()) return;
@@ -246,10 +245,8 @@ export function NotasRapidas({ candidatoId, usuarioId, usuarioNome }: {
 }
 
 // Componente de Avaliação com Estrelas
-export function AvaliacaoCandidato({ candidatoId, usuarioId, usuarioNome }: { 
+export function AvaliacaoCandidato({ candidatoId }: { 
   candidatoId: number;
-  usuarioId: number;
-  usuarioNome: string;
 }) {
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
   const [media, setMedia] = useState<AvaliacaoResponse['media'] | null>(null);
@@ -264,11 +261,7 @@ export function AvaliacaoCandidato({ candidatoId, usuarioId, usuarioNome }: {
     comentario: ''
   });
 
-  useEffect(() => {
-    carregarAvaliacoes();
-  }, [candidatoId]);
-
-  const carregarAvaliacoes = async () => {
+  const carregarAvaliacoes = React.useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiGet<AvaliacaoResponse>(`/avaliacoes/candidato/${candidatoId}`);
@@ -279,7 +272,11 @@ export function AvaliacaoCandidato({ candidatoId, usuarioId, usuarioNome }: {
     } finally {
       setLoading(false);
     }
-  };
+  }, [candidatoId]);
+
+  React.useEffect(() => {
+    carregarAvaliacoes();
+  }, [carregarAvaliacoes]);
 
   const submeterAvaliacao = async () => {
     // Validar que pelo menos um critério foi preenchido
