@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import DelicateAnimations from "./DelicateAnimations";
+import NotificationCenter from "./NotificationCenter";
 
 export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -74,6 +75,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
+              <NotificationCenter />
               <ThemeToggleCompact />
               <button
                 onClick={handleLogout}
@@ -116,7 +118,8 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
-              <div className="flex items-center justify-center py-2">
+              <div className="flex items-center justify-center gap-3 py-2">
+                <NotificationCenter />
                 <ThemeToggleCompact />
               </div>
               <button

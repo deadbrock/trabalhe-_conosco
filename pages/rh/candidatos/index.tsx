@@ -10,6 +10,8 @@ import AgendamentosCandidato from "@/components/AgendamentosCandidato";
 import PontuacaoCandidato from "@/components/PontuacaoCandidato";
 import { StatusBadge, StatusEmoji } from "@/components/StatusEmoji";
 import CandidateTimeline from "@/components/CandidateTimeline";
+import { NotasRapidas, AvaliacaoCandidato } from "@/components/NotasAvaliacao";
+import { ActivityLogCompact } from "@/components/ActivityLog";
 
 export type Vaga = {
   id: number;
@@ -504,6 +506,36 @@ export default function RHCandidatos() {
                   >
                     ⭐ Pontuação
                   </button>
+                  <button
+                    onClick={() => setAbaAtiva('notas')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'notas'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    📝 Notas
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('avaliacoes')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'avaliacoes'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    ⭐ Avaliações
+                  </button>
+                  <button
+                    onClick={() => setAbaAtiva('atividades')}
+                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
+                      abaAtiva === 'atividades'
+                        ? 'bg-white text-primary shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    📜 Atividades
+                  </button>
                 </div>
 
                 <div className="p-8 space-y-5 overflow-y-auto flex-1">
@@ -653,6 +685,29 @@ export default function RHCandidatos() {
                       candidatoId={selectedCandidato.id}
                       scoreAtual={selectedCandidato.score || 0}
                     />
+                  )}
+
+                  {/* Aba Notas */}
+                  {abaAtiva === 'notas' && (
+                    <NotasRapidas
+                      candidatoId={selectedCandidato.id}
+                      usuarioId={userId}
+                      usuarioNome={userName}
+                    />
+                  )}
+
+                  {/* Aba Avaliações */}
+                  {abaAtiva === 'avaliacoes' && (
+                    <AvaliacaoCandidato
+                      candidatoId={selectedCandidato.id}
+                      usuarioId={userId}
+                      usuarioNome={userName}
+                    />
+                  )}
+
+                  {/* Aba Atividades */}
+                  {abaAtiva === 'atividades' && (
+                    <ActivityLogCompact candidatoId={selectedCandidato.id} />
                   )}
                 </div>
 
