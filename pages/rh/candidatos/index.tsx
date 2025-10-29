@@ -712,7 +712,7 @@ export default function RHCandidatos() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover-lift smooth-hover">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Total de Candidatos</p>
@@ -724,7 +724,7 @@ export default function RHCandidatos() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover-lift smooth-hover">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Novos</p>
@@ -736,7 +736,7 @@ export default function RHCandidatos() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover-lift smooth-hover">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Em Análise</p>
@@ -748,7 +748,7 @@ export default function RHCandidatos() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover-lift smooth-hover">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 font-medium">Aprovados</p>
@@ -810,7 +810,7 @@ export default function RHCandidatos() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
                 onClick={() => setVagaSelecionada(vaga)}
-                className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
+                className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 cursor-pointer group hover-lift hover-glow"
               >
                   {/* Badge de Candidatos */}
                   <div className="flex items-center justify-between mb-4">
