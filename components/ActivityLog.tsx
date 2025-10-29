@@ -37,13 +37,15 @@ export default function ActivityLog({
   const carregarAtividades = useCallback(async () => {
     try {
       setLoading(true);
-      const params: Record<string, string | number> = { limit: limite };
       
-      if (candidatoId) params.candidato_id = candidatoId;
-      if (vagaId) params.vaga_id = vagaId;
-      if (tipoFiltro !== 'all') params.tipo = tipoFiltro;
+      // Construir query params
+      const params = new URLSearchParams();
+      params.append('limit', limite.toString());
+      if (candidatoId) params.append('candidato_id', candidatoId.toString());
+      if (vagaId) params.append('vaga_id', vagaId.toString());
+      if (tipoFiltro !== 'all') params.append('tipo', tipoFiltro);
 
-      const data = await apiGet<Atividade[]>('/atividades', params);
+      const data = await apiGet<Atividade[]>(`/atividades?${params.toString()}`);
       setAtividades(data);
     } catch (error) {
       console.error('Erro ao carregar atividades:', error);

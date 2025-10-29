@@ -28,8 +28,8 @@ export default function NotificationCenter() {
 
   const carregarNotificacoes = useCallback(async () => {
     try {
-      const params = filter === 'unread' ? { lida: 'false' } : {};
-      const data = await apiGet<NotificacoesResponse>('/notificacoes', params);
+      const queryString = filter === 'unread' ? '?lida=false' : '';
+      const data = await apiGet<NotificacoesResponse>(`/notificacoes${queryString}`);
       setNotificacoes(data.notificacoes);
       setNaoLidas(data.nao_lidas);
     } catch (error) {
