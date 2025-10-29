@@ -12,6 +12,10 @@ import comentariosRouter from "./routes/comentarios";
 import tagsRouter from "./routes/tags";
 import agendamentosRouter from "./routes/agendamentos";
 import pontuacaoRouter from "./routes/pontuacao";
+import notificacoesRouter from "./routes/notificacoes";
+import atividadesRouter from "./routes/atividades";
+import notasRouter from "./routes/notas";
+import avaliacoesRouter from "./routes/avaliacoes";
 import { requireAuth } from "./middleware/auth";
 
 dotenv.config();
@@ -71,6 +75,12 @@ app.use("/comentarios", requireAuth, comentariosRouter);
 app.use("/tags", requireAuth, tagsRouter);
 app.use("/agendamentos", requireAuth, agendamentosRouter);
 app.use("/pontuacao", requireAuth, pontuacaoRouter);
+
+// Novas rotas FASE 3 - Todas protegidas (RH apenas)
+app.use("/notificacoes", requireAuth, notificacoesRouter);
+app.use("/atividades", requireAuth, atividadesRouter);
+app.use("/notas", requireAuth, notasRouter);
+app.use("/avaliacoes", requireAuth, avaliacoesRouter);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {

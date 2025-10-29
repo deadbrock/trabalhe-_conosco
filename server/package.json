@@ -10,6 +10,7 @@
     "migrate": "ts-node src/migrate.ts",
     "migrate:banco-talentos": "ts-node src/migrate-banco-talentos.ts",
     "migrate:fase1": "ts-node src/migrate-fase1.ts",
+    "migrate:fase3": "ts-node src/migrate-fase3.ts",
     "seed": "ts-node src/seed.ts",
     "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
