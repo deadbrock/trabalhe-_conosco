@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tag, Plus, X } from 'lucide-react';
-import { apiGet, apiPost, apiDelete } from '@/utils/requests';
+import { apiGet, apiPost, apiDelete } from '@/lib/api';
 
 interface TagType {
   id: number;

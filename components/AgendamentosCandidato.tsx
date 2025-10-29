@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Video, Plus, Trash2, Edit2 } from 'lucide-react';
-import { apiGet, apiPost, apiDelete, apiPut } from '@/utils/requests';
+import { apiGet, apiPost, apiDelete, apiPut } from '@/lib/api';
 
 interface Agendamento {
   id: number;

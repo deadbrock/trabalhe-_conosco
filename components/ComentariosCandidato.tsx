@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, Send, Trash2, Star, StarOff } from 'lucide-react';
-import { apiGet, apiPost, apiDelete } from '@/utils/requests';
+import { apiGet, apiPost, apiDelete } from '@/lib/api';
 
 interface Comentario {
   id: number;
