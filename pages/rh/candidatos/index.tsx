@@ -56,7 +56,7 @@ export default function RHCandidatos() {
   const [searchCandidato, setSearchCandidato] = useState("");
   const [vagaSelecionada, setVagaSelecionada] = useState<VagaComCandidatos | null>(null);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
-  const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao'>('detalhes');
+  const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao' | 'notas' | 'avaliacoes' | 'atividades'>('detalhes');
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
   const userId = typeof window !== "undefined" ? parseInt(localStorage.getItem("rh_user_id") || "1") : 1;
