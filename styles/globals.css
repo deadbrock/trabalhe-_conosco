@@ -104,3 +104,9 @@ body {
   filter: blur(40px) saturate(120%);
   opacity: 0.6;
 }
+
+/* Skeleton wave animation */
+@keyframes wave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Tag, Plus, X } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
+import { TagsSkeleton } from './Skeleton';
 
 interface TagType {
   id: number;
@@ -19,6 +20,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
   const [tagsCandidato, setTagsCandidato] = useState<TagType[]>([]);
   const [mostrarSeletor, setMostrarSeletor] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingTags, setLoadingTags] = useState(true);
 
   const carregarTags = useCallback(async () => {
     try {
@@ -30,11 +32,14 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
   }, []);
 
   const carregarTagsCandidato = useCallback(async () => {
+    setLoadingTags(true);
     try {
       const data = await apiGet<TagType[]>(`/tags/candidato/${candidatoId}`);
       setTagsCandidato(data);
     } catch (error) {
       console.error('Erro ao carregar tags do candidato:', error);
+    } finally {
+      setLoadingTags(false);
     }
   }, [candidatoId]);
 
@@ -84,7 +89,9 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
 
       {/* Tags atuais */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {tagsCandidato.length === 0 ? (
+        {loadingTags ? (
+          <TagsSkeleton />
+        ) : tagsCandidato.length === 0 ? (
           <p className="text-sm text-gray-400">Nenhuma tag adicionada</p>
         ) : (
           tagsCandidato.map((tag) => (

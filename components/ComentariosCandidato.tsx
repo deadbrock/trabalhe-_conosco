@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, Send, Trash2, Star, StarOff } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
+import { ComentariosSkeleton } from './Skeleton';
 
 interface Comentario {
   id: number;
@@ -27,13 +28,17 @@ export default function ComentariosCandidato({
   const [novoComentario, setNovoComentario] = useState('');
   const [importante, setImportante] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingComentarios, setLoadingComentarios] = useState(true);
 
   const carregarComentarios = useCallback(async () => {
+    setLoadingComentarios(true);
     try {
       const data = await apiGet<Comentario[]>(`/comentarios/${candidatoId}`);
       setComentarios(data);
     } catch (error) {
       console.error('Erro ao carregar comentários:', error);
+    } finally {
+      setLoadingComentarios(false);
     }
   }, [candidatoId]);
 
@@ -141,7 +146,9 @@ export default function ComentariosCandidato({
 
       {/* Lista de comentários */}
       <div className="space-y-3">
-        {comentarios.length === 0 ? (
+        {loadingComentarios ? (
+          <ComentariosSkeleton />
+        ) : comentarios.length === 0 ? (
           <p className="text-center text-gray-400 py-8">
             Nenhum comentário ainda. Seja o primeiro!
           </p>

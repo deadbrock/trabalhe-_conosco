@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar, Clock, MapPin, Video, Plus, Trash2, Edit2 } from 'lucide-react';
 import { apiGet, apiPost, apiDelete, apiPut } from '@/lib/api';
+import { AgendamentosSkeleton } from './Skeleton';
 
 interface Agendamento {
   id: number;
@@ -31,6 +32,7 @@ export default function AgendamentosCandidato({
   const [mostrarForm, setMostrarForm] = useState(false);
   const [editando, setEditando] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingAgendamentos, setLoadingAgendamentos] = useState(true);
 
   const [form, setForm] = useState<{
     titulo: string;
@@ -49,11 +51,14 @@ export default function AgendamentosCandidato({
   });
 
   const carregarAgendamentos = useCallback(async () => {
+    setLoadingAgendamentos(true);
     try {
       const data = await apiGet<Agendamento[]>(`/agendamentos?candidato_id=${candidatoId}`);
       setAgendamentos(data);
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error);
+    } finally {
+      setLoadingAgendamentos(false);
     }
   }, [candidatoId]);
 
@@ -278,7 +283,9 @@ export default function AgendamentosCandidato({
 
       {/* Lista de agendamentos */}
       <div className="space-y-3">
-        {agendamentos.length === 0 ? (
+        {loadingAgendamentos ? (
+          <AgendamentosSkeleton />
+        ) : agendamentos.length === 0 ? (
           <p className="text-center text-gray-400 py-8">
             Nenhum agendamento criado ainda
           </p>
