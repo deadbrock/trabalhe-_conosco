@@ -99,7 +99,7 @@ const sizeClasses = {
   xl: 'text-4xl',
 };
 
-export default function StatusEmoji({ status, size = 'md', animated = true }: StatusEmojiProps) {
+export function StatusEmoji({ status, size = 'md', animated = true }: StatusEmojiProps) {
   const config = statusConfig[status.toLowerCase()] || statusConfig.pendente;
   const sizeClass = sizeClasses[size];
 

@@ -3,7 +3,7 @@ import { Sparkles, Palette } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme, isFeminine } = useTheme();
+  const { toggleTheme, isFeminine } = useTheme();
 
   return (
     <button
