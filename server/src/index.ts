@@ -39,6 +39,22 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+// Rota pública de status do WhatsApp (antes da autenticação)
+app.get("/whatsapp-status", async (_req, res) => {
+  try {
+    const { verificarConexao } = await import("./services/whatsappService");
+    const conectado = await verificarConexao();
+    res.json({
+      conectado,
+      status: conectado ? 'connected' : 'disconnected',
+      tipo: 'Twilio WhatsApp API',
+      configurado: !!process.env.TWILIO_ACCOUNT_SID && !!process.env.TWILIO_AUTH_TOKEN
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: "Erro ao verificar status", message: error.message });
+  }
+});
+
 // públicas
 app.use("/auth", authRouter);
 app.use("/setup", setupRouter);
