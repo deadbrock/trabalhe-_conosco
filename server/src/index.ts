@@ -19,6 +19,7 @@ import avaliacoesRouter from "./routes/avaliacoes";
 import templatesRouter from "./routes/templates";
 import comunicacaoRouter from "./routes/comunicacao";
 import gatilhosRouter from "./routes/gatilhos";
+import whatsappRouter from "./routes/whatsapp";
 import { requireAuth } from "./middleware/auth";
 
 dotenv.config();
@@ -89,6 +90,7 @@ app.use("/avaliacoes", requireAuth, avaliacoesRouter);
 app.use("/templates", requireAuth, templatesRouter);
 app.use("/comunicacao", requireAuth, comunicacaoRouter);
 app.use("/gatilhos", requireAuth, gatilhosRouter);
+app.use("/whatsapp", requireAuth, whatsappRouter);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
