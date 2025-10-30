@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import RHLayout from '@/components/RHLayout';
 import { apiGet, apiPost } from '@/lib/api';
 import { Smartphone, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import Image from 'next/image';
 
 interface QRCodeResponse {
   qrcode?: string;
@@ -40,9 +41,10 @@ export default function WhatsAppConnect() {
         }
         setError(data.message);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao gerar QR Code:', error);
-      setError(error.message || 'Erro ao conectar com WhatsApp');
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao conectar com WhatsApp';
+      setError(errorMessage);
       setStatus('disconnected');
     } finally {
       setLoading(false);
@@ -160,6 +162,7 @@ export default function WhatsAppConnect() {
                   📱 Escaneie o QR Code com seu WhatsApp
                 </p>
                 <div className="flex justify-center mb-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img 
                     src={qrCode} 
                     alt="QR Code WhatsApp" 
@@ -168,8 +171,8 @@ export default function WhatsAppConnect() {
                 </div>
                 <div className="text-sm text-gray-600 space-y-2">
                   <p><strong>1.</strong> Abra o WhatsApp no celular</p>
-                  <p><strong>2.</strong> Toque em "Configurações" → "Aparelhos conectados"</p>
-                  <p><strong>3.</strong> Toque em "Conectar um aparelho"</p>
+                  <p><strong>2.</strong> Toque em &quot;Configurações&quot; → &quot;Aparelhos conectados&quot;</p>
+                  <p><strong>3.</strong> Toque em &quot;Conectar um aparelho&quot;</p>
                   <p><strong>4.</strong> Escaneie o QR Code acima</p>
                   <p className="text-yellow-600 font-medium mt-4">
                     ⏱️ O QR Code expira em 2 minutos

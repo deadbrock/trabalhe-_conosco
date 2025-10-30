@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageSquare, FileText, Settings, BarChart3, History } from 'lucide-react';
+import { Mail, FileText, Settings, BarChart3, History } from 'lucide-react';
 import RHLayout from '../../components/RHLayout';
 import TemplateManager from '../../components/TemplateManager';
 import TemplateEditor from '../../components/TemplateEditor';
@@ -20,7 +20,7 @@ export default function ComunicacaoPage() {
     setModoTemplate('novo');
   };
 
-  const handleEditarTemplate = (template: any) => {
+  const handleEditarTemplate = (template: { id: number }) => {
     setTemplateEditandoId(template.id);
     setModoTemplate('editar');
   };
