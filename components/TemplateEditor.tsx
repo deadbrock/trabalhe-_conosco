@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Save, X, Eye, Sparkles } from 'lucide-react';
 import { apiPost, apiPut, apiGet } from '../lib/api';
 
@@ -45,13 +45,8 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
     ativo: true
   });
 
-  useEffect(() => {
-    if (templateId) {
-      carregarTemplate();
-    }
-  }, [templateId]);
-
-  const carregarTemplate = async () => {
+  const carregarTemplate = useCallback(async () => {
+    if (!templateId) return;
     try {
       setLoading(true);
       const data = await apiGet<Template>(`/templates/${templateId}`);
@@ -62,7 +57,11 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
     } finally {
       setLoading(false);
     }
-  };
+  }, [templateId]);
+
+  useEffect(() => {
+    carregarTemplate();
+  }, [carregarTemplate]);
 
   const detectarVariaveis = (texto: string): string[] => {
     const regex = /\{\{(\w+)\}\}/g;
@@ -147,9 +146,10 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
       }
 
       if (onSave) onSave();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar template:', error);
-      alert(error.response?.data?.error || 'Erro ao salvar template');
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao salvar template';
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

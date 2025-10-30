@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, Edit2, Copy, Trash2, Eye, Power, Plus, Search } from 'lucide-react';
 import { apiGet, apiDelete, apiPost, apiPatch } from '../lib/api';
 
@@ -33,11 +33,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
   const [busca, setBusca] = useState('');
   const [templatePreview, setTemplatePreview] = useState<Template | null>(null);
 
-  useEffect(() => {
-    carregarTemplates();
-  }, [filtroTipo, filtroStatus]);
-
-  const carregarTemplates = async () => {
+  const carregarTemplates = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -52,7 +48,11 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
     } finally {
       setLoading(false);
     }
-  };
+  }, [filtroTipo, filtroStatus]);
+
+  useEffect(() => {
+    carregarTemplates();
+  }, [carregarTemplates]);
 
   const handleDuplicar = async (id: number) => {
     if (!confirm('Deseja duplicar este template?')) return;
@@ -74,9 +74,10 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
       await apiDelete(`/templates/${id}`);
       alert('Template deletado com sucesso!');
       carregarTemplates();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao deletar template:', error);
-      alert(error.response?.data?.error || 'Erro ao deletar template');
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao deletar template';
+      alert(errorMessage);
     }
   };
 
@@ -156,7 +157,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
           {/* Filtro Tipo */}
           <select
             value={filtroTipo}
-            onChange={(e) => setFiltroTipo(e.target.value as any)}
+            onChange={(e) => setFiltroTipo(e.target.value as 'all' | 'email' | 'whatsapp')}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">Todos os tipos</option>
@@ -167,7 +168,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
           {/* Filtro Status */}
           <select
             value={filtroStatus}
-            onChange={(e) => setFiltroStatus(e.target.value as any)}
+            onChange={(e) => setFiltroStatus(e.target.value as 'all' | 'ativo' | 'inativo')}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">Todos os status</option>

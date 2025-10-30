@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, CheckCircle, XCircle, Clock, Eye, Filter } from 'lucide-react';
 import { apiGet } from '../lib/api';
 
@@ -35,11 +35,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
   const [comunicacaoSelecionada, setComunicacaoSelecionada] = useState<Comunicacao | null>(null);
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    carregarHistorico();
-  }, [candidatoId, vagaId, filtroTipo, filtroStatus]);
-
-  const carregarHistorico = async () => {
+  const carregarHistorico = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -58,7 +54,11 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
     } finally {
       setLoading(false);
     }
-  };
+  }, [candidatoId, vagaId, filtroTipo, filtroStatus, limite]);
+
+  useEffect(() => {
+    carregarHistorico();
+  }, [carregarHistorico]);
 
   const getStatusConfig = (status: Comunicacao['status']) => {
     const configs = {
@@ -116,7 +116,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
           
           <select
             value={filtroTipo}
-            onChange={(e) => setFiltroTipo(e.target.value as any)}
+            onChange={(e) => setFiltroTipo(e.target.value as 'all' | 'email' | 'whatsapp')}
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
           >
             <option value="all">Todos os tipos</option>
@@ -126,7 +126,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
 
           <select
             value={filtroStatus}
-            onChange={(e) => setFiltroStatus(e.target.value as any)}
+            onChange={(e) => setFiltroStatus(e.target.value as 'all' | 'enviado' | 'lido' | 'falhou')}
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
           >
             <option value="all">Todos os status</option>

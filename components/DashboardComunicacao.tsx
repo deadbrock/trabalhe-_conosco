@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { apiGet } from '../lib/api';
 
@@ -26,11 +26,7 @@ export default function DashboardComunicacao() {
   const [loading, setLoading] = useState(true);
   const [periodo, setPeriodo] = useState(30);
 
-  useEffect(() => {
-    carregarEstatisticas();
-  }, [periodo]);
-
-  const carregarEstatisticas = async () => {
+  const carregarEstatisticas = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiGet<Estatisticas>(`/comunicacao/estatisticas?dias=${periodo}`);
@@ -40,7 +36,11 @@ export default function DashboardComunicacao() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [periodo]);
+
+  useEffect(() => {
+    carregarEstatisticas();
+  }, [carregarEstatisticas]);
 
   if (loading || !estatisticas) {
     return (

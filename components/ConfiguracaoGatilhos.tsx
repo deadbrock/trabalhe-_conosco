@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, Save, Power, Clock, Calendar } from 'lucide-react';
 import { apiGet, apiPut, apiPatch } from '../lib/api';
 
@@ -65,11 +65,7 @@ export default function ConfiguracaoGatilhos() {
   const [loading, setLoading] = useState(true);
   const [salvando, setSalvando] = useState<string | null>(null);
 
-  useEffect(() => {
-    carregarDados();
-  }, []);
-
-  const carregarDados = async () => {
+  const carregarDados = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -87,7 +83,11 @@ export default function ConfiguracaoGatilhos() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    carregarDados();
+  }, [carregarDados]);
 
   const handleToggleEmail = async (evento: string) => {
     try {
@@ -125,15 +125,16 @@ export default function ConfiguracaoGatilhos() {
       });
       alert('Configurações salvas com sucesso!');
       carregarDados();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao salvar:', error);
-      alert(error.response?.data?.error || 'Erro ao salvar configurações');
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao salvar configurações';
+      alert(errorMessage);
     } finally {
       setSalvando(null);
     }
   };
 
-  const handleChange = (evento: string, campo: string, valor: any) => {
+  const handleChange = (evento: string, campo: string, valor: string | number | boolean) => {
     setGatilhos(gatilhos.map(g => 
       g.evento === evento ? { ...g, [campo]: valor } : g
     ));
