@@ -1,13 +1,32 @@
-import * as wppconnect from '@wppconnect-team/wppconnect';
-// @ts-ignore - qrcode-terminal não tem tipos
-import qrcode from 'qrcode-terminal';
-import { Pool } from 'pg';
+/**
+ * 📱 Serviço de WhatsApp usando Twilio API
+ * 
+ * Vantagens:
+ * - ✅ API oficial autorizada pelo WhatsApp
+ * - ✅ Sem Chromium/Puppeteer (leve)
+ * - ✅ Sem QR Code (conecta automaticamente)
+ * - ✅ Funciona em qualquer plataforma (Railway, Vercel, etc.)
+ * - ✅ 99.9% de uptime
+ * - ✅ Escalável (milhões de mensagens)
+ */
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+import twilio from 'twilio';
 
-let client: any = null;
-let isInitializing = false;
-let qrCodeBase64: string | null = null;
+// Validar variáveis de ambiente
+if (!process.env.TWILIO_ACCOUNT_SID) {
+  console.warn('⚠️  TWILIO_ACCOUNT_SID não configurado');
+}
+if (!process.env.TWILIO_AUTH_TOKEN) {
+  console.warn('⚠️  TWILIO_AUTH_TOKEN não configurado');
+}
+if (!process.env.TWILIO_WHATSAPP_NUMBER) {
+  console.warn('⚠️  TWILIO_WHATSAPP_NUMBER não configurado (use: whatsapp:+14155238886 para sandbox)');
+}
+
+// Cliente Twilio
+const twilioClient = process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN
+  ? twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+  : null;
 
 interface EnviarWhatsAppParams {
   numero: string;
@@ -21,94 +40,28 @@ interface ResultadoEnvio {
 }
 
 /**
- * Inicia a conexão do WhatsApp
- */
-export async function iniciarWhatsApp(): Promise<any> {
-  if (client) {
-    console.log('✅ WhatsApp já está conectado');
-    return client;
-  }
-
-  if (isInitializing) {
-    console.log('⏳ WhatsApp já está inicializando...');
-    // Aguardar inicialização
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return client;
-  }
-
-  try {
-    isInitializing = true;
-    console.log('🔄 Iniciando WhatsApp...');
-
-    client = await wppconnect.create({
-      session: 'trabalhe-conosco',
-      catchQR: (base64Qr: string, asciiQR: string, attempts: number) => {
-        console.log('📱 QR Code gerado! Escaneie com o WhatsApp');
-        console.log(`Tentativa: ${attempts}/5`);
-        
-        // Exibir QR Code no terminal
-        qrcode.generate(base64Qr, { small: true });
-        
-        // Salvar QR Code para API
-        qrCodeBase64 = base64Qr;
-        
-        // Salvar no banco para exibir no frontend
-        salvarQRCode(base64Qr).catch(err => {
-          console.error('Erro ao salvar QR Code:', err);
-        });
-      },
-      logQR: false,
-      statusFind: (statusSession: string, session: string) => {
-        console.log(`📊 Status: ${statusSession}`);
-        
-        if (statusSession === 'qrReadSuccess') {
-          console.log('✅ QR Code escaneado com sucesso!');
-        } else if (statusSession === 'isLogged') {
-          console.log('✅ WhatsApp conectado!');
-        } else if (statusSession === 'notLogged') {
-          console.log('⚠️ WhatsApp não está logado');
-        }
-      },
-      folderNameToken: './tokens',
-      headless: true,
-      devtools: false,
-      useChrome: false,
-      debug: false,
-      browserArgs: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--disable-gpu'
-      ]
-    } as any);
-
-    console.log('✅ WhatsApp conectado com sucesso!');
-    isInitializing = false;
-    return client;
-
-  } catch (error: any) {
-    console.error('❌ Erro ao iniciar WhatsApp:', error);
-    isInitializing = false;
-    client = null;
-    throw error;
-  }
-}
-
-/**
- * Envia mensagem via WhatsApp
+ * Envia mensagem via WhatsApp usando Twilio
  */
 export async function enviarWhatsApp({
   numero,
   mensagem
 }: EnviarWhatsAppParams): Promise<ResultadoEnvio> {
   try {
-    // Verificar se está conectado
-    if (!client) {
-      console.log('⚠️ WhatsApp não conectado. Tentando conectar...');
-      await iniciarWhatsApp();
+    // Validar configuração
+    if (!twilioClient) {
+      console.error('❌ Twilio não configurado. Adicione as variáveis de ambiente.');
+      return {
+        sucesso: false,
+        erro: 'Twilio não configurado. Verifique TWILIO_ACCOUNT_SID e TWILIO_AUTH_TOKEN.'
+      };
+    }
+
+    if (!process.env.TWILIO_WHATSAPP_NUMBER) {
+      console.error('❌ TWILIO_WHATSAPP_NUMBER não configurado.');
+      return {
+        sucesso: false,
+        erro: 'Número do WhatsApp não configurado.'
+      };
     }
 
     // Limpar e formatar número
@@ -119,80 +72,138 @@ export async function enviarWhatsApp({
       ? numeroLimpo 
       : `55${numeroLimpo}`;
 
-    // Adicionar @c.us se não tiver
-    const numeroCompleto = numeroFormatado.includes('@') 
-      ? numeroFormatado 
-      : `${numeroFormatado}@c.us`;
+    // Formato do Twilio: whatsapp:+5511999999999
+    const numeroCompleto = `whatsapp:+${numeroFormatado}`;
+    const from = process.env.TWILIO_WHATSAPP_NUMBER;
 
-    console.log(`📤 Enviando WhatsApp para: ${numeroCompleto}`);
+    console.log(`📤 Enviando WhatsApp via Twilio para: ${numeroCompleto}`);
+    console.log(`📤 De: ${from}`);
 
     // Enviar mensagem
-    const result = await client.sendText(numeroCompleto, mensagem);
+    const message = await twilioClient.messages.create({
+      body: mensagem,
+      from: from,
+      to: numeroCompleto
+    });
 
-    console.log(`✅ WhatsApp enviado com sucesso! ID: ${result.id}`);
+    console.log(`✅ WhatsApp enviado com sucesso! SID: ${message.sid}`);
+    console.log(`📊 Status: ${message.status}`);
 
     return {
       sucesso: true,
-      messageId: result.id
+      messageId: message.sid
     };
 
   } catch (error: any) {
-    console.error('❌ Erro ao enviar WhatsApp:', error.message);
-
-    // Se erro de conexão, tentar reconectar
-    if (error.message && error.message.includes('not connected')) {
-      console.log('🔄 Tentando reconectar...');
-      client = null;
-      return {
-        sucesso: false,
-        erro: 'WhatsApp desconectado. Escaneie o QR Code novamente.'
-      };
+    console.error('❌ Erro ao enviar WhatsApp via Twilio:', error.message);
+    
+    // Mensagens de erro mais amigáveis
+    let mensagemErro = error.message || 'Erro desconhecido ao enviar WhatsApp';
+    
+    if (error.code === 21608) {
+      mensagemErro = 'Número não tem WhatsApp ou não aceitou o sandbox. Envie o código de ativação primeiro.';
+    } else if (error.code === 21211) {
+      mensagemErro = 'Número de telefone inválido.';
+    } else if (error.code === 20003) {
+      mensagemErro = 'Credenciais Twilio inválidas. Verifique ACCOUNT_SID e AUTH_TOKEN.';
     }
 
     return {
       sucesso: false,
-      erro: error.message || 'Erro desconhecido ao enviar WhatsApp'
+      erro: mensagemErro
     };
   }
 }
 
 /**
- * Verifica se o WhatsApp está conectado
+ * Verifica se o WhatsApp está configurado e funcionando
  */
 export async function verificarConexao(): Promise<boolean> {
   try {
-    if (!client) {
+    if (!twilioClient) {
+      console.log('⚠️  Twilio não configurado');
       return false;
     }
 
-    const status = await client.getConnectionState();
-    return status === 'CONNECTED';
-  } catch (error) {
-    console.error('❌ Erro ao verificar conexão:', error);
+    // Testar conexão buscando a conta
+    const account = await twilioClient.api.accounts(process.env.TWILIO_ACCOUNT_SID).fetch();
+    
+    console.log(`✅ Twilio conectado! Conta: ${account.friendlyName}`);
+    console.log(`📊 Status: ${account.status}`);
+    
+    return account.status === 'active';
+  } catch (error: any) {
+    console.error('❌ Erro ao verificar conexão Twilio:', error.message);
     return false;
   }
 }
 
 /**
- * Desconecta o WhatsApp
+ * Obtém informações da conta Twilio
  */
-export async function desconectarWhatsApp(): Promise<void> {
+export async function obterInfoConta(): Promise<any> {
   try {
-    if (client) {
-      await client.close();
-      client = null;
-      console.log('✅ WhatsApp desconectado');
+    if (!twilioClient) {
+      throw new Error('Twilio não configurado');
     }
-  } catch (error) {
-    console.error('❌ Erro ao desconectar WhatsApp:', error);
+
+    const account = await twilioClient.api.accounts(process.env.TWILIO_ACCOUNT_SID).fetch();
+    
+    return {
+      nome: account.friendlyName,
+      status: account.status,
+      tipo: account.type,
+      criado_em: account.dateCreated
+    };
+  } catch (error: any) {
+    console.error('❌ Erro ao obter info da conta:', error.message);
+    throw error;
   }
 }
 
 /**
- * Retorna o QR Code atual (se houver)
+ * Obtém saldo da conta Twilio
  */
-export function obterQRCode(): string | null {
-  return qrCodeBase64;
+export async function obterSaldo(): Promise<string> {
+  try {
+    if (!twilioClient) {
+      throw new Error('Twilio não configurado');
+    }
+
+    const balance = await twilioClient.balance.fetch();
+    
+    return `${balance.currency} ${balance.balance}`;
+  } catch (error: any) {
+    console.error('❌ Erro ao obter saldo:', error.message);
+    throw error;
+  }
+}
+
+/**
+ * Busca histórico de mensagens
+ */
+export async function buscarHistoricoMensagens(limite: number = 20): Promise<any[]> {
+  try {
+    if (!twilioClient) {
+      throw new Error('Twilio não configurado');
+    }
+
+    const messages = await twilioClient.messages.list({ limit: limite });
+    
+    return messages.map(msg => ({
+      sid: msg.sid,
+      para: msg.to,
+      de: msg.from,
+      status: msg.status,
+      corpo: msg.body,
+      data: msg.dateCreated,
+      preco: msg.price,
+      erro: msg.errorMessage
+    }));
+  } catch (error: any) {
+    console.error('❌ Erro ao buscar histórico:', error.message);
+    throw error;
+  }
 }
 
 /**
@@ -213,61 +224,43 @@ export async function substituirVariaveis(
 }
 
 /**
- * Salva QR Code no banco para exibir no frontend
+ * Valida número de telefone
  */
-async function salvarQRCode(base64: string): Promise<void> {
-  try {
-    // Criar tabela se não existir
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS whatsapp_qrcode (
-        id SERIAL PRIMARY KEY,
-        qrcode TEXT NOT NULL,
-        criado_em TIMESTAMP DEFAULT NOW()
-      )
-    `);
-
-    // Deletar QR Codes antigos
-    await pool.query('DELETE FROM whatsapp_qrcode');
-
-    // Inserir novo QR Code
-    await pool.query(
-      'INSERT INTO whatsapp_qrcode (qrcode) VALUES ($1)',
-      [base64]
-    );
-
-    console.log('✅ QR Code salvo no banco');
-  } catch (error) {
-    console.error('❌ Erro ao salvar QR Code:', error);
+export function validarNumero(numero: string): boolean {
+  const numeroLimpo = numero.replace(/\D/g, '');
+  
+  // Validar formato brasileiro: 11 dígitos (DDD + número)
+  if (numeroLimpo.length < 10 || numeroLimpo.length > 11) {
+    return false;
   }
+  
+  return true;
 }
 
 /**
- * Busca o QR Code mais recente do banco
+ * Formata número para padrão internacional
  */
-export async function buscarQRCodeDoBanco(): Promise<string | null> {
-  try {
-    const result = await pool.query(
-      'SELECT qrcode FROM whatsapp_qrcode ORDER BY criado_em DESC LIMIT 1'
-    );
-
-    if (result.rows.length > 0) {
-      return result.rows[0].qrcode;
-    }
-
-    return null;
-  } catch (error) {
-    console.error('❌ Erro ao buscar QR Code:', error);
-    return null;
-  }
+export function formatarNumero(numero: string): string {
+  const numeroLimpo = numero.replace(/\D/g, '');
+  
+  // Adicionar código do país se não tiver
+  const numeroFormatado = numeroLimpo.startsWith('55') 
+    ? numeroLimpo 
+    : `55${numeroLimpo}`;
+  
+  return `whatsapp:+${numeroFormatado}`;
 }
 
-// Inicializar WhatsApp automaticamente ao startar o servidor (DESABILITADO)
-// Para habilitar, adicione WHATSAPP_AUTO_START=true nas variáveis de ambiente
-if (process.env.WHATSAPP_AUTO_START === 'true') {
-  console.log('🚀 Iniciando WhatsApp automaticamente...');
-  iniciarWhatsApp().catch(err => {
-    console.error('❌ Erro ao iniciar WhatsApp automaticamente:', err);
+// Log de inicialização
+if (twilioClient) {
+  console.log('✅ Twilio WhatsApp Service inicializado');
+  console.log(`📱 Número: ${process.env.TWILIO_WHATSAPP_NUMBER || 'Não configurado'}`);
+  
+  // Verificar conexão na inicialização
+  verificarConexao().catch(err => {
+    console.error('❌ Erro ao verificar conexão inicial:', err);
   });
 } else {
-  console.log('ℹ️  WhatsApp auto-start desabilitado. Use /whatsapp/iniciar para conectar manualmente.');
+  console.log('⚠️  Twilio WhatsApp Service não configurado');
+  console.log('ℹ️  Adicione TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN e TWILIO_WHATSAPP_NUMBER');
 }

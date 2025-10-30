@@ -1,37 +1,8 @@
-# Configuração Nixpacks para Railway
-# Adiciona dependências necessárias para WPPConnect/Puppeteer
+# 📦 Configuração Nixpacks para Railway
+# Twilio WhatsApp - SEM Chromium/Puppeteer
 
 [phases.setup]
-nixPkgs = [
-  'nodejs_18',
-  'chromium',
-  'nss',
-  'freetype',
-  'harfbuzz',
-  'ca-certificates',
-  'ttf-freefont',
-  'fontconfig',
-  'libxshmfence',
-  'libgbm',
-  'glib',
-  'gtk3',
-  'pango',
-  'cairo',
-  'alsa-lib',
-  'libdrm',
-  'mesa',
-  'xorg.libX11',
-  'xorg.libXcomposite',
-  'xorg.libXdamage',
-  'xorg.libXext',
-  'xorg.libXfixes',
-  'xorg.libXrandr',
-  'cups',
-  'expat',
-  'dbus',
-  'at-spi2-core',
-  'at-spi2-atk'
-]
+nixPkgs = ['nodejs_18']
 
 [phases.install]
 cmds = ['npm install']
@@ -40,4 +11,4 @@ cmds = ['npm install']
 cmds = ['npm run build']
 
 [start]
-cmd = 'npm run start'
+cmd = 'npm start'
