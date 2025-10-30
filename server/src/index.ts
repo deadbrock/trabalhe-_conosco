@@ -119,5 +119,6 @@ app.use("/whatsapp", (req, res, next) => {
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
-  console.log(`API listening on http://localhost:${port}`);
+  console.log(`🚀 API listening on http://localhost:${port}`);
+  console.log(`📱 WhatsApp Status: /whatsapp-status`);
 });
