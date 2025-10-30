@@ -2,7 +2,6 @@ import { useState } from 'react';
 import RHLayout from '@/components/RHLayout';
 import { apiGet, apiPost } from '@/lib/api';
 import { Smartphone, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
-import Image from 'next/image';
 
 interface QRCodeResponse {
   qrcode?: string;

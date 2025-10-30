@@ -61,6 +61,27 @@ export async function apiPut<T>(path: string, body: unknown, token?: string): Pr
   return res.json();
 }
 
+export async function apiPatch<T>(path: string, body: unknown, token?: string): Promise<T> {
+  const res = await fetch(`${getApiBase()}${path}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+  if (res.status === 401) {
+    // Token expirado ou inválido - redirecionar para login
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("rh_token");
+      window.location.href = "/rh/login?expired=true";
+    }
+    throw new Error("Sessão expirada. Faça login novamente.");
+  }
+  if (!res.ok) throw new Error(`PATCH ${path} failed: ${res.status}`);
+  return res.json();
+}
+
 export async function apiDelete(path: string, token?: string): Promise<void> {
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "DELETE",
