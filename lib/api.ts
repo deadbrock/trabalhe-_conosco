@@ -2,9 +2,15 @@ export function getApiBase() {
   return process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3333";
 }
 
+function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("rh_token");
+}
+
 export async function apiGet<T>(path: string, token?: string): Promise<T> {
+  const authToken = token || getAuthToken();
   const res = await fetch(`${getApiBase()}${path}`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     cache: "no-store",
   });
   if (res.status === 401) {
@@ -20,11 +26,12 @@ export async function apiGet<T>(path: string, token?: string): Promise<T> {
 }
 
 export async function apiPost<T>(path: string, body: unknown, token?: string): Promise<T> {
+  const authToken = token || getAuthToken();
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
     body: JSON.stringify(body),
   });
@@ -41,11 +48,12 @@ export async function apiPost<T>(path: string, body: unknown, token?: string): P
 }
 
 export async function apiPut<T>(path: string, body: unknown, token?: string): Promise<T> {
+  const authToken = token || getAuthToken();
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
     body: JSON.stringify(body),
   });
@@ -62,11 +70,12 @@ export async function apiPut<T>(path: string, body: unknown, token?: string): Pr
 }
 
 export async function apiPatch<T>(path: string, body: unknown, token?: string): Promise<T> {
+  const authToken = token || getAuthToken();
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
     },
     body: JSON.stringify(body),
   });
@@ -83,9 +92,10 @@ export async function apiPatch<T>(path: string, body: unknown, token?: string): 
 }
 
 export async function apiDelete(path: string, token?: string): Promise<void> {
+  const authToken = token || getAuthToken();
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "DELETE",
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
   });
   if (res.status === 401) {
     // Token expirado ou inválido - redirecionar para login

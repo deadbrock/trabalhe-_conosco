@@ -18,7 +18,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
     } else {
       setIsAuthenticated(true);
     }
-  }, [router]);
+  }, []); // Removido 'router' das dependências para evitar loop
 
   const handleLogout = () => {
     localStorage.removeItem("rh_token");
