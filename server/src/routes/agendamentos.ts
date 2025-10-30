@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { pool } from "../db";
+import { notificarConviteEntrevista } from "../services/gatilhosService";
 
 const router = Router();
 
@@ -119,7 +120,23 @@ router.post("/", async (req: Request, res: Response) => {
       ]
     );
     
-    res.status(201).json(result.rows[0]);
+    const agendamento = result.rows[0];
+    
+    // 🔔 Disparar gatilho de convite para entrevista
+    const dataFormatada = new Date(data_hora).toLocaleDateString('pt-BR');
+    const horaFormatada = new Date(data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    
+    notificarConviteEntrevista(candidato_id, vaga_id, {
+      data: dataFormatada,
+      hora: horaFormatada,
+      local: local || 'A definir',
+      link: link_video || ''
+    }).catch(err => {
+      console.error('❌ Erro ao disparar gatilho de convite para entrevista:', err);
+      // Não bloquear a resposta se o gatilho falhar
+    });
+    
+    res.status(201).json(agendamento);
   } catch (error) {
     console.error("Erro ao criar agendamento:", error);
     res.status(500).json({ error: "Erro ao criar agendamento" });
