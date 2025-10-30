@@ -126,7 +126,8 @@ export async function verificarConexao(): Promise<boolean> {
     }
 
     // Testar conexão buscando a conta
-    const account = await twilioClient.api.accounts(process.env.TWILIO_ACCOUNT_SID).fetch();
+    const accountSid = process.env.TWILIO_ACCOUNT_SID || '';
+    const account = await twilioClient.api.accounts(accountSid).fetch();
     
     console.log(`✅ Twilio conectado! Conta: ${account.friendlyName}`);
     console.log(`📊 Status: ${account.status}`);
@@ -147,7 +148,8 @@ export async function obterInfoConta(): Promise<any> {
       throw new Error('Twilio não configurado');
     }
 
-    const account = await twilioClient.api.accounts(process.env.TWILIO_ACCOUNT_SID).fetch();
+    const accountSid = process.env.TWILIO_ACCOUNT_SID || '';
+    const account = await twilioClient.api.accounts(accountSid).fetch();
     
     return {
       nome: account.friendlyName,
