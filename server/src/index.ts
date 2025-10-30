@@ -119,6 +119,7 @@ app.use("/whatsapp", (req, res, next) => {
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
-  console.log(`🚀 API listening on http://localhost:${port}`);
-  console.log(`📱 WhatsApp Status: /whatsapp-status`);
+  console.log(`🚀 API v1.0.1 listening on http://localhost:${port}`);
+  console.log(`📱 WhatsApp Status disponível em: /whatsapp-status`);
+  console.log(`🔗 Twilio WhatsApp API Configurado: ${!!process.env.TWILIO_ACCOUNT_SID}`);
 });
