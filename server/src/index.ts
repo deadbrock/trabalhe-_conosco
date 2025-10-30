@@ -92,15 +92,14 @@ app.use("/comunicacao", requireAuth, comunicacaoRouter);
 app.use("/gatilhos", requireAuth, gatilhosRouter);
 
 // Rotas de WhatsApp: /status público, demais protegidas
-const whatsappCombinedRouter = Router();
-whatsappCombinedRouter.use((req, res, next) => {
+app.use("/whatsapp", (req, res, next) => {
+  // Rota /status é pública
   if (req.path === "/status") {
-    return next(); // Rota /status é pública
+    return next();
   }
-  requireAuth(req, res, next); // Demais rotas protegidas
-});
-whatsappCombinedRouter.use(whatsappRouter);
-app.use("/whatsapp", whatsappCombinedRouter);
+  // Demais rotas protegidas
+  requireAuth(req, res, next);
+}, whatsappRouter);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {
