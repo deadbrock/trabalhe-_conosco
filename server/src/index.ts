@@ -16,6 +16,9 @@ import notificacoesRouter from "./routes/notificacoes";
 import atividadesRouter from "./routes/atividades";
 import notasRouter from "./routes/notas";
 import avaliacoesRouter from "./routes/avaliacoes";
+import templatesRouter from "./routes/templates";
+import comunicacaoRouter from "./routes/comunicacao";
+import gatilhosRouter from "./routes/gatilhos";
 import { requireAuth } from "./middleware/auth";
 
 dotenv.config();
@@ -81,6 +84,11 @@ app.use("/notificacoes", requireAuth, notificacoesRouter);
 app.use("/atividades", requireAuth, atividadesRouter);
 app.use("/notas", requireAuth, notasRouter);
 app.use("/avaliacoes", requireAuth, avaliacoesRouter);
+
+// Novas rotas SPRINT 2 - Comunicação Automatizada (RH apenas)
+app.use("/templates", requireAuth, templatesRouter);
+app.use("/comunicacao", requireAuth, comunicacaoRouter);
+app.use("/gatilhos", requireAuth, gatilhosRouter);
 
 const port = process.env.PORT || 3333;
 app.listen(port, () => {

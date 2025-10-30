@@ -11,7 +11,9 @@
     "migrate:banco-talentos": "ts-node src/migrate-banco-talentos.ts",
     "migrate:fase1": "ts-node src/migrate-fase1.ts",
     "migrate:fase3": "ts-node src/migrate-fase3.ts",
+    "migrate:sprint2": "ts-node src/migrate-sprint2.ts",
     "seed": "ts-node src/seed.ts",
+    "seed:templates": "ts-node src/seed-templates.ts",
     "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +26,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
@@ -33,6 +36,7 @@
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "pg": "^8.16.3",
+    "resend": "^4.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
