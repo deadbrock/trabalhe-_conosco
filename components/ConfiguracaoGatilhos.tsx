@@ -134,7 +134,7 @@ export default function ConfiguracaoGatilhos() {
     }
   };
 
-  const handleChange = (evento: string, campo: string, valor: string | number | boolean) => {
+  const handleChange = (evento: string, campo: string, valor: string | number | boolean | null) => {
     setGatilhos(gatilhos.map(g => 
       g.evento === evento ? { ...g, [campo]: valor } : g
     ));
