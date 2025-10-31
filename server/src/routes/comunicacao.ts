@@ -442,5 +442,79 @@ router.get('/estatisticas', async (req: Request, res: Response) => {
   }
 });
 
+// ==========================================
+// POST /comunicacao/testar-email - Enviar email de teste
+// ==========================================
+router.post('/testar-email', async (req: Request, res: Response) => {
+  try {
+    const { destinatario, assunto, mensagem } = req.body;
+
+    if (!destinatario) {
+      return res.status(400).json({ error: 'Destinatário é obrigatório' });
+    }
+
+    const assuntoFinal = assunto || '✅ Teste de Email - Sistema RH';
+    const mensagemFinal = mensagem || `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #4F46E5;">🎉 Email de Teste - Sistema RH</h2>
+        
+        <p>Olá!</p>
+        
+        <p>Este é um <strong>email de teste</strong> enviado pelo sistema de Recrutamento e Seleção.</p>
+        
+        <div style="background-color: #F3F4F6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-top: 0; color: #1F2937;">✅ Configuração do Email:</h3>
+          <ul style="color: #4B5563;">
+            <li>📧 Provedor: <strong>Resend</strong></li>
+            <li>🌐 Domínio: <strong>trabalheconoscofg.com.br</strong></li>
+            <li>⚡ Status: <strong>Funcionando</strong></li>
+          </ul>
+        </div>
+        
+        <p style="color: #6B7280;">Se você recebeu este email, significa que o sistema de comunicação está <strong>100% operacional</strong>!</p>
+        
+        <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 30px 0;">
+        
+        <p style="font-size: 12px; color: #9CA3AF; text-align: center;">
+          Enviado automaticamente pelo Sistema de RH<br>
+          Data: ${new Date().toLocaleString('pt-BR')}
+        </p>
+      </div>
+    `;
+
+    console.log(`📧 Enviando email de teste para: ${destinatario}`);
+
+    const resultado = await enviarEmail({
+      destinatario,
+      assunto: assuntoFinal,
+      conteudo: mensagemFinal
+    });
+
+    if (!resultado.sucesso) {
+      console.error(`❌ Erro ao enviar email de teste:`, resultado.erro);
+      return res.status(500).json({ 
+        error: 'Falha ao enviar email', 
+        detalhes: resultado.erro 
+      });
+    }
+
+    console.log(`✅ Email de teste enviado com sucesso! ID: ${resultado.messageId}`);
+
+    res.json({ 
+      message: '✅ Email de teste enviado com sucesso!',
+      destinatario,
+      assunto: assuntoFinal,
+      messageId: resultado.messageId,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    console.error('❌ Erro ao enviar email de teste:', error);
+    res.status(500).json({ 
+      error: 'Erro ao enviar email de teste',
+      detalhes: error.message
+    });
+  }
+});
+
 export default router;
 
