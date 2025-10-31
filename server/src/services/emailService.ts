@@ -1,6 +1,10 @@
 import { Resend } from 'resend';
+import { enviarEmailSendGrid } from './sendgridService';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Determinar qual provedor usar
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || 'resend'; // 'resend' ou 'sendgrid'
 
 interface EnviarEmailParams {
   destinatario: string;
@@ -21,34 +25,56 @@ export async function enviarEmail({
   assunto,
   conteudo,
   remetenteNome = 'RH - FG Services',
-  remetenteEmail = 'rh@trabalheconoscofg.com.br'
+  remetenteEmail
 }: EnviarEmailParams): Promise<ResultadoEnvio> {
+  // Definir email padrão baseado no provedor
+  const emailPadrao = EMAIL_PROVIDER === 'sendgrid' 
+    ? 'trabalheconoscofg@fgservices.com.br'
+    : 'rh@trabalheconoscofg.com.br';
+  
+  const emailRemetente = remetenteEmail || emailPadrao;
+
+  // Usar SendGrid se configurado
+  if (EMAIL_PROVIDER === 'sendgrid' || process.env.SENDGRID_API_KEY) {
+    console.log('📧 Usando SendGrid para enviar email...');
+    return enviarEmailSendGrid({
+      destinatario,
+      assunto,
+      conteudo,
+      remetenteNome,
+      remetenteEmail: emailRemetente
+    });
+  }
+
+  // Fallback para Resend
   try {
     // Verificar se Resend está configurado
     if (!process.env.RESEND_API_KEY) {
-      console.warn('⚠️ RESEND_API_KEY não configurada. Email não será enviado.');
+      console.warn('⚠️ Nenhum provedor de email configurado (RESEND_API_KEY ou SENDGRID_API_KEY)');
       return {
         sucesso: false,
         erro: 'Serviço de email não configurado'
       };
     }
 
+    console.log('📧 Usando Resend para enviar email...');
+
     const { data, error } = await resend.emails.send({
-      from: `${remetenteNome} <${remetenteEmail}>`,
+      from: `${remetenteNome} <${emailRemetente}>`,
       to: [destinatario],
       subject: assunto,
       html: conteudo
     });
 
     if (error) {
-      console.error('❌ Erro ao enviar email:', error);
+      console.error('❌ Erro ao enviar email via Resend:', error);
       return {
         sucesso: false,
         erro: error.message || 'Erro desconhecido ao enviar email'
       };
     }
 
-    console.log(`✅ Email enviado com sucesso para ${destinatario} - ID: ${data?.id}`);
+    console.log(`✅ Email enviado com sucesso via Resend para ${destinatario} - ID: ${data?.id}`);
     
     return {
       sucesso: true,
