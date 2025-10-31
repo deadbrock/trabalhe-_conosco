@@ -203,6 +203,10 @@ export async function dispararGatilho(
       resultados.push(resultado.sucesso ? '✅ Email enviado' : `❌ Email falhou: ${resultado.erro}`);
     }
 
+    // ⚠️ ENVIO DE WHATSAPP TEMPORARIAMENTE DESABILITADO
+    // Descomente quando decidir qual solução usar (SMS/WhatsApp API/Sandbox)
+    
+    /*
     // Enviar WhatsApp se ativo
     if (gatilho.whatsapp_ativo && gatilho.whatsapp_conteudo) {
       const variaveisLimpas = Object.fromEntries(
@@ -234,6 +238,13 @@ export async function dispararGatilho(
       );
 
       resultados.push(resultado.sucesso ? '✅ WhatsApp enviado' : `❌ WhatsApp falhou: ${resultado.erro}`);
+    }
+    */
+    
+    // Log informativo
+    if (gatilho.whatsapp_ativo && gatilho.whatsapp_conteudo) {
+      console.log('⚠️ WhatsApp está configurado mas temporariamente DESABILITADO');
+      resultados.push('⏸️ WhatsApp desabilitado temporariamente');
     }
 
     if (resultados.length === 0) {
