@@ -1,0 +1,191 @@
+/* ================================================================
+   TEMA FEMININO - PALETA SUAVE & DELICADA
+   ================================================================ */
+
+.theme-feminine {
+  /* Cores principais */
+  --primary: #e91e63; /* Rosa vibrante */
+  --primary-light: #f8bbd0; /* Rosa claro */
+  --primary-dark: #c2185b; /* Rosa escuro */
+  
+  --secondary: #9c27b0; /* Roxo */
+  --secondary-light: #e1bee7; /* Roxo claro */
+  
+  --accent: #ba68c8; /* Lilás */
+  --accent-light: #f3e5f5; /* Lilás muito claro */
+  
+  /* Neutros suaves */
+  --background-soft: #fef5f8;
+  --text-soft: #5d4157;
+}
+
+/* Aplicar cores no tema feminino */
+.theme-feminine .bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.theme-feminine .text-primary {
+  color: var(--primary) !important;
+}
+
+.theme-feminine .border-primary {
+  border-color: var(--primary) !important;
+}
+
+/* Gradientes femininos */
+.theme-feminine .bg-gradient-to-r.from-primary {
+  background-image: linear-gradient(to right, var(--primary), var(--secondary)) !important;
+}
+
+.theme-feminine .bg-gradient-to-br.from-primary {
+  background-image: linear-gradient(to bottom right, var(--primary), var(--accent)) !important;
+}
+
+/* Hover effects femininos */
+.theme-feminine .hover-glow:hover {
+  box-shadow: 0 0 20px rgba(233, 30, 99, 0.4), 0 0 40px rgba(233, 30, 99, 0.2) !important;
+}
+
+/* Cards com toque feminino */
+.theme-feminine .bg-white {
+  background-color: #fffbfc !important;
+}
+
+.theme-feminine .border-gray-100 {
+  border-color: #f8e8ee !important;
+}
+
+/* Badges de status com cores femininas */
+.theme-feminine .bg-blue-100 {
+  background-color: #e1f5fe !important;
+}
+
+.theme-feminine .bg-green-100 {
+  background-color: #f1f8e9 !important;
+}
+
+.theme-feminine .bg-yellow-100 {
+  background-color: #fff9c4 !important;
+}
+
+.theme-feminine .bg-purple-100 {
+  background-color: #f3e5f5 !important;
+}
+
+.theme-feminine .bg-red-100 {
+  background-color: #fce4ec !important;
+}
+
+/* Textos suaves */
+.theme-feminine .text-gray-900 {
+  color: #4a4a4a !important;
+}
+
+.theme-feminine .text-gray-700 {
+  color: #6d6d6d !important;
+}
+
+.theme-feminine .text-gray-600 {
+  color: #8a8a8a !important;
+}
+
+/* Botões femininos */
+.theme-feminine button.bg-primary,
+.theme-feminine a.bg-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+}
+
+.theme-feminine button.bg-primary:hover,
+.theme-feminine a.bg-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%) !important;
+}
+
+/* Shadows suaves */
+.theme-feminine .shadow-lg {
+  box-shadow: 0 10px 25px -5px rgba(233, 30, 99, 0.1), 0 10px 10px -5px rgba(233, 30, 99, 0.04) !important;
+}
+
+.theme-feminine .shadow-xl {
+  box-shadow: 0 20px 50px -12px rgba(233, 30, 99, 0.15) !important;
+}
+
+/* Animação de sparkle no tema feminino */
+.theme-feminine .sparkle {
+  position: relative;
+}
+
+.theme-feminine .sparkle::after {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.2em;
+  animation: sparkle-rotate 3s ease-in-out infinite;
+}
+
+@keyframes sparkle-rotate {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Borda arredondada extra no tema feminino */
+.theme-feminine .rounded-2xl {
+  border-radius: 1.5rem !important;
+}
+
+.theme-feminine .rounded-xl {
+  border-radius: 1rem !important;
+}
+
+/* Background pattern sutil */
+.theme-feminine body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(233, 30, 99, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(156, 39, 176, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar feminina */
+.theme-feminine ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.theme-feminine ::-webkit-scrollbar-track {
+  background: #fef5f8;
+}
+
+.theme-feminine ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 5px;
+}
+
+.theme-feminine ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-dark), var(--secondary));
+}
+
+/* Input fields femininos */
+.theme-feminine input:focus,
+.theme-feminine textarea:focus,
+.theme-feminine select:focus {
+  border-color: var(--primary) !important;
+  ring-color: var(--primary-light) !important;
+}
+
+/* Placeholder suave */
+.theme-feminine ::placeholder {
+  color: #c9a3b9 !important;
+}
+

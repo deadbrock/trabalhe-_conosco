@@ -1,0 +1,266 @@
+/* ================================================================
+   ANIMAÇÕES DE HOVER MELHORADAS - FASE 2
+   ================================================================ */
+
+/* Hover: Lift & Shadow */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover: Scale Up */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Hover: Glow Effect */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(161, 18, 42, 0.4), 0 0 40px rgba(161, 18, 42, 0.2);
+}
+
+/* Hover: Slide Right */
+.hover-slide-right {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hover-slide-right::after {
+  content: '→';
+  position: absolute;
+  right: 20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.hover-slide-right:hover::after {
+  opacity: 1;
+  right: 10px;
+}
+
+/* Hover: Gradient Shift */
+.hover-gradient-shift {
+  background-size: 200% auto;
+  transition: background-position 0.5s ease;
+}
+
+.hover-gradient-shift:hover {
+  background-position: right center;
+}
+
+/* Hover: Border Animation */
+.hover-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  transition: left 0.5s ease;
+}
+
+.hover-border:hover::before {
+  left: 100%;
+}
+
+/* Hover: Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.hover-shake:hover {
+  animation: shake 0.3s ease;
+}
+
+/* Hover: Pulse */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.hover-pulse {
+  position: relative;
+}
+
+.hover-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  opacity: 0;
+  z-index: -1;
+}
+
+.hover-pulse:hover::before {
+  animation: pulse-ring 0.8s ease-out;
+}
+
+/* Hover: Shine Effect */
+.hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.hover-shine:hover::after {
+  left: 100%;
+}
+
+/* Hover: Float */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hover-float:hover {
+  animation: float 1s ease-in-out infinite;
+}
+
+/* Hover: Tilt */
+.hover-tilt {
+  transition: transform 0.3s ease;
+}
+
+.hover-tilt:hover {
+  transform: perspective(1000px) rotateY(5deg);
+}
+
+/* Hover: Bounce */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.hover-bounce:hover {
+  animation: bounce 0.6s ease;
+}
+
+/* Hover: Neon Glow */
+.hover-neon {
+  transition: all 0.3s ease;
+}
+
+.hover-neon:hover {
+  text-shadow: 0 0 10px rgba(161, 18, 42, 0.8),
+               0 0 20px rgba(161, 18, 42, 0.6),
+               0 0 30px rgba(161, 18, 42, 0.4);
+}
+
+/* Hover: Underline Expand */
+.hover-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* Hover: Flip */
+.hover-flip {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.hover-flip:hover {
+  transform: rotateY(180deg);
+}
+
+/* Hover: Jiggle */
+@keyframes jiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+.hover-jiggle:hover {
+  animation: jiggle 0.4s ease 2;
+}
+
+/* Hover: Expand Background */
+.hover-expand-bg {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hover-expand-bg::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(161, 18, 42, 0.1);
+  transition: all 0.5s ease;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.hover-expand-bg:hover::before {
+  width: 300%;
+  height: 300%;
+}
+
+/* Smooth All (classe utilitária) */
+.smooth-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
