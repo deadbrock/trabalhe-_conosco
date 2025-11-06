@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle } from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import DelicateAnimations from "./DelicateAnimations";
 import NotificationCenter from "./NotificationCenter";
@@ -18,6 +18,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
     } else {
       setIsAuthenticated(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Removido 'router' das dependências para evitar loop
 
   const handleLogout = () => {
@@ -35,6 +36,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
     { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
     { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
     { href: "/rh/comunicacao", icon: MessageCircle, label: "Comunicação" },
+    { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
   ];
 
   return (

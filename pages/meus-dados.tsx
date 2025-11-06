@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { apiPost } from '../lib/api';
 
 type TipoSolicitacao = 'exportacao' | 'exclusao' | null;
@@ -55,8 +56,9 @@ export default function MeusDados() {
       const response = await apiPost<SolicitacaoResponse>('/lgpd/solicitar', formData);
       setSolicitacao(response);
       setEtapa('codigo');
-    } catch (error: any) {
-      setErro(error.response?.data?.error || 'Erro ao processar solicitação');
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } } };
+      setErro(err.response?.data?.error || 'Erro ao processar solicitação');
     } finally {
       setLoading(false);
     }
@@ -82,8 +84,9 @@ export default function MeusDados() {
         codigo
       });
       setEtapa('sucesso');
-    } catch (error: any) {
-      setErro(error.response?.data?.error || 'Código inválido');
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } } };
+      setErro(err.response?.data?.error || 'Código inválido');
     } finally {
       setLoading(false);
     }
@@ -436,13 +439,13 @@ export default function MeusDados() {
               lgpd@fgservices.com.br
             </a>
             <p className="mt-4">
-              <a href="/politica-privacidade" className="text-indigo-600 hover:text-indigo-700">
+              <Link href="/politica-privacidade" className="text-indigo-600 hover:text-indigo-700">
                 Política de Privacidade
-              </a>
+              </Link>
               {' • '}
-              <a href="/" className="text-indigo-600 hover:text-indigo-700">
+              <Link href="/" className="text-indigo-600 hover:text-indigo-700">
                 Voltar ao Site
-              </a>
+              </Link>
             </p>
           </div>
         </div>

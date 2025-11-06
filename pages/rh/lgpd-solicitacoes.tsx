@@ -8,7 +8,7 @@
  * - Rejeitar solicitações
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import RHLayout from '../../components/RHLayout';
 import { apiGet, apiPost } from '../../lib/api';
 
@@ -42,7 +42,7 @@ export default function LGPDSolicitacoes() {
   // ==========================================
   // CARREGAR SOLICITAÇÕES
   // ==========================================
-  const carregarSolicitacoes = async () => {
+  const carregarSolicitacoes = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -58,11 +58,11 @@ export default function LGPDSolicitacoes() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filtroStatus, filtroTipo]);
 
   useEffect(() => {
     carregarSolicitacoes();
-  }, [filtroStatus, filtroTipo]);
+  }, [carregarSolicitacoes]);
 
   // ==========================================
   // EXPORTAR DADOS
@@ -76,8 +76,9 @@ export default function LGPDSolicitacoes() {
       alert(`✅ Dados exportados com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO candidato receberá os dados por email.`);
       setShowModal(false);
       carregarSolicitacoes();
-    } catch (error: any) {
-      alert(`❌ Erro ao exportar dados:\n${error.response?.data?.error || error.message}`);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } }; message?: string };
+      alert(`❌ Erro ao exportar dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
@@ -102,8 +103,9 @@ export default function LGPDSolicitacoes() {
       setShowModal(false);
       setMotivo('');
       carregarSolicitacoes();
-    } catch (error: any) {
-      alert(`❌ Erro ao excluir dados:\n${error.response?.data?.error || error.message}`);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } }; message?: string };
+      alert(`❌ Erro ao excluir dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
@@ -125,8 +127,9 @@ export default function LGPDSolicitacoes() {
       setShowModal(false);
       setMotivo('');
       carregarSolicitacoes();
-    } catch (error: any) {
-      alert(`❌ Erro ao rejeitar:\n${error.response?.data?.error || error.message}`);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } }; message?: string };
+      alert(`❌ Erro ao rejeitar:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }

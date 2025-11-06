@@ -42,7 +42,7 @@ export default function PoliticaPrivacidade() {
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Introdução</h2>
               <p className="text-gray-700 leading-relaxed">
-                A <strong>FG Services</strong> ("nós", "nosso" ou "Empresa") está comprometida em proteger a privacidade e os dados pessoais de todos os candidatos que se inscrevem em nossos processos seletivos. Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+                A <strong>FG Services</strong> (&quot;nós&quot;, &quot;nosso&quot; ou &quot;Empresa&quot;) está comprometida em proteger a privacidade e os dados pessoais de todos os candidatos que se inscrevem em nossos processos seletivos. Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
               </p>
             </section>
 
