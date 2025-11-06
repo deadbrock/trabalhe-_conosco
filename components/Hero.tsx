@@ -107,14 +107,43 @@ export default function Hero() {
             onError={(e) => {
               const video = e.currentTarget;
               const error = video.error;
-              console.error("❌ Erro no evento onError:", {
-                error,
-                src: video.src,
-                networkState: video.networkState,
-                readyState: video.readyState
-              });
+              
+              console.error("❌ ERRO DETALHADO NO VÍDEO:");
+              console.error("- URL do vídeo:", video.src);
+              console.error("- currentSrc:", video.currentSrc);
+              console.error("- networkState:", video.networkState, ["NETWORK_EMPTY", "NETWORK_IDLE", "NETWORK_LOADING", "NETWORK_NO_SOURCE"][video.networkState]);
+              console.error("- readyState:", video.readyState, ["HAVE_NOTHING", "HAVE_METADATA", "HAVE_CURRENT_DATA", "HAVE_FUTURE_DATA", "HAVE_ENOUGH_DATA"][video.readyState]);
+              
+              if (error) {
+                console.error("- Código do erro:", error.code);
+                console.error("- Mensagem:", error.message);
+                const errorMessages = [
+                  "Erro desconhecido",
+                  "MEDIA_ERR_ABORTED: Download abortado",
+                  "MEDIA_ERR_NETWORK: Erro de rede",
+                  "MEDIA_ERR_DECODE: Erro ao decodificar",
+                  "MEDIA_ERR_SRC_NOT_SUPPORTED: Formato não suportado ou arquivo muito grande"
+                ];
+                console.error("- Tipo:", errorMessages[error.code] || errorMessages[0]);
+              }
+              
               console.warn("⚠️ Vídeo não pode ser carregado. Usando fallback visual.");
-              console.info("💡 Dica: Reconverta o vídeo com: ffmpeg -i fg.mp4 -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 128k -movflags +faststart fg_converted.mp4");
+              
+              // Tentar verificar se é problema de tamanho
+              fetch(video.src, { method: 'HEAD' }).then(response => {
+                const size = response.headers.get('content-length');
+                if (size) {
+                  const sizeMB = (parseInt(size) / 1024 / 1024).toFixed(2);
+                  console.info(`📊 Tamanho do arquivo: ${sizeMB} MB`);
+                  if (parseInt(size) > 50 * 1024 * 1024) {
+                    console.warn("⚠️ ARQUIVO MUITO GRANDE! Vercel tem limite de 50MB para servir arquivos.");
+                    console.info("💡 Solução: Comprimir o vídeo ou hospedar externamente (Cloudinary, S3, etc)");
+                  }
+                }
+              }).catch(err => {
+                console.error("❌ Erro ao verificar tamanho:", err);
+              });
+              
               setVideoError(true);
             }}
             onLoadedData={() => {
