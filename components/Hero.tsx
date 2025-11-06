@@ -7,6 +7,25 @@ export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    // Verificar se o arquivo existe antes de tentar carregar
+    const checkVideoExists = async () => {
+      try {
+        const response = await fetch('/fg.mp4', { method: 'HEAD' });
+        if (!response.ok) {
+          console.error(`❌ Arquivo fg.mp4 não encontrado. Status: ${response.status}`);
+          console.error(`📁 URL tentada: ${window.location.origin}/fg.mp4`);
+          setVideoError(true);
+          return;
+        }
+        console.log("✅ Arquivo fg.mp4 encontrado, iniciando carregamento...");
+      } catch (error) {
+        console.error("❌ Erro ao verificar arquivo:", error);
+        setVideoError(true);
+      }
+    };
+
+    checkVideoExists();
+
     // Forçar o vídeo a carregar e reproduzir
     if (videoRef.current) {
       const video = videoRef.current;
@@ -14,6 +33,15 @@ export default function Hero() {
       // Verificar se o vídeo existe
       video.addEventListener('loadstart', () => {
         console.log("🟡 Iniciando carregamento do vídeo fg.mp4");
+      });
+      
+      video.addEventListener('loadedmetadata', () => {
+        console.log("📊 Metadados do vídeo carregados:", {
+          duration: video.duration,
+          videoWidth: video.videoWidth,
+          videoHeight: video.videoHeight,
+          readyState: video.readyState
+        });
       });
       
       video.addEventListener('canplay', () => {
@@ -25,7 +53,35 @@ export default function Hero() {
       });
       
       video.addEventListener('error', (e) => {
-        console.error("❌ Erro no elemento de vídeo:", e);
+        const videoElement = e.target as HTMLVideoElement;
+        const error = videoElement.error;
+        if (error) {
+          console.error("❌ Erro detalhado no vídeo:", {
+            code: error.code,
+            message: error.message,
+            MEDIA_ERR_ABORTED: error.MEDIA_ERR_ABORTED,
+            MEDIA_ERR_NETWORK: error.MEDIA_ERR_NETWORK,
+            MEDIA_ERR_DECODE: error.MEDIA_ERR_DECODE,
+            MEDIA_ERR_SRC_NOT_SUPPORTED: error.MEDIA_ERR_SRC_NOT_SUPPORTED
+          });
+          
+          let errorMsg = "Erro desconhecido";
+          switch(error.code) {
+            case error.MEDIA_ERR_ABORTED:
+              errorMsg = "Carregamento abortado pelo usuário";
+              break;
+            case error.MEDIA_ERR_NETWORK:
+              errorMsg = "Erro de rede ao carregar vídeo";
+              break;
+            case error.MEDIA_ERR_DECODE:
+              errorMsg = "Erro ao decodificar vídeo (formato não suportado?)";
+              break;
+            case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+              errorMsg = "Formato de vídeo não suportado ou arquivo não encontrado";
+              break;
+          }
+          console.error(`❌ ${errorMsg}`);
+        }
         setVideoError(true);
       });
       
@@ -49,8 +105,15 @@ export default function Hero() {
             playsInline
             preload="auto"
             style={{ zIndex: -1 }}
-            onError={() => {
-              console.error("Erro ao carregar vídeo fg.mp4");
+            onError={(e) => {
+              const video = e.currentTarget;
+              const error = video.error;
+              console.error("❌ Erro no evento onError:", {
+                error,
+                src: video.src,
+                networkState: video.networkState,
+                readyState: video.readyState
+              });
               setVideoError(true);
             }}
             onLoadedData={() => {
