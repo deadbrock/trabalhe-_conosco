@@ -1,27 +1,72 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 export default function Hero() {
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Forçar o vídeo a carregar e reproduzir
+    if (videoRef.current) {
+      const video = videoRef.current;
+      
+      // Verificar se o vídeo existe
+      video.addEventListener('loadstart', () => {
+        console.log("🟡 Iniciando carregamento do vídeo fg.mp4");
+      });
+      
+      video.addEventListener('canplay', () => {
+        console.log("🟢 Vídeo pronto para reproduzir");
+        video.play().catch((error) => {
+          console.error("❌ Erro ao reproduzir vídeo:", error);
+          setVideoError(true);
+        });
+      });
+      
+      video.addEventListener('error', (e) => {
+        console.error("❌ Erro no elemento de vídeo:", e);
+        setVideoError(true);
+      });
+      
+      // Carregar o vídeo
+      video.load();
+    }
+  }, []);
+
   return (
     <section className="relative flex items-center justify-center overflow-hidden h-[70vh]">
       {/* Vídeo de fundo */}
-      <div className="absolute inset-0 w-full">
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src="/fg.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+      <div className="absolute inset-0 w-full h-full z-0">
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            src="/fg.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            style={{ zIndex: -1 }}
+            onError={() => {
+              console.error("Erro ao carregar vídeo fg.mp4");
+              setVideoError(true);
+            }}
+            onLoadedData={() => {
+              console.log("✅ Vídeo fg.mp4 carregado com sucesso");
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/20 via-red-700/20 to-primary/20 z-0" />
+        )}
       </div>
 
       {/* Overlay com gradiente mais intenso */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-[1]" />
       
       {/* Efeito de vinheta nas bordas */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] z-[1]" />
 
       {/* Partículas */}
       <div className="absolute inset-0">
