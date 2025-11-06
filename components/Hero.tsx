@@ -92,13 +92,12 @@ export default function Hero() {
 
   return (
     <section className="relative flex items-center justify-center overflow-hidden h-[70vh]">
-      {/* Vídeo de fundo */}
+      {/* Vídeo de fundo ou imagem de fallback */}
       <div className="absolute inset-0 w-full h-full z-0">
         {!videoError ? (
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover z-0"
-            src="/fg.mp4"
             autoPlay
             muted
             loop
@@ -114,14 +113,29 @@ export default function Hero() {
                 networkState: video.networkState,
                 readyState: video.readyState
               });
+              console.warn("⚠️ Vídeo não pode ser carregado. Usando fallback visual.");
+              console.info("💡 Dica: Reconverta o vídeo com: ffmpeg -i fg.mp4 -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 128k -movflags +faststart fg_converted.mp4");
               setVideoError(true);
             }}
             onLoadedData={() => {
               console.log("✅ Vídeo fg.mp4 carregado com sucesso");
             }}
-          />
+          >
+            {/* Múltiplos formatos para compatibilidade */}
+            <source src="/fg.mp4" type="video/mp4" />
+            <source src="/fg.webm" type="video/webm" />
+            Seu navegador não suporta vídeo HTML5.
+          </video>
         ) : (
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/20 via-red-700/20 to-primary/20 z-0" />
+          // Fallback visual elegante quando o vídeo não carrega
+          <div className="absolute inset-0 w-full h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-red-900 to-purple-900 animate-gradient-xy" />
+            <div className="absolute inset-0 opacity-30">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-primary/30 rounded-full filter blur-3xl animate-blob" />
+              <div className="absolute top-0 right-0 w-96 h-96 bg-red-700/30 rounded-full filter blur-3xl animate-blob animation-delay-2000" />
+              <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-600/30 rounded-full filter blur-3xl animate-blob animation-delay-4000" />
+            </div>
+          </div>
         )}
       </div>
 
