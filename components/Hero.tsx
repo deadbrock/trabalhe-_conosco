@@ -150,9 +150,10 @@ export default function Hero() {
               console.log("✅ Vídeo fg.mp4 carregado com sucesso");
             }}
           >
-            {/* Múltiplos formatos para compatibilidade */}
+            {/* Vídeo hospedado no Cloudinary para melhor performance */}
+            <source src="https://res.cloudinary.com/djbvjlw1m/video/upload/fg.mp4" type="video/mp4" />
+            {/* Fallback para arquivo local caso Cloudinary esteja indisponível */}
             <source src="/fg.mp4" type="video/mp4" />
-            <source src="/fg.webm" type="video/webm" />
             Seu navegador não suporta vídeo HTML5.
           </video>
         ) : (
