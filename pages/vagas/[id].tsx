@@ -36,6 +36,8 @@ export default function JobDetailPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [consentimentoLGPD, setConsentimentoLGPD] = useState(false);
+  const [showModalLGPD, setShowModalLGPD] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -116,6 +118,13 @@ export default function JobDetailPage() {
       return;
     }
 
+    // Validação do consentimento LGPD
+    if (!consentimentoLGPD) {
+      setError("Por favor, aceite os termos de consentimento de dados para prosseguir.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("nome", formData.nome);
@@ -128,6 +137,9 @@ export default function JobDetailPage() {
       formDataToSend.append("bairro", formData.bairro);
       formDataToSend.append("vaga_id", id || "");
       formDataToSend.append("curriculo", curriculo);
+      formDataToSend.append("consentimento_lgpd", "true");
+      formDataToSend.append("data_consentimento", new Date().toISOString());
+      formDataToSend.append("ip_consentimento", "web");
 
       const API_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3333";
       const response = await fetch(`${API_URL}/candidatos`, {
@@ -514,6 +526,43 @@ export default function JobDetailPage() {
                     {curriculo ? `✓ ${curriculo.name}` : "Nenhum arquivo escolhido - obrigatório"}
                   </p>
                 </div>
+
+                {/* Consentimento LGPD */}
+                <div className="pt-4 border-t border-gray-200">
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={consentimentoLGPD}
+                      onChange={(e) => setConsentimentoLGPD(e.target.checked)}
+                      className="mt-1 w-5 h-5 rounded border-2 border-gray-300 text-primary focus:ring-2 focus:ring-primary cursor-pointer"
+                    />
+                    <span className="text-sm text-gray-700 leading-relaxed">
+                      Autorizo a coleta e tratamento dos meus dados pessoais conforme a{" "}
+                      <Link 
+                        href="/politica-privacidade" 
+                        target="_blank"
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        Política de Privacidade
+                      </Link>
+                      {" "}e a{" "}
+                      <button
+                        type="button"
+                        onClick={() => setShowModalLGPD(true)}
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        LGPD
+                      </button>
+                      . *
+                    </span>
+                  </label>
+                  <p className="text-xs text-gray-500 mt-2 ml-8">
+                    Você pode solicitar a exclusão dos seus dados a qualquer momento através do{" "}
+                    <Link href="/meus-dados" target="_blank" className="text-primary hover:underline">
+                      Portal de Dados Pessoais
+                    </Link>.
+                  </p>
+                </div>
                 
                 <button 
                   type="submit"
@@ -527,6 +576,97 @@ export default function JobDetailPage() {
           </aside>
         </div>
       </div>
+
+      {/* Modal LGPD */}
+      {showModalLGPD && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowModalLGPD(false)}>
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Termo de Consentimento LGPD</h3>
+              <button
+                onClick={() => setShowModalLGPD(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="prose prose-sm max-w-none text-gray-700 space-y-4">
+              <p className="font-semibold">
+                Ao se candidatar a uma vaga na FG Services, você autoriza expressamente:
+              </p>
+
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-bold text-blue-900 mb-2">📋 Dados Coletados:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Nome completo, CPF, RG, data de nascimento</li>
+                  <li>Email, telefone e endereço completo</li>
+                  <li>Currículo e informações profissionais</li>
+                  <li>Dados da candidatura e processos seletivos</li>
+                </ul>
+              </div>
+
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h4 className="font-bold text-green-900 mb-2">✅ Finalidade do Tratamento:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Avaliação da sua candidatura</li>
+                  <li>Comunicação sobre o processo seletivo</li>
+                  <li>Manutenção no banco de talentos (com seu consentimento)</li>
+                  <li>Cumprimento de obrigações legais trabalhistas</li>
+                </ul>
+              </div>
+
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <h4 className="font-bold text-purple-900 mb-2">🔒 Seus Direitos (LGPD):</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Acessar e corrigir seus dados</li>
+                  <li>Solicitar exportação em formato estruturado</li>
+                  <li>Solicitar exclusão dos dados</li>
+                  <li>Revogar consentimento a qualquer momento</li>
+                </ul>
+              </div>
+
+              <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                <p className="text-sm">
+                  <strong>⚠️ Importante:</strong> Seus dados serão mantidos por até 12 meses após a candidatura, podendo ser excluídos mediante solicitação através do{" "}
+                  <Link href="/meus-dados" target="_blank" className="text-primary font-semibold hover:underline">
+                    Portal de Dados Pessoais
+                  </Link>
+                  .
+                </p>
+              </div>
+
+              <p className="text-sm italic">
+                Para mais informações, consulte nossa{" "}
+                <Link href="/politica-privacidade" target="_blank" className="text-primary font-semibold hover:underline">
+                  Política de Privacidade completa
+                </Link>
+                .
+              </p>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => {
+                  setConsentimentoLGPD(true);
+                  setShowModalLGPD(false);
+                }}
+                className="flex-1 bg-gradient-to-r from-primary to-red-700 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+              >
+                Aceitar e Fechar
+              </button>
+              <button
+                onClick={() => setShowModalLGPD(false)}
+                className="px-6 py-3 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
