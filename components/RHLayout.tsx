@@ -67,7 +67,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all h-10 ${
                       isActive
                         ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
                         : "text-gray-600 hover:bg-gray-100"
@@ -78,11 +78,15 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
-              <NotificationCenter />
-              <ThemeToggleCompact />
+              <div className="flex items-center h-10">
+                <NotificationCenter />
+              </div>
+              <div className="flex items-center h-10">
+                <ThemeToggleCompact />
+              </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all ml-2"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all ml-2 h-10"
               >
                 <LogOut className="w-5 h-5" />
                 Sair
