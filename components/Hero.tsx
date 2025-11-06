@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="absolute inset-0 w-full">
         <video
           className="absolute inset-0 w-full h-full object-cover"
-          src="/hero.mp4"
+          src="/fg.mp4"
           autoPlay
           muted
           loop
