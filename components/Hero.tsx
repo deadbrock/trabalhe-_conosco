@@ -150,8 +150,8 @@ export default function Hero() {
               console.log("✅ Vídeo fg.mp4 carregado com sucesso");
             }}
           >
-            {/* Vídeo hospedado no Cloudinary para melhor performance */}
-            <source src="https://res.cloudinary.com/djbvjlw1m/video/upload/fg.mp4" type="video/mp4" />
+            {/* Vídeo hospedado no Cloudinary para melhor performance e CDN global */}
+            <source src="https://res.cloudinary.com/djbvjlw1m/video/upload/v1762443018/fg_oecdza.mp4" type="video/mp4" />
             {/* Fallback para arquivo local caso Cloudinary esteja indisponível */}
             <source src="/fg.mp4" type="video/mp4" />
             Seu navegador não suporta vídeo HTML5.
