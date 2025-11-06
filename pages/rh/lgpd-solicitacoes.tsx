@@ -28,6 +28,11 @@ interface Solicitacao {
   observacoes: string;
 }
 
+interface ApiResponse {
+  protocolo: string;
+  message?: string;
+}
+
 export default function LGPDSolicitacoes() {
   const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +77,7 @@ export default function LGPDSolicitacoes() {
 
     setProcessando(true);
     try {
-      const response = await apiPost(`/lgpd/exportar/${solicitacaoSelecionada.id}`, {});
+      const response = await apiPost<ApiResponse>(`/lgpd/exportar/${solicitacaoSelecionada.id}`, {});
       alert(`✅ Dados exportados com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO candidato receberá os dados por email.`);
       setShowModal(false);
       carregarSolicitacoes();
@@ -96,7 +101,7 @@ export default function LGPDSolicitacoes() {
 
     setProcessando(true);
     try {
-      const response = await apiPost(`/lgpd/excluir/${solicitacaoSelecionada.id}`, {
+      const response = await apiPost<ApiResponse>(`/lgpd/excluir/${solicitacaoSelecionada.id}`, {
         motivo: motivo || 'Solicitação aprovada pelo titular'
       });
       alert(`✅ Dados excluídos com sucesso!\n\nProtocolo: ${response.protocolo}\n\nComprovante enviado por email.`);
