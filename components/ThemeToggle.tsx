@@ -47,8 +47,8 @@ export function ThemeToggleCompact() {
     <button
       onClick={toggleTheme}
       className={`
-        relative p-3 rounded-full transition-all duration-300
-        hover-lift smooth-hover
+        relative p-2 rounded-lg transition-all duration-300
+        hover-lift smooth-hover h-10 flex items-center justify-center
         ${isFeminine 
           ? 'bg-gradient-to-br from-pink-400 to-purple-500 text-white shadow-lg' 
           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-pink-300'

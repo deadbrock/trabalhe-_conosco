@@ -78,12 +78,8 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
-              <div className="flex items-center h-10">
-                <NotificationCenter />
-              </div>
-              <div className="flex items-center h-10">
-                <ThemeToggleCompact />
-              </div>
+              <NotificationCenter />
+              <ThemeToggleCompact />
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all ml-2 h-10"
