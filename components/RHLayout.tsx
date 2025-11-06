@@ -46,28 +46,17 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">FG</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Painel RH</h1>
-                <p className="text-xs text-gray-500">FG Services</p>
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-2">
+        <div className="max-w-full mx-auto px-6">
+          <div className="flex items-center justify-center h-16">
+            {/* Desktop Navigation - Centralizado */}
+            <nav className="hidden md:flex items-center gap-3">
               {menuItems.map((item) => {
                 const isActive = router.pathname === item.href;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all h-10 ${
+                    className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium transition-all h-10 ${
                       isActive
                         ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
                         : "text-gray-600 hover:bg-gray-100"
@@ -78,11 +67,19 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
+              
+              {/* Separador visual */}
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              
               <NotificationCenter />
               <ThemeToggleCompact />
+              
+              {/* Separador visual */}
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all ml-2 h-10"
+                className="flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all h-10"
               >
                 <LogOut className="w-5 h-5" />
                 Sair
@@ -92,7 +89,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 absolute right-4"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
