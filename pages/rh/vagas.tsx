@@ -100,24 +100,24 @@ export default function RHVagas() {
         </div>
 
         {/* Filtros */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+        <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex-grow min-w-[280px]">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)} 
                   onKeyDown={(e) => e.key === 'Enter' && load()}
                   placeholder="Buscar por título, endereço ou descrição..." 
-                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
+                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-12 pr-4 py-3.5 outline-none focus:border-primary focus:bg-white focus:shadow-md transition-all duration-300 text-gray-900 placeholder:text-gray-400 font-medium"
                 />
               </div>
             </div>
             <select 
               value={statusFilter} 
               onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")} 
-              className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium"
+              className="px-5 py-3.5 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-secondary focus:bg-white focus:shadow-md transition-all duration-300 text-gray-900 font-semibold cursor-pointer"
             >
               <option value="all">Todos os Status</option>
               <option value="ativa">Ativas</option>
@@ -126,7 +126,7 @@ export default function RHVagas() {
             <button 
               onClick={load} 
               disabled={loading}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all font-medium text-gray-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-blue-600 text-white hover:shadow-lg transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
             >
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
               {loading ? "Atualizando..." : "Atualizar"}
@@ -135,12 +135,12 @@ export default function RHVagas() {
         </div>
 
         {/* Lista de Vagas */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
           {filtered.length === 0 ? (
-            <div className="p-12 text-center">
-              <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">Nenhuma vaga encontrada</p>
-              <p className="text-gray-400 text-sm mt-2">Crie sua primeira vaga clicando no botão acima</p>
+            <div className="p-16 text-center">
+              <Briefcase className="w-20 h-20 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-700 text-lg font-semibold mb-2">Nenhuma vaga encontrada</p>
+              <p className="text-gray-500 text-sm">Crie sua primeira vaga clicando no botão acima</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
@@ -150,45 +150,45 @@ export default function RHVagas() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="p-6 hover:bg-gray-50 transition-all"
+                  className="p-6 hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent transition-all duration-300 border-l-4 border-transparent hover:border-secondary"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start justify-between gap-6">
                     <div className="flex-grow">
                       <div className="flex items-center gap-3 mb-3">
-                        <h3 className="text-xl font-bold text-gray-900">{v.titulo}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        <h3 className="text-xl font-semibold text-dark">{v.titulo}</h3>
+                        <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase shadow-sm ${
                           v.status === 'ativa' 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' 
+                            : 'bg-gray-200 text-gray-600'
                         }`}>
                           {v.status === 'ativa' ? 'Ativa' : 'Inativa'}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
-                        <span className="flex items-center gap-1.5">
-                          <Briefcase className="w-4 h-4" />
+                        <span className="flex items-center gap-2 font-medium">
+                          <Briefcase className="w-4 h-4 text-secondary" />
                           {v.tipo_contrato}
                         </span>
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="w-4 h-4" />
+                        <span className="flex items-center gap-2 font-medium">
+                          <MapPin className="w-4 h-4 text-primary" />
                           {v.endereco}
                         </span>
                       </div>
                       {v.descricao && (
-                        <p className="text-gray-600 line-clamp-2">{v.descricao}</p>
+                        <p className="text-gray-600 line-clamp-2 leading-relaxed">{v.descricao}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
                       <button 
                         onClick={() => { setEditing(v); setModalOpen(true); }}
-                        className="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-all"
+                        className="p-2.5 rounded-lg hover:bg-blue-50 text-secondary hover:scale-110 transition-all duration-300 shadow-sm hover:shadow-md"
                         title="Editar"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       <button 
                         onClick={() => onToggle(v)}
-                        className={`p-2 rounded-lg transition-all ${
+                        className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md hover:scale-110 ${
                           v.status === 'ativa'
                             ? 'hover:bg-yellow-50 text-yellow-600'
                             : 'hover:bg-green-50 text-green-600'
@@ -199,7 +199,7 @@ export default function RHVagas() {
                       </button>
                       <button 
                         onClick={() => onDelete(v.id)}
-                        className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
+                        className="p-2.5 rounded-lg hover:bg-red-50 text-primary hover:scale-110 transition-all duration-300 shadow-sm hover:shadow-md"
                         title="Excluir"
                       >
                         <Trash2 className="w-5 h-5" />

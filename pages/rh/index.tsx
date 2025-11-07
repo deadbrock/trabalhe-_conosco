@@ -86,25 +86,28 @@ export default function RHDashboard() {
       label: "Vagas Abertas", 
       value: metrics?.vagas_abertas ?? "--",
       icon: Briefcase,
-      color: "from-blue-500 to-blue-600",
-      bgColor: "bg-blue-100",
-      textColor: "text-blue-700"
+      color: "from-secondary to-blue-600",
+      bgColor: "bg-blue-50",
+      textColor: "text-secondary",
+      borderColor: "border-secondary"
     },
     { 
       label: "Total de Candidatos", 
       value: metrics?.total_candidatos ?? "--",
       icon: Users,
-      color: "from-green-500 to-green-600",
-      bgColor: "bg-green-100",
-      textColor: "text-green-700"
+      color: "from-primary to-red-600",
+      bgColor: "bg-red-50",
+      textColor: "text-primary",
+      borderColor: "border-primary"
     },
     { 
       label: "Candidatos Hoje", 
       value: metrics?.candidatos_hoje ?? "--",
       icon: TrendingUp,
       color: "from-purple-500 to-purple-600",
-      bgColor: "bg-purple-100",
-      textColor: "text-purple-700"
+      bgColor: "bg-purple-50",
+      textColor: "text-purple-700",
+      borderColor: "border-purple-500"
     },
   ];
 
@@ -131,56 +134,57 @@ export default function RHDashboard() {
           <p className="text-gray-600">Bem-vindo ao painel de gerenciamento de RH</p>
         </div>
 
-        {/* Métricas */}
+        {/* Métricas - Cards com bordas coloridas */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, i) => (
             <motion.div 
               key={i} 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.4, delay: i * 0.1 }} 
-              className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              transition={{ duration: 0.6, delay: i * 0.15 }} 
+              className={`bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 ${card.borderColor} animate-[fadeInUp_0.6s_ease_forwards]`}
+              style={{ animationDelay: `${i * 150}ms` }}
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-md`}>
-                  <card.icon className="w-6 h-6 text-white" />
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg`}>
+                  <card.icon className="w-7 h-7 text-white" />
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${card.bgColor} ${card.textColor}`}>
+                <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase ${card.bgColor} ${card.textColor}`}>
                   Atualizado
                 </span>
               </div>
-              <div className="text-sm font-medium text-gray-600 mb-1">{card.label}</div>
-              <div className="text-4xl font-bold text-gray-900">{card.value}</div>
+              <div className="text-sm font-medium text-gray-500 mb-2 tracking-wide">{card.label}</div>
+              <div className="text-4xl font-bold text-dark">{card.value}</div>
             </motion.div>
           ))}
         </div>
 
         {/* Ações Rápidas */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Ações Rápidas</h2>
+        <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100">
+          <h2 className="text-2xl font-semibold text-dark mb-6 tracking-wide">Ações Rápidas</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {quickActions.map((action, i) => (
               <Link
                 key={i}
                 href={action.href}
-                className={`flex items-center gap-4 p-5 rounded-xl bg-gradient-to-r ${action.color} text-white hover:shadow-lg transition-all duration-300 hover:scale-105`}
+                className={`flex items-center gap-4 p-6 rounded-xl bg-gradient-to-r ${action.color} text-white hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-md`}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <action.icon className="w-6 h-6" />
+                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg">
+                  <action.icon className="w-7 h-7" />
                 </div>
-                <span className="font-semibold text-lg">{action.label}</span>
+                <span className="font-semibold text-lg tracking-wide">{action.label}</span>
               </Link>
             ))}
           </div>
         </div>
 
         {/* Últimos Candidatos */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-900">Últimas Candidaturas</h2>
+        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div className="p-8 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
+            <h2 className="text-2xl font-semibold text-dark tracking-wide">Últimas Candidaturas</h2>
             <Link 
               href="/rh/candidatos" 
-              className="text-sm text-primary hover:text-red-700 font-semibold flex items-center gap-1 transition-colors"
+              className="text-sm text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-red-50"
             >
               Ver Todos
               <ExternalLink className="w-4 h-4" />
@@ -190,7 +194,7 @@ export default function RHDashboard() {
           {recentCandidatos.length === 0 ? (
             <div className="p-12 text-center">
               <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">Nenhuma candidatura recente</p>
+              <p className="text-gray-500 font-medium">Nenhuma candidatura recente</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
@@ -200,34 +204,36 @@ export default function RHDashboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="p-5 hover:bg-gray-50 transition-all"
+                  className="p-6 hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent transition-all duration-300"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-6">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-gray-900">{candidato.nome}</h3>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-                          {candidato.status === "novo" ? "Novo" : candidato.status}
-                        </span>
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className="font-semibold text-dark text-lg">{candidato.nome}</h3>
+                        {candidato.status === "novo" && (
+                          <span className="bg-gradient-to-r from-primary to-red-500 text-white text-xs font-bold px-3 py-1 rounded-md uppercase shadow-sm">
+                            Novo
+                          </span>
+                        )}
                       </div>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1.5">
-                          <Briefcase className="w-4 h-4" />
-                          <span>{candidato.vaga_titulo || "Vaga não especificada"}</span>
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="w-4 h-4 text-secondary" />
+                          <span className="font-medium">{candidato.vaga_titulo || "Vaga não especificada"}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <Mail className="w-4 h-4" />
+                        <div className="flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-primary" />
                           <span>{candidato.email}</span>
                         </div>
                         {candidato.telefone && (
-                          <div className="flex items-center gap-1.5">
-                            <Phone className="w-4 h-4" />
+                          <div className="flex items-center gap-2">
+                            <Phone className="w-4 h-4 text-green-600" />
                             <span>{candidato.telefone}</span>
                           </div>
                         )}
                         {candidato.data_cadastro && (
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-4 h-4" />
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-purple-600" />
                             <span>{new Date(candidato.data_cadastro).toLocaleDateString('pt-BR')}</span>
                           </div>
                         )}
@@ -235,7 +241,7 @@ export default function RHDashboard() {
                     </div>
                     <Link
                       href={`/rh/candidatos/${candidato.vaga_id}`}
-                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-red-700 text-white font-semibold hover:shadow-lg transition-all hover:scale-105"
+                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-blue-600 text-white font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
                     >
                       Ver Kanban
                     </Link>

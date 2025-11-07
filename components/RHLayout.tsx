@@ -40,12 +40,12 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Animações Delicadas (apenas tema feminino) */}
+    <div className="min-h-screen bg-gradient-to-br from-light via-white to-gray-100">
+      {/* Animações Delicadas */}
       <DelicateAnimations />
       
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      {/* Header - Design Moderno com Backdrop Blur */}
+      <header className="backdrop-blur-md bg-primary/90 border-b border-white/10 sticky top-0 z-50 shadow-lg">
         <div className="max-w-full mx-auto px-6">
           <div className="flex items-center justify-center h-16">
             {/* Desktop Navigation - Centralizado */}
@@ -56,10 +56,10 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 px-5 py-2 rounded-lg font-medium transition-all h-10 ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 h-10 ${
                       isActive
-                        ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
-                        : "text-gray-600 hover:bg-gray-100"
+                        ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md scale-105"
+                        : "text-white/90 hover:bg-white/10 hover:text-white"
                     }`}
                   >
                     <item.icon className="w-5 h-5" />
@@ -69,17 +69,17 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
               })}
               
               {/* Separador visual */}
-              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <div className="w-px h-6 bg-white/20 mx-1"></div>
               
               <NotificationCenter />
               <ThemeToggleCompact />
               
               {/* Separador visual */}
-              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              <div className="w-px h-6 bg-white/20 mx-1"></div>
               
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all h-10"
+                className="flex items-center gap-2 px-4 py-2 rounded-md font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300 h-10"
               >
                 <LogOut className="w-5 h-5" />
                 Sair
@@ -89,7 +89,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 absolute right-4"
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 absolute right-4 text-white"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -98,7 +98,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
+          <div className="md:hidden border-t border-white/10 bg-primary/95 backdrop-blur-md">
             <nav className="px-4 py-3 space-y-1">
               {menuItems.map((item) => {
                 const isActive = router.pathname === item.href;
@@ -107,10 +107,10 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium tracking-wide transition-all duration-300 ${
                       isActive
-                        ? "bg-gradient-to-r from-primary to-secondary text-white"
-                        : "text-gray-600 hover:bg-gray-100"
+                        ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
+                        : "text-white/90 hover:bg-white/10 hover:text-white"
                     }`}
                   >
                     <item.icon className="w-5 h-5" />
@@ -124,7 +124,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-all"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300"
               >
                 <LogOut className="w-5 h-5" />
                 Sair
@@ -134,9 +134,11 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
+      {/* Main Content - Container com sombra e bordas arredondadas */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
+        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+          {children}
+        </div>
       </main>
     </div>
   );
