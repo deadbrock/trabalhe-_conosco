@@ -277,8 +277,7 @@ export default function PoliticaPrivacidade() {
                 </p>
                 <div className="space-y-2">
                   <p className="text-gray-900"><strong>Email:</strong> <a href="mailto:lgpd@fgservices.com.br" className="text-indigo-600 hover:text-indigo-700 underline">lgpd@fgservices.com.br</a></p>
-                  <p className="text-gray-900"><strong>Endereço:</strong> [Inserir endereço físico da empresa]</p>
-                  <p className="text-gray-900"><strong>CNPJ:</strong> [Inserir CNPJ]</p>
+                  <p className="text-gray-900"><strong>Endereço:</strong> [Rua minas gerais, 137, Igarassu, PE]</p>
                 </div>
               </div>
             </section>
