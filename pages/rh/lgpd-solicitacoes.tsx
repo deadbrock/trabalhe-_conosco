@@ -15,7 +15,8 @@ import { apiGet, apiPost } from '../../lib/api';
 interface Solicitacao {
   id: number;
   tipo: 'exportacao' | 'exclusao';
-  status: 'pendente' | 'em_analise' | 'aprovada' | 'concluida' | 'rejeitada';
+  status: 'pendente' | 'em_analise' | 'aprovada' | 'concluida' | 'rejeitada' | 'aguardando_aprovacao_rh' | 'email_nao_encontrado';
+  candidato_id: number | null;
   candidato_nome: string;
   candidato_email: string;
   candidato_telefone: string;
@@ -40,7 +41,7 @@ export default function LGPDSolicitacoes() {
   const [filtroTipo, setFiltroTipo] = useState<string>('');
   const [solicitacaoSelecionada, setSolicitacaoSelecionada] = useState<Solicitacao | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalTipo, setModalTipo] = useState<'exportar' | 'excluir' | 'rejeitar' | 'detalhes'>('detalhes');
+  const [modalTipo, setModalTipo] = useState<'exportar' | 'excluir' | 'rejeitar' | 'detalhes' | 'notificar'>('detalhes');
   const [motivo, setMotivo] = useState('');
   const [processando, setProcessando] = useState(false);
 
@@ -141,6 +142,36 @@ export default function LGPDSolicitacoes() {
   };
 
   // ==========================================
+  // NOTIFICAR EMAIL NÃO ENCONTRADO
+  // ==========================================
+  const handleNotificarEmailNaoEncontrado = async () => {
+    if (!solicitacaoSelecionada) return;
+
+    const confirmar = window.confirm(
+      `⚠️ CONFIRMAR ENVIO\n\n` +
+      `Será enviado um email para ${solicitacaoSelecionada.email_solicitante} informando que:\n\n` +
+      `"Não encontramos uma candidatura associada a este email em nossa base de dados."\n\n` +
+      `O email pedirá para que o solicitante verifique se usou o email correto na candidatura.\n\n` +
+      `Deseja continuar?`
+    );
+
+    if (!confirmar) return;
+
+    setProcessando(true);
+    try {
+      const response = await apiPost<ApiResponse>(`/lgpd/notificar-email-nao-encontrado/${solicitacaoSelecionada.id}`, {});
+      alert(`✅ Email enviado com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO solicitante foi notificado sobre o email não encontrado.`);
+      setShowModal(false);
+      carregarSolicitacoes();
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: string } }; message?: string };
+      alert(`❌ Erro ao enviar notificação:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
+    } finally {
+      setProcessando(false);
+    }
+  };
+
+  // ==========================================
   // HELPERS
   // ==========================================
   const getStatusBadge = (status: string) => {
@@ -149,7 +180,9 @@ export default function LGPDSolicitacoes() {
       em_analise: 'bg-blue-100 text-blue-800',
       aprovada: 'bg-green-100 text-green-800',
       concluida: 'bg-green-100 text-green-800',
-      rejeitada: 'bg-red-100 text-red-800'
+      rejeitada: 'bg-red-100 text-red-800',
+      aguardando_aprovacao_rh: 'bg-orange-100 text-orange-800',
+      email_nao_encontrado: 'bg-gray-100 text-gray-800'
     };
     return badges[status as keyof typeof badges] || 'bg-gray-100 text-gray-800';
   };
@@ -309,6 +342,15 @@ export default function LGPDSolicitacoes() {
                             👁️ Ver
                           </button>
 
+                          {solicitacao.status === 'aguardando_aprovacao_rh' && (
+                            <button
+                              onClick={() => abrirModal(solicitacao, 'notificar')}
+                              className="text-orange-600 hover:text-orange-900"
+                            >
+                              📧 Notificar
+                            </button>
+                          )}
+
                           {(solicitacao.status === 'em_analise' || solicitacao.status === 'pendente') && (
                             <>
                               {solicitacao.tipo === 'exportacao' && (
@@ -359,6 +401,7 @@ export default function LGPDSolicitacoes() {
                     {modalTipo === 'exportar' && '📦 Exportar Dados'}
                     {modalTipo === 'excluir' && '🗑️ Excluir Dados'}
                     {modalTipo === 'rejeitar' && '❌ Rejeitar Solicitação'}
+                    {modalTipo === 'notificar' && '📧 Notificar Solicitante'}
                   </h3>
                   <button
                     onClick={() => {
@@ -479,6 +522,55 @@ export default function LGPDSolicitacoes() {
                           setShowModal(false);
                           setMotivo('');
                         }}
+                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {modalTipo === 'notificar' && (
+                  <div>
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+                      <p className="text-orange-800 font-medium">⚠️ Email não encontrado na base de dados</p>
+                      <p className="text-orange-700 text-sm mt-2">
+                        Não encontramos uma candidatura com o email informado pelo solicitante.
+                      </p>
+                    </div>
+
+                    <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Email solicitante:</strong> {solicitacaoSelecionada.email_solicitante}
+                      </p>
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Tipo de solicitação:</strong> {solicitacaoSelecionada.tipo === 'exportacao' ? 'Exportação' : 'Exclusão'}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Data da solicitação:</strong> {formatarData(solicitacaoSelecionada.created_at)}
+                      </p>
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <p className="text-blue-800 font-medium text-sm">📧 O que será enviado?</p>
+                      <ul className="text-blue-700 text-sm mt-2 ml-4 list-disc space-y-1">
+                        <li>Email informando que não encontramos dados cadastrados</li>
+                        <li>Orientação para verificar se o email está correto</li>
+                        <li>Sugestão para tentar com outro email caso possua</li>
+                        <li>Contatos da empresa para suporte</li>
+                      </ul>
+                    </div>
+
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={handleNotificarEmailNaoEncontrado}
+                        disabled={processando}
+                        className="flex-1 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 disabled:bg-gray-300 transition-colors"
+                      >
+                        {processando ? 'Enviando...' : '📧 Enviar Notificação'}
+                      </button>
+                      <button
+                        onClick={() => setShowModal(false)}
                         className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                       >
                         Cancelar
