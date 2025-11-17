@@ -27,7 +27,7 @@ export default function RHLogin() {
 
   // Inicializar áudio de Natal
   useEffect(() => {
-    audioRef.current = new Audio('https://res.cloudinary.com/djbvjlw1m/video/upload/v1762797600/jingle-bells-christmas.mp3');
+    audioRef.current = new Audio('https://res.cloudinary.com/djbvjlw1m/video/upload/v1763408399/Bobby_Helms_-_Jingle_Bell_Rock_nIhs1T7OcZg_tpr0tv.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.3; // Volume baixo e agradável
     
