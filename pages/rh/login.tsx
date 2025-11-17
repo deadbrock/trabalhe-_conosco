@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { apiPost } from "@/lib/api";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { Mail, Lock, Shield } from "lucide-react";
+import { Mail, Lock, Shield, Volume2, VolumeX } from "lucide-react";
 import Link from "next/link";
 import ChristmasAnimation from "@/components/ChristmasAnimation";
 
@@ -14,6 +14,8 @@ export default function RHLogin() {
   const [sessionExpired, setSessionExpired] = useState(false);
   const [showChristmas, setShowChristmas] = useState(false);
   const [userName, setUserName] = useState<string>("");
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const router = useRouter();
 
   // Verificar se sessão expirou
@@ -22,6 +24,35 @@ export default function RHLogin() {
       setSessionExpired(true);
     }
   }, [router.query]);
+
+  // Inicializar áudio de Natal
+  useEffect(() => {
+    audioRef.current = new Audio('https://res.cloudinary.com/djbvjlw1m/video/upload/v1762797600/jingle-bells-christmas.mp3');
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.3; // Volume baixo e agradável
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Toggle música
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    
+    if (isMusicPlaying) {
+      audioRef.current.pause();
+      setIsMusicPlaying(false);
+    } else {
+      audioRef.current.play().catch(err => {
+        console.log("Erro ao tocar música:", err);
+      });
+      setIsMusicPlaying(true);
+    }
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +99,43 @@ export default function RHLogin() {
       >
         ← Voltar ao site
       </Link>
+
+      {/* Botão de Música Natalina */}
+      <motion.button
+        onClick={toggleMusic}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute top-6 right-6 group"
+      >
+        <div className="relative">
+          {/* Anel pulsante */}
+          {isMusicPlaying && (
+            <motion.div
+              className="absolute inset-0 rounded-full bg-red-500/30"
+              animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          )}
+          
+          {/* Botão principal */}
+          <div className="relative bg-gradient-to-r from-red-600 to-green-600 p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300">
+            {isMusicPlaying ? (
+              <Volume2 className="w-6 h-6 text-white" />
+            ) : (
+              <VolumeX className="w-6 h-6 text-white" />
+            )}
+          </div>
+          
+          {/* Tooltip */}
+          <div className="absolute top-full right-0 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
+              {isMusicPlaying ? "🎵 Pausar música" : "🎄 Música natalina"}
+            </div>
+          </div>
+        </div>
+      </motion.button>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
