@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { apiGet, apiPut, getApiBase } from "@/lib/api";
+import { apiGet, apiPut, apiPost, getApiBase } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
-import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock, ArrowLeft, Mail, Phone, Download, MessageCircle, CheckCircle, XCircle, Star, Eye, Calendar } from "lucide-react";
+import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock, ArrowLeft, Mail, Phone, Download, MessageCircle, CheckCircle, XCircle, Star, Eye, Calendar, Send, Loader2 } from "lucide-react";
 import Link from "next/link";
 import ComentariosCandidato from "@/components/ComentariosCandidato";
 import TagsCandidato from "@/components/TagsCandidato";
@@ -57,6 +57,7 @@ export default function RHCandidatos() {
   const [vagaSelecionada, setVagaSelecionada] = useState<VagaComCandidatos | null>(null);
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
   const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao' | 'notas' | 'avaliacoes' | 'atividades'>('detalhes');
+  const [enviandoFGS, setEnviandoFGS] = useState(false);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
   const userId = typeof window !== "undefined" ? parseInt(localStorage.getItem("rh_user_id") || "1") : 1;
@@ -160,6 +161,35 @@ export default function RHCandidatos() {
       alert(`✅ Status alterado com sucesso!`);
     } catch {
       alert("❌ Erro ao alterar status");
+    }
+  };
+
+  const handleEnviarParaFGS = async (candidatoId: number) => {
+    if (!confirm('Deseja enviar este candidato para o sistema FGS (Admissão)?\n\nOs dados e documentos serão transferidos para o sistema de admissão.')) {
+      return;
+    }
+
+    setEnviandoFGS(true);
+    try {
+      const response = await apiPost<{ success: boolean; message: string; data?: any }>(
+        `/candidatos/${candidatoId}/enviar-fgs`,
+        {},
+        token
+      );
+      
+      if (response.success) {
+        alert(`✅ ${response.message}`);
+        // Recarregar dados para atualizar status se necessário
+        await load();
+      } else {
+        alert(`❌ ${response.message || 'Erro ao enviar para FGS'}`);
+      }
+    } catch (error: any) {
+      console.error('Erro ao enviar para FGS:', error);
+      const errorMessage = error.message || 'Erro desconhecido ao enviar para FGS';
+      alert(`❌ ${errorMessage}`);
+    } finally {
+      setEnviandoFGS(false);
     }
   };
 
@@ -653,6 +683,35 @@ export default function RHCandidatos() {
                           </button>
                         </div>
                       </div>
+
+                      {/* Botão Enviar para FGS - Apenas para candidatos aprovados */}
+                      {selectedCandidato.status === "aprovado" && (
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border-2 border-blue-200">
+                          <label className="text-sm font-semibold text-blue-900 block mb-3">
+                            📤 Enviar para Admissão (FGS)
+                          </label>
+                          <p className="text-xs text-blue-700 mb-3">
+                            Envie este candidato aprovado para o sistema FGS. Todos os dados e documentos serão transferidos.
+                          </p>
+                          <button
+                            onClick={() => handleEnviarParaFGS(selectedCandidato.id)}
+                            disabled={enviandoFGS}
+                            className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                          >
+                            {enviandoFGS ? (
+                              <>
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                Enviando...
+                              </>
+                            ) : (
+                              <>
+                                <Send className="w-5 h-5" />
+                                Enviar para Admissão
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
                     </>
                   )}
 
