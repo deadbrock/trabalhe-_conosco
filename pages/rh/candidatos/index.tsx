@@ -171,7 +171,7 @@ export default function RHCandidatos() {
 
     setEnviandoFGS(true);
     try {
-      const response = await apiPost<{ success: boolean; message: string; data?: any }>(
+      const response = await apiPost<{ success: boolean; message: string; data?: unknown }>(
         `/candidatos/${candidatoId}/enviar-fgs`,
         {},
         token
@@ -184,9 +184,9 @@ export default function RHCandidatos() {
       } else {
         alert(`❌ ${response.message || 'Erro ao enviar para FGS'}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao enviar para FGS:', error);
-      const errorMessage = error.message || 'Erro desconhecido ao enviar para FGS';
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao enviar para FGS';
       alert(`❌ ${errorMessage}`);
     } finally {
       setEnviandoFGS(false);
