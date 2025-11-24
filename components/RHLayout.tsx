@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield } from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import DelicateAnimations from "./DelicateAnimations";
 import NotificationCenter from "./NotificationCenter";
@@ -34,6 +34,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
     { href: "/rh", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/rh/vagas", icon: Briefcase, label: "Vagas" },
     { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
+    { href: "/rh/documentos", icon: FileText, label: "Documentos" },
     { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
     { href: "/rh/comunicacao", icon: MessageCircle, label: "Comunicação" },
     { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },

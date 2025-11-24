@@ -686,31 +686,65 @@ export default function RHCandidatos() {
 
                       {/* Botão Enviar para FGS - Apenas para candidatos aprovados */}
                       {selectedCandidato.status === "aprovado" && (
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border-2 border-blue-200">
-                          <label className="text-sm font-semibold text-blue-900 block mb-3">
-                            📤 Enviar para Admissão (FGS)
-                          </label>
-                          <p className="text-xs text-blue-700 mb-3">
-                            Envie este candidato aprovado para o sistema FGS. Todos os dados e documentos serão transferidos.
-                          </p>
-                          <button
-                            onClick={() => handleEnviarParaFGS(selectedCandidato.id)}
-                            disabled={enviandoFGS}
-                            className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-                          >
-                            {enviandoFGS ? (
-                              <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Enviando...
-                              </>
-                            ) : (
-                              <>
-                                <Send className="w-5 h-5" />
-                                Enviar para Admissão
-                              </>
-                            )}
-                          </button>
-                        </div>
+                        <>
+                          {/* Botão: Solicitar Documentos */}
+                          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border-2 border-green-200">
+                            <label className="text-sm font-semibold text-green-900 block mb-3">
+                              📄 Solicitar Documentos para Admissão
+                            </label>
+                            <p className="text-xs text-green-700 mb-3">
+                              Gere um link único e envie por email/WhatsApp para o candidato enviar os documentos necessários.
+                            </p>
+                            <button
+                              onClick={async () => {
+                                try {
+                                  const response = await api.post(`/documentos/gerar-link/${selectedCandidato.id}`, {
+                                    enviarNotificacao: true
+                                  });
+                                  
+                                  if (response.data.success) {
+                                    alert(`✅ Link gerado e enviado!\n\nLink: ${response.data.link}\n\nEmail: ${response.data.notificacao?.emailEnviado ? '✅' : '❌'}\nWhatsApp: ${response.data.notificacao?.whatsappEnviado ? '✅' : '❌'}`);
+                                  }
+                                } catch (error: unknown) {
+                                  const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+                                  console.error('Erro ao gerar link:', error);
+                                  alert(`❌ Erro: ${errorMessage}`);
+                                }
+                              }}
+                              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                            >
+                              <FileText className="w-5 h-5" />
+                              Solicitar Documentos
+                            </button>
+                          </div>
+
+                          {/* Botão: Enviar para FGS */}
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border-2 border-blue-200">
+                            <label className="text-sm font-semibold text-blue-900 block mb-3">
+                              📤 Enviar para Admissão (FGS)
+                            </label>
+                            <p className="text-xs text-blue-700 mb-3">
+                              Envie este candidato aprovado para o sistema FGS. Todos os dados e documentos serão transferidos.
+                            </p>
+                            <button
+                              onClick={() => handleEnviarParaFGS(selectedCandidato.id)}
+                              disabled={enviandoFGS}
+                              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                            >
+                              {enviandoFGS ? (
+                                <>
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  Enviando...
+                                </>
+                              ) : (
+                                <>
+                                  <Send className="w-5 h-5" />
+                                  Enviar para Admissão
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </>
                       )}
                     </>
                   )}
