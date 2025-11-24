@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Upload, CheckCircle, XCircle, FileText, AlertCircle, Loader2 } from 'lucide-react';
@@ -41,14 +41,7 @@ export default function DocumentosUploadPage() {
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
-  // Buscar dados ao carregar
-  useEffect(() => {
-    if (token) {
-      buscarDados();
-    }
-  }, [token]);
-
-  const buscarDados = async () => {
+  const buscarDados = useCallback(async () => {
     try {
       setLoading(true);
       setErro(null);
@@ -56,13 +49,23 @@ export default function DocumentosUploadPage() {
       const response = await axios.get(`${API_URL}/documentos/${token}`);
       
       setDados(response.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao buscar dados:', error);
-      setErro(error.response?.data?.error || 'Erro ao carregar informações');
+      const errorMessage = error instanceof Error && 'response' in error 
+        ? (error as { response?: { data?: { error?: string } } }).response?.data?.error || 'Erro ao carregar informações'
+        : 'Erro ao carregar informações';
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  // Buscar dados ao carregar
+  useEffect(() => {
+    if (token) {
+      buscarDados();
+    }
+  }, [token, buscarDados]);
 
   const handleUpload = async (tipoDocumento: string, file: File) => {
     try {
@@ -73,7 +76,7 @@ export default function DocumentosUploadPage() {
       formData.append('file', file);
       formData.append('tipo_documento', tipoDocumento);
       
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/documentos/${token}/upload`,
         formData,
         {
@@ -87,10 +90,14 @@ export default function DocumentosUploadPage() {
       await buscarDados();
       
       alert('✅ Documento enviado com sucesso!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao fazer upload:', error);
       
-      const mensagemErro = error.response?.data?.motivo || error.response?.data?.error || 'Erro ao enviar documento';
+      const mensagemErro = error instanceof Error && 'response' in error
+        ? (error as { response?: { data?: { motivo?: string; error?: string } } }).response?.data?.motivo ||
+          (error as { response?: { data?: { motivo?: string; error?: string } } }).response?.data?.error ||
+          'Erro ao enviar documento'
+        : 'Erro ao enviar documento';
       
       alert(`❌ ${mensagemErro}`);
     } finally {
