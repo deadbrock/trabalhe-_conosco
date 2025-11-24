@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export function getApiBase() {
   return process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3333";
 }
@@ -6,6 +8,36 @@ function getAuthToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("rh_token");
 }
+
+// Axios instance com autenticação automática
+const api = axios.create({
+  baseURL: getApiBase(),
+});
+
+// Interceptor para adicionar token automaticamente
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Interceptor para lidar com erros de autenticação
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("rh_token");
+        window.location.href = "/rh/login?expired=true";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
 
 export async function apiGet<T>(path: string, token?: string): Promise<T> {
   const authToken = token || getAuthToken();
