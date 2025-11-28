@@ -66,7 +66,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
             <nav className="hidden md:flex items-center gap-3">
               {menuItems.map((item, index) => {
                 // Se tem submenu, renderiza dropdown
-                if ('submenu' in item) {
+                if ('submenu' in item && item.submenu) {
                   const isOpen = openDropdown === item.label;
                   const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
                   
@@ -168,7 +168,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
             <nav className="px-4 py-3 space-y-1">
               {menuItems.map((item, index) => {
                 // Se tem submenu
-                if ('submenu' in item) {
+                if ('submenu' in item && item.submenu) {
                   const isOpen = openDropdown === item.label;
                   const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
                   
