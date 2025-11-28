@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText } from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText, ChevronDown } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import DelicateAnimations from "./DelicateAnimations";
 import NotificationCenter from "./NotificationCenter";
@@ -10,6 +10,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("rh_token");
@@ -33,11 +34,23 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   const menuItems = [
     { href: "/rh", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/rh/vagas", icon: Briefcase, label: "Vagas" },
-    { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
-    { href: "/rh/documentos", icon: FileText, label: "Documentos" },
-    { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
-    { href: "/rh/comunicacao", icon: MessageCircle, label: "Comunicação" },
-    { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
+    { 
+      label: "Candidatos", 
+      icon: Users, 
+      submenu: [
+        { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
+        { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
+        { href: "/rh/documentos", icon: FileText, label: "Documentos" },
+      ]
+    },
+    { 
+      label: "Comunicação", 
+      icon: MessageCircle, 
+      submenu: [
+        { href: "/rh/comunicacao", icon: MessageCircle, label: "Comunicação" },
+        { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
+      ]
+    },
   ];
 
   return (
@@ -51,7 +64,59 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center justify-center h-16">
             {/* Desktop Navigation - Centralizado */}
             <nav className="hidden md:flex items-center gap-3">
-              {menuItems.map((item) => {
+              {menuItems.map((item, index) => {
+                // Se tem submenu, renderiza dropdown
+                if ('submenu' in item) {
+                  const isOpen = openDropdown === item.label;
+                  const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
+                  
+                  return (
+                    <div key={index} className="relative">
+                      <button
+                        onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                        onMouseEnter={() => setOpenDropdown(item.label)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium tracking-wide transition-all duration-300 h-10 ${
+                          isAnySubmenuActive
+                            ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md scale-105"
+                            : "text-white/90 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        <item.icon className="w-5 h-5" />
+                        {item.label}
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* Dropdown Menu */}
+                      {isOpen && (
+                        <div 
+                          className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+                          onMouseLeave={() => setOpenDropdown(null)}
+                        >
+                          {item.submenu.map((subItem) => {
+                            const isActive = router.pathname === subItem.href;
+                            return (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => setOpenDropdown(null)}
+                                className={`flex items-center gap-3 px-4 py-3 transition-all duration-200 ${
+                                  isActive
+                                    ? "bg-gradient-to-r from-primary to-secondary text-white"
+                                    : "text-gray-700 hover:bg-gray-100"
+                                }`}
+                              >
+                                <subItem.icon className="w-5 h-5" />
+                                {subItem.label}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                
+                // Se não tem submenu, renderiza link normal
                 const isActive = router.pathname === item.href;
                 return (
                   <Link
@@ -101,7 +166,60 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-white/10 bg-primary/95 backdrop-blur-md">
             <nav className="px-4 py-3 space-y-1">
-              {menuItems.map((item) => {
+              {menuItems.map((item, index) => {
+                // Se tem submenu
+                if ('submenu' in item) {
+                  const isOpen = openDropdown === item.label;
+                  const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
+                  
+                  return (
+                    <div key={index}>
+                      <button
+                        onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                        className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-medium tracking-wide transition-all duration-300 ${
+                          isAnySubmenuActive
+                            ? "bg-gradient-to-r from-primary to-secondary text-white shadow-md"
+                            : "text-white/90 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <item.icon className="w-5 h-5" />
+                          {item.label}
+                        </div>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* Submenu Mobile */}
+                      {isOpen && (
+                        <div className="ml-4 mt-1 space-y-1">
+                          {item.submenu.map((subItem) => {
+                            const isActive = router.pathname === subItem.href;
+                            return (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => {
+                                  setIsMobileMenuOpen(false);
+                                  setOpenDropdown(null);
+                                }}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium tracking-wide transition-all duration-300 ${
+                                  isActive
+                                    ? "bg-white/20 text-white shadow-md"
+                                    : "text-white/80 hover:bg-white/10 hover:text-white"
+                                }`}
+                              >
+                                <subItem.icon className="w-4 h-4" />
+                                {subItem.label}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                
+                // Se não tem submenu
                 const isActive = router.pathname === item.href;
                 return (
                   <Link
