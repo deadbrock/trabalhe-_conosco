@@ -56,27 +56,13 @@ export default function DocumentosUploadPage() {
       setLoading(true);
       const token = localStorage.getItem('documentos_token');
       
-      // TODO: Implementar endpoint para buscar dados do candidato autenticado
-      // Por enquanto, vou simular dados
-      setDados({
-        candidato: {
-          nome: 'Candidato Teste',
-          email: 'teste@email.com',
-          telefone: '(81) 99999-9999',
-          vaga: 'Desenvolvedor',
+      const response = await axios.get(`${API_URL}/documentos/dados`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
         },
-        documentos: {
-          ctps_digital: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          identidade_frente: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          identidade_verso: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          comprovante_residencia: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          certidao_nascimento_casamento: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          reservista: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          titulo_eleitor: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-          antecedentes_criminais: { url: null, validado: false, rejeitado: false, motivo_rejeicao: null },
-        },
-        status: 'pendente',
       });
+      
+      setDados(response.data);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
       setErro('Erro ao carregar informações');
@@ -109,7 +95,6 @@ export default function DocumentosUploadPage() {
 
       const token = localStorage.getItem('documentos_token');
 
-      // TODO: Implementar endpoint de upload
       await axios.post(`${API_URL}/documentos/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
