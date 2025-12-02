@@ -32,8 +32,9 @@ interface DadosDocumentos {
   status: string;
 }
 
-// Força SSR para garantir que a rota dinâmica funcione
+// Força SSR para garantir que a rota dinâmica funcione no Vercel
 export async function getServerSideProps() {
+  // Retorna props vazias para forçar SSR
   return {
     props: {},
   };
