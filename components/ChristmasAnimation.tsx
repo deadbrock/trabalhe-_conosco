@@ -279,29 +279,6 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               </div>
             </motion.div>
 
-            {/* Emojis decorativos */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="flex justify-center gap-4 mb-6 text-4xl"
-            >
-              {['🙏', '💙', '⭐', '🎯', '🚀'].map((emoji, idx) => (
-                <motion.span
-                  key={idx}
-                  animate={{
-                    y: [0, -15, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: idx * 0.2,
-                  }}
-                >
-                  {emoji}
-                </motion.span>
-              ))}
-            </motion.div>
 
             {/* Botão continuar sem countdown - usuário lê com calma */}
             <motion.div
