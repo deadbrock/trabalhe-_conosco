@@ -233,15 +233,14 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border-2 border-blue-200">
                 <p className="text-xl text-gray-700 leading-relaxed mb-4">
                   Quero expressar minha <span className="font-bold text-blue-600">profunda gratidão</span> a todos que 
-                  confiaram neste sistema e depositaram suas esperanças em nosso trabalho.
+                  confiaram neste sistema e depositaram suas esperanças em meu trabalho.
                 </p>
                 <p className="text-xl text-gray-700 leading-relaxed mb-4">
                   Cada uma das <span className="font-bold text-purple-600">400+ candidaturas</span> representa um sonho, 
                   uma oportunidade e a confiança que vocês depositaram em mim.
                 </p>
                 <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                  Este marco não seria possível sem a dedicação de cada candidato e a confiança 
-                  da equipe de RH que acreditou nesta plataforma.
+                  Este marco não seria possível sem a confiança da equipe de RH que acreditou nesta plataforma.
                 </p>
                 
                 {/* Assinatura */}
