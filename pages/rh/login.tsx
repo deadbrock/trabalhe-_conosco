@@ -87,17 +87,89 @@ export default function RHLogin() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
+    <section className="min-h-screen bg-gradient-to-br from-red-900 via-green-900 to-red-950 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Neve caindo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-white rounded-full opacity-80"
+            initial={{ 
+              x: Math.random() * window.innerWidth, 
+              y: -20,
+              scale: Math.random() * 0.5 + 0.5
+            }}
+            animate={{ 
+              y: window.innerHeight + 20,
+              x: Math.random() * window.innerWidth,
+            }}
+            transition={{ 
+              duration: Math.random() * 5 + 5,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "linear"
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Luzes de Natal piscantes */}
+      <div className="absolute top-0 left-0 right-0 h-8 flex justify-around items-center pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className={`w-4 h-4 rounded-full ${
+              i % 3 === 0 ? 'bg-red-500' : i % 3 === 1 ? 'bg-green-500' : 'bg-yellow-500'
+            }`}
+            animate={{ 
+              opacity: [0.3, 1, 0.3],
+              scale: [0.8, 1.2, 0.8]
+            }}
+            transition={{ 
+              duration: 1.5,
+              repeat: Infinity,
+              delay: i * 0.1
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Estrelas brilhantes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-yellow-300 text-2xl"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{ 
+              opacity: [0.2, 1, 0.2],
+              scale: [0.5, 1, 0.5],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 3,
+              repeat: Infinity,
+              delay: Math.random() * 3
+            }}
+          >
+            ✨
+          </motion.div>
+        ))}
+      </div>
+
       {/* Elementos decorativos de fundo */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-green-500/10 rounded-full blur-3xl" />
       
-      {/* Link para voltar */}
+      {/* Link para voltar com tema natalino */}
       <Link
         href="/"
-        className="absolute top-6 left-6 text-gray-600 hover:text-primary transition-colors font-medium flex items-center gap-2"
+        className="absolute top-6 left-6 text-white hover:text-yellow-300 transition-colors font-medium flex items-center gap-2 z-20 bg-red-600/30 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20"
       >
-        ← Voltar ao site
+        🎄 ← Voltar ao site
       </Link>
 
       {/* Botão de Música Natalina */}
@@ -143,20 +215,50 @@ export default function RHLogin() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md relative z-10"
       >
-        {/* Card de Login */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-primary to-secondary p-8 text-center">
+        {/* Card de Login com tema natalino */}
+        <div className="bg-white rounded-3xl shadow-2xl border-4 border-red-500/30 overflow-hidden relative">
+          {/* Decoração de azevinho */}
+          <div className="absolute top-4 right-4 text-3xl z-10 animate-bounce">🎅</div>
+          <div className="absolute top-4 left-4 text-3xl z-10 animate-bounce" style={{ animationDelay: '0.5s' }}>🎁</div>
+          
+          {/* Header com tema natalino */}
+          <div className="bg-gradient-to-r from-red-600 via-green-600 to-red-600 p-8 text-center relative overflow-hidden">
+            {/* Flocos de neve no header */}
+            <div className="absolute inset-0 opacity-20">
+              {[...Array(10)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute text-white text-xl"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{ 
+                    y: [0, 20, 0],
+                    rotate: [0, 360]
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.3
+                  }}
+                >
+                  ❄️
+                </motion.div>
+              ))}
+            </div>
             <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+              initial={{ scale: 0.8, rotate: -10 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: "spring" }}
+              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 border-4 border-yellow-400"
             >
-              <Shield className="w-10 h-10 text-primary" />
+              <Shield className="w-10 h-10 text-red-600" />
             </motion.div>
-            <h1 className="text-3xl font-bold text-white mb-2">Painel RH</h1>
-            <p className="text-white/90">Acesso exclusivo para RH</p>
+            <h1 className="text-3xl font-bold text-white mb-2 relative z-10 flex items-center justify-center gap-2">
+              🎄 Painel RH 🎄
+            </h1>
+            <p className="text-white/90 relative z-10">🎅 Feliz Natal! Acesso exclusivo para RH 🎁</p>
           </div>
 
           {/* Form */}
@@ -212,12 +314,21 @@ export default function RHLogin() {
                 </motion.div>
               )}
 
-              <button 
-                disabled={loading} 
-                className="w-full rounded-xl px-6 py-4 font-bold text-lg text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+              <motion.button 
+                disabled={loading}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full rounded-xl px-6 py-4 font-bold text-lg text-white bg-gradient-to-r from-red-600 via-green-600 to-red-600 hover:from-green-600 hover:via-red-600 hover:to-green-600 transition-all duration-500 shadow-lg hover:shadow-2xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden"
               >
-                {loading ? "Entrando..." : "Entrar no Painel"}
-              </button>
+                <motion.div
+                  className="absolute inset-0 bg-white/20"
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                />
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {loading ? "🎅 Entrando..." : "🎄 Entrar no Painel 🎁"}
+                </span>
+              </motion.button>
             </form>
 
             <p className="text-center text-sm text-gray-500 mt-6">
@@ -226,12 +337,18 @@ export default function RHLogin() {
           </div>
         </div>
 
-        {/* Informações adicionais */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            © 2025 FG Services - Todos os direitos reservados
-          </p>
-        </div>
+        {/* Informações adicionais com tema natalino */}
+        <motion.div 
+          className="mt-6 text-center"
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 inline-block">
+            <p className="text-sm text-white font-medium flex items-center gap-2 justify-center">
+              ⭐ © 2025 FG Services - Feliz Natal e Próspero Ano Novo! 🎊
+            </p>
+          </div>
+        </motion.div>
       </motion.div>
 
       {/* Animação de Natal */}
