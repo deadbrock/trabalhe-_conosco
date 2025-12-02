@@ -699,12 +699,12 @@ export default function RHCandidatos() {
                             <button
                               onClick={async () => {
                                 try {
-                                  const response = await api.post(`/documentos/gerar-link/${selectedCandidato.id}`, {
+                                  const response = await api.post(`/documentos/gerar-credenciais/${selectedCandidato.id}`, {
                                     enviarNotificacao: true
                                   });
                                   
                                   if (response.data.success) {
-                                    alert(`✅ Link gerado e enviado!\n\nLink: ${response.data.link}\n\nEmail: ${response.data.notificacao?.emailEnviado ? '✅' : '❌'}\nWhatsApp: ${response.data.notificacao?.whatsappEnviado ? '✅' : '❌'}`);
+                                    alert(`✅ Credenciais geradas e enviadas!\n\nLink: ${response.data.link}\nCPF: ${response.data.cpf}\nSenha: ${response.data.senha}\n\nEmail: ${response.data.notificacao?.emailEnviado ? '✅' : '❌'}\nWhatsApp: ${response.data.notificacao?.whatsappEnviado ? '✅' : '❌'}`);
                                   }
                                 } catch (error: unknown) {
                                   const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
