@@ -10,8 +10,11 @@ interface ChristmasAnimationProps {
 export default function ChristmasAnimation({ userName, onClose }: ChristmasAnimationProps) {
   const [countdown, setCountdown] = useState(10);
   const [showThanks, setShowThanks] = useState(false);
+  const [thanksCountdown, setThanksCountdown] = useState(10);
 
   useEffect(() => {
+    // Não executar efeitos se já está mostrando agradecimento
+    if (showThanks) return;
     // Confetes natalinos (vermelho e verde)
     const christmasConfetti = () => {
       const colors = ['#c41e3a', '#165b33', '#ffd700', '#ffffff'];
@@ -121,7 +124,25 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
       clearInterval(countdownInterval);
       clearInterval(snowInterval);
     };
-  }, [onClose]);
+  }, [showThanks]);
+
+  // Efeito separado para countdown da tela de agradecimento
+  useEffect(() => {
+    if (!showThanks) return;
+
+    const thanksInterval = setInterval(() => {
+      setThanksCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(thanksInterval);
+          onClose();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(thanksInterval);
+  }, [showThanks, onClose]);
 
   // Calcular dias até o Natal
   const hoje = new Date();
@@ -291,20 +312,25 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               ))}
             </motion.div>
 
-            {/* Botão continuar */}
-            <motion.button
+            {/* Botão continuar com countdown */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
-              onClick={onClose}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 mx-auto"
+              className="flex flex-col items-center gap-3"
             >
-              <span>💼</span>
-              Continuar para o Sistema
-              <span>✨</span>
-            </motion.button>
+              <p className="text-sm text-gray-500">Fechando automaticamente em {thanksCountdown}s</p>
+              <motion.button
+                onClick={onClose}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3"
+              >
+                <span>💼</span>
+                Continuar para o Sistema
+                <span>✨</span>
+              </motion.button>
+            </motion.div>
 
             {/* Frase inspiradora */}
             <motion.p
