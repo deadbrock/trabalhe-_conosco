@@ -21,6 +21,7 @@ interface DadosDocumentos {
     vaga: string;
   };
   documentos: {
+    foto_3x4: DocumentoStatus;
     ctps_digital: DocumentoStatus;
     identidade_frente: DocumentoStatus;
     identidade_verso: DocumentoStatus;
@@ -29,6 +30,8 @@ interface DadosDocumentos {
     reservista: DocumentoStatus;
     titulo_eleitor: DocumentoStatus;
     antecedentes_criminais: DocumentoStatus;
+    certidao_nascimento_dependente: DocumentoStatus;
+    cpf_dependente: DocumentoStatus;
   };
   status: string;
 }
@@ -118,14 +121,20 @@ export default function DocumentosUploadPage() {
   };
 
   const documentos = [
-    { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: '📄' },
-    { key: 'identidade_frente', label: 'Identidade (Frente)', icon: '🪪' },
-    { key: 'identidade_verso', label: 'Identidade (Verso)', icon: '🪪' },
-    { key: 'comprovante_residencia', label: 'Comprovante de Residência', icon: '🏠' },
-    { key: 'certidao_nascimento_casamento', label: 'Certidão de Nascimento/Casamento', icon: '📜' },
-    { key: 'reservista', label: 'Certificado de Reservista', icon: '🎖️' },
-    { key: 'titulo_eleitor', label: 'Título de Eleitor', icon: '🗳️' },
-    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: '📋' },
+    { key: 'foto_3x4', label: 'Foto 3x4', icon: '📸', info: null },
+    { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: '📄', info: null },
+    { key: 'identidade_frente', label: 'Identidade (Frente)', icon: '🪪', info: null },
+    { key: 'identidade_verso', label: 'Identidade (Verso)', icon: '🪪', info: null },
+    { key: 'comprovante_residencia', label: 'Comprovante de Residência', icon: '🏠', info: 'Conta de água, luz ou internet de até 3 meses' },
+    { key: 'certidao_nascimento_casamento', label: 'Certidão de Nascimento/Casamento', icon: '📜', info: null },
+    { key: 'reservista', label: 'Certificado de Reservista', icon: '🎖️', info: 'Obrigatório apenas para candidatos do sexo masculino' },
+    { key: 'titulo_eleitor', label: 'Título de Eleitor', icon: '🗳️', info: null },
+    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: '📋', info: '⚠️ Aceito APENAS se emitido pelo Tribunal de Justiça ou Fórum da sua região' },
+  ];
+
+  const documentosDependentes = [
+    { key: 'certidao_nascimento_dependente', label: 'Certidão de Nascimento (Dependente)', icon: '👶', info: 'Obrigatório para filhos de até 13 anos' },
+    { key: 'cpf_dependente', label: 'CPF do Dependente', icon: '📋', info: 'Obrigatório para filhos de até 13 anos' },
   ];
 
   if (loading) {
@@ -239,6 +248,15 @@ export default function DocumentosUploadPage() {
                   </div>
                 </div>
 
+                {/* Informação adicional */}
+                {doc.info && (
+                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p className="text-xs text-amber-800">
+                      {doc.info}
+                    </p>
+                  </div>
+                )}
+
                 {/* Motivo de Rejeição */}
                 {isRejected && docStatus?.motivo_rejeicao && (
                   <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -290,6 +308,126 @@ export default function DocumentosUploadPage() {
             );
           })}
         </div>
+      </div>
+
+      {/* Seção de Dependentes */}
+      <div className="max-w-6xl mx-auto mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6 border-2 border-purple-200"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-3xl">👨‍👩‍👧‍👦</span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Documentos de Dependentes</h2>
+              <p className="text-sm text-gray-600">Obrigatório para filhos de até 13 anos</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {documentosDependentes.map((doc, index) => {
+              const docStatus = dados?.documentos[doc.key as keyof typeof dados.documentos];
+              const isUploaded = docStatus?.url;
+              const isValidated = docStatus?.validado;
+              const isRejected = docStatus?.rejeitado;
+              const isUploading = uploadingDoc === doc.key;
+
+              return (
+                <motion.div
+                  key={doc.key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={`bg-white rounded-xl shadow-lg p-6 border-2 transition-all ${
+                    isValidated
+                      ? 'border-green-500'
+                      : isRejected
+                      ? 'border-red-500'
+                      : isUploaded
+                      ? 'border-blue-500'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{doc.icon}</span>
+                      <div>
+                        <h3 className="font-bold text-gray-900 text-sm">{doc.label}</h3>
+                        {isValidated && (
+                          <span className="text-xs text-green-600 flex items-center gap-1 mt-1">
+                            <CheckCircle className="w-3 h-3" />
+                            Validado
+                          </span>
+                        )}
+                        {isRejected && (
+                          <span className="text-xs text-red-600 flex items-center gap-1 mt-1">
+                            <XCircle className="w-3 h-3" />
+                            Rejeitado
+                          </span>
+                        )}
+                        {isUploaded && !isValidated && !isRejected && (
+                          <span className="text-xs text-blue-600 flex items-center gap-1 mt-1">
+                            <FileText className="w-3 h-3" />
+                            Em análise
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {doc.info && (
+                    <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                      <p className="text-xs text-purple-800">{doc.info}</p>
+                    </div>
+                  )}
+
+                  <label
+                    className={`block w-full py-3 px-4 rounded-lg font-medium text-center cursor-pointer transition-all ${
+                      isUploading
+                        ? 'bg-gray-300 cursor-not-allowed'
+                        : isValidated
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : isRejected
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                        : isUploaded
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                        : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
+                    }`}
+                  >
+                    {isUploading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Enviando...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        <Upload className="w-4 h-4" />
+                        {isUploaded ? 'Reenviar' : 'Enviar'}
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
+                      className="hidden"
+                      disabled={isUploading}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleUpload(doc.key, file);
+                        }
+                      }}
+                    />
+                  </label>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <p className="mt-4 text-xs text-gray-500 text-center italic">
+            * Se você não possui filhos de até 13 anos, não é necessário enviar estes documentos.
+          </p>
+        </motion.div>
       </div>
 
       {/* Footer */}
