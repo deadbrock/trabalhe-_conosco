@@ -90,27 +90,34 @@ export default function RHLogin() {
     <section className="min-h-screen bg-gradient-to-br from-red-900 via-green-900 to-red-950 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Neve caindo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-80"
-            initial={{ 
-              x: Math.random() * window.innerWidth, 
-              y: -20,
-              scale: Math.random() * 0.5 + 0.5
-            }}
-            animate={{ 
-              y: window.innerHeight + 20,
-              x: Math.random() * window.innerWidth,
-            }}
-            transition={{ 
-              duration: Math.random() * 5 + 5,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "linear"
-            }}
-          />
-        ))}
+        {[...Array(50)].map((_, i) => {
+          const randomX = Math.random() * 100;
+          const randomDelay = Math.random() * 5;
+          const randomDuration = Math.random() * 5 + 5;
+          const randomScale = Math.random() * 0.5 + 0.5;
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-white rounded-full opacity-80"
+              style={{ left: `${randomX}%` }}
+              initial={{ 
+                y: -20,
+                scale: randomScale
+              }}
+              animate={{ 
+                y: ['0vh', '100vh'],
+                x: [`${randomX}%`, `${(randomX + Math.random() * 20 - 10)}%`],
+              }}
+              transition={{ 
+                duration: randomDuration,
+                repeat: Infinity,
+                delay: randomDelay,
+                ease: "linear"
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Luzes de Natal piscantes */}
