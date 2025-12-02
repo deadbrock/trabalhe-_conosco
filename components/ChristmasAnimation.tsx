@@ -9,6 +9,7 @@ interface ChristmasAnimationProps {
 
 export default function ChristmasAnimation({ userName, onClose }: ChristmasAnimationProps) {
   const [countdown, setCountdown] = useState(10);
+  const [showThanks, setShowThanks] = useState(false);
 
   useEffect(() => {
     // Confetes natalinos (vermelho e verde)
@@ -106,7 +107,8 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
       setCountdown(prev => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
-          onClose();
+          // Mostrar mensagem de agradecimento ao invés de fechar
+          setShowThanks(true);
           return 0;
         }
         return prev - 1;
@@ -139,6 +141,186 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
   const mensagemBemVindo = isDiasDeNatal 
     ? "Que esta época festiva traga muita alegria e sucesso! 🎅✨"
     : "A magia do Natal está chegando! Prepare-se para as festividades! ✨🎁";
+
+  // Se deve mostrar mensagem de agradecimento
+  if (showThanks) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #0f4c81 0%, #1e3a5f 100%)',
+            backdropFilter: 'blur(10px)'
+          }}
+        >
+          {/* Corações flutuantes */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute text-red-500 opacity-70"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  fontSize: `${Math.random() * 30 + 20}px`,
+                }}
+                initial={{ y: '100vh' }}
+                animate={{ y: '-20vh' }}
+                transition={{
+                  duration: Math.random() * 5 + 5,
+                  repeat: Infinity,
+                  ease: 'linear',
+                  delay: Math.random() * 5,
+                }}
+              >
+                ❤️
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Card de agradecimento */}
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+            className="relative bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-12 max-w-3xl mx-4 text-center border-4 border-blue-600"
+            style={{
+              boxShadow: '0 0 50px rgba(59, 130, 246, 0.3)',
+            }}
+          >
+            {/* Emoji de celebração */}
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 10, -10, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+              }}
+              className="text-8xl mb-6"
+            >
+              🎉
+            </motion.div>
+
+            {/* Título */}
+            <motion.h1
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
+            >
+              Mais de 400 Candidaturas! 🚀
+            </motion.h1>
+
+            {/* Mensagem principal */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="space-y-4 mb-8"
+            >
+              <p className="text-2xl text-gray-800 font-semibold">
+                Uma Mensagem Especial de Agradecimento
+              </p>
+              
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border-2 border-blue-200">
+                <p className="text-xl text-gray-700 leading-relaxed mb-4">
+                  Quero expressar minha <span className="font-bold text-blue-600">profunda gratidão</span> a todos que 
+                  confiaram neste sistema e depositaram suas esperanças em nosso trabalho.
+                </p>
+                <p className="text-xl text-gray-700 leading-relaxed mb-4">
+                  Cada uma das <span className="font-bold text-purple-600">400+ candidaturas</span> representa um sonho, 
+                  uma oportunidade e a confiança que vocês depositaram em mim.
+                </p>
+                <p className="text-xl text-gray-700 leading-relaxed mb-6">
+                  Este marco não seria possível sem a dedicação de cada candidato e a confiança 
+                  da equipe de RH que acreditou nesta plataforma.
+                </p>
+                
+                {/* Assinatura */}
+                <div className="border-t-2 border-blue-300 pt-6 mt-6">
+                  <p className="text-2xl font-bold text-gray-800 mb-2">
+                    Com gratidão,
+                  </p>
+                  <motion.p
+                    animate={{
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                    className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                  >
+                    Douglas Marques ✨
+                  </motion.p>
+                  <p className="text-sm text-gray-600 mt-2 italic">
+                    Desenvolvedor do Sistema Trabalhe Conosco
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Emojis decorativos */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+              className="flex justify-center gap-4 mb-6 text-4xl"
+            >
+              {['🙏', '💙', '⭐', '🎯', '🚀'].map((emoji, idx) => (
+                <motion.span
+                  key={idx}
+                  animate={{
+                    y: [0, -15, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: idx * 0.2,
+                  }}
+                >
+                  {emoji}
+                </motion.span>
+              ))}
+            </motion.div>
+
+            {/* Botão continuar */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+              onClick={onClose}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 mx-auto"
+            >
+              <span>💼</span>
+              Continuar para o Sistema
+              <span>✨</span>
+            </motion.button>
+
+            {/* Frase inspiradora */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5 }}
+              className="mt-8 text-lg text-gray-600 italic font-medium"
+            >
+              &quot;Juntos, construímos oportunidades e realizamos sonhos!&quot; 🌟
+            </motion.p>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <AnimatePresence>
