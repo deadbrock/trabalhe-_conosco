@@ -108,7 +108,9 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
     // Countdown timer
     const countdownInterval = setInterval(() => {
       setCountdown(prev => {
+        console.log('🎄 Countdown Natal:', prev);
         if (prev <= 1) {
+          console.log('✅ Natal acabou! Mostrando agradecimento...');
           clearInterval(countdownInterval);
           // Mostrar mensagem de agradecimento ao invés de fechar
           setShowThanks(true);
@@ -130,9 +132,13 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
   useEffect(() => {
     if (!showThanks) return;
 
+    console.log('🎉 Tela de agradecimento ativada!');
+
     const thanksInterval = setInterval(() => {
       setThanksCountdown(prev => {
+        console.log('💙 Countdown Agradecimento:', prev);
         if (prev <= 1) {
+          console.log('✅ Agradecimento acabou! Fechando...');
           clearInterval(thanksInterval);
           onClose();
           return 0;
@@ -165,6 +171,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
 
   // Se deve mostrar mensagem de agradecimento
   if (showThanks) {
+    console.log('🎉 Renderizando tela de agradecimento');
     return (
       <AnimatePresence>
         <motion.div
@@ -361,32 +368,40 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
       >
         {/* Flocos de neve decorativos CSS */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-white opacity-70"
-              initial={{
-                x: Math.random() * window.innerWidth,
-                y: -20,
-                scale: Math.random() * 0.5 + 0.5,
-              }}
-              animate={{
-                y: window.innerHeight + 20,
-                x: Math.random() * window.innerWidth,
-              }}
-              transition={{
-                duration: Math.random() * 10 + 10,
-                repeat: Infinity,
-                ease: 'linear',
-                delay: Math.random() * 5,
-              }}
-              style={{
-                fontSize: `${Math.random() * 20 + 10}px`,
-              }}
-            >
-              ❄️
-            </motion.div>
-          ))}
+          {[...Array(30)].map((_, i) => {
+            const randomX = Math.random() * 100;
+            const randomDelay = Math.random() * 5;
+            const randomDuration = Math.random() * 10 + 10;
+            const randomScale = Math.random() * 0.5 + 0.5;
+            const randomSize = Math.random() * 20 + 10;
+            
+            return (
+              <motion.div
+                key={i}
+                className="absolute text-white opacity-70"
+                style={{
+                  left: `${randomX}%`,
+                  fontSize: `${randomSize}px`,
+                }}
+                initial={{
+                  y: '-5vh',
+                  scale: randomScale,
+                }}
+                animate={{
+                  y: '105vh',
+                  x: [`${randomX}%`, `${(randomX + Math.random() * 20 - 10)}%`],
+                }}
+                transition={{
+                  duration: randomDuration,
+                  repeat: Infinity,
+                  ease: 'linear',
+                  delay: randomDelay,
+                }}
+              >
+                ❄️
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Card principal */}
