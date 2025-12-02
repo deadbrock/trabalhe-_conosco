@@ -8,9 +8,8 @@ interface ChristmasAnimationProps {
 }
 
 export default function ChristmasAnimation({ userName, onClose }: ChristmasAnimationProps) {
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(8);
   const [showThanks, setShowThanks] = useState(false);
-  const [thanksCountdown, setThanksCountdown] = useState(10);
 
   useEffect(() => {
     // Não executar efeitos se já está mostrando agradecimento
@@ -128,27 +127,12 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
     };
   }, [showThanks]);
 
-  // Efeito separado para countdown da tela de agradecimento
+  // Log quando a tela de agradecimento é ativada
   useEffect(() => {
-    if (!showThanks) return;
-
-    console.log('🎉 Tela de agradecimento ativada!');
-
-    const thanksInterval = setInterval(() => {
-      setThanksCountdown(prev => {
-        console.log('💙 Countdown Agradecimento:', prev);
-        if (prev <= 1) {
-          console.log('✅ Agradecimento acabou! Fechando...');
-          clearInterval(thanksInterval);
-          onClose();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(thanksInterval);
-  }, [showThanks, onClose]);
+    if (showThanks) {
+      console.log('🎉 Tela de agradecimento ativada!');
+    }
+  }, [showThanks]);
 
   // Calcular dias até o Natal
   const hoje = new Date();
@@ -319,14 +303,13 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               ))}
             </motion.div>
 
-            {/* Botão continuar com countdown */}
+            {/* Botão continuar sem countdown - usuário lê com calma */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
               className="flex flex-col items-center gap-3"
             >
-              <p className="text-sm text-gray-500">Fechando automaticamente em {thanksCountdown}s</p>
               <motion.button
                 onClick={onClose}
                 whileHover={{ scale: 1.05 }}
@@ -334,9 +317,10 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
                 className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3"
               >
                 <span>💼</span>
-                Continuar para o Sistema
+                Acessar o Sistema
                 <span>✨</span>
               </motion.button>
+              <p className="text-xs text-gray-500 italic">Leia com calma, sem pressa! 😊</p>
             </motion.div>
 
             {/* Frase inspiradora */}
@@ -527,22 +511,14 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             ))}
           </motion.div>
 
-          {/* Botão fechar com countdown */}
+          {/* Apenas countdown, sem botão */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5 }}
             className="flex flex-col items-center gap-3"
           >
-            <p className="text-sm text-gray-500">Fechando automaticamente em {countdown}s</p>
-            <button
-              onClick={onClose}
-              className="px-8 py-4 rounded-xl bg-gradient-to-r from-red-600 to-green-600 text-white font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
-            >
-              <span>🎄</span>
-              Continuar para o Sistema
-              <span>🎁</span>
-            </button>
+            <p className="text-sm text-gray-500">Aguarde {countdown}s para a mensagem especial...</p>
           </motion.div>
 
           {/* Mensagem especial */}
