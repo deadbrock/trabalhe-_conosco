@@ -3,13 +3,7 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "rewrites": [
-    {
-      "source": "/documentos/:token",
-      "destination": "/documentos/[token]"
-    }
-  ]
+  "outputDirectory": ".next"
 }
 
 

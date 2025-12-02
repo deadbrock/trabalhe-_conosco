@@ -49,6 +49,13 @@ export default function DocumentosUploadPage() {
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
+  // Debug
+  useEffect(() => {
+    console.log('📄 Página de documentos carregada');
+    console.log('🔑 Token da URL:', token);
+    console.log('🌐 API URL:', API_URL);
+  }, [token]);
+
   const buscarDados = useCallback(async () => {
     try {
       setLoading(true);
