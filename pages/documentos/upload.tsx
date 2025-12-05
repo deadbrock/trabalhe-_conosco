@@ -501,11 +501,12 @@ export default function DocumentosUploadPage() {
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-800">
-              <strong>Informação importante:</strong> A autodeclaração racial é um instrumento de identificação 
-              étnico-racial utilizado para fins de políticas públicas e estatísticas. A declaração é de 
-              responsabilidade exclusiva do(a) candidato(a) e deve refletir sua própria percepção sobre 
-              sua identidade racial.
+            <p className="text-sm text-blue-800 text-justify leading-relaxed">
+              <strong>Informação importante:</strong> Esta autodeclaração atende a exigência do art. 39, § 8º, da Lei nº 
+              12.288/2010, alterado pela Lei nº 14.553/2023 e da Portaria MTE nº 3.784/2023, que obriga a prestação 
+              da informação nas inclusões, alterações ou retificações cadastrais dos trabalhadores ocorridas a partir 
+              de 1º de janeiro de 2024, respeitando o critério de autodeclaração do trabalhador, em conformidade com 
+              a classificação utilizada pelo Instituto Brasileiro de Geografia e Estatística - IBGE.
             </p>
           </div>
 
