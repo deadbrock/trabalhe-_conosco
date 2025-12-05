@@ -190,9 +190,12 @@ export default function DocumentosUploadPage() {
         return;
       }
 
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        alert('❌ Formato não permitido! Use: JPG, PNG, PDF ou WEBP');
+      // Aceitar qualquer tipo de imagem ou PDF
+      const isImage = file.type.startsWith('image/');
+      const isPDF = file.type === 'application/pdf';
+      
+      if (!isImage && !isPDF) {
+        alert('❌ Formato não permitido! Use uma imagem (foto) ou PDF.');
         setUploadingDoc(null);
         return;
       }
@@ -373,10 +376,11 @@ export default function DocumentosUploadPage() {
             <div>
               <h3 className="font-bold text-yellow-900 mb-2">Atenção - Requisitos Importantes:</h3>
               <ul className="text-yellow-800 space-y-1 text-sm">
+                <li>• 📸 Você pode <strong>usar a câmera do celular</strong> para fotografar os documentos</li>
                 <li>• Todas as fotos devem estar <strong>nítidas e legíveis</strong></li>
                 <li>• Documentos não podem estar <strong>rasurados ou embaçados</strong></li>
                 <li>• Comprovante de residência deve ser de <strong>até 3 meses</strong></li>
-                <li>• Formatos aceitos: <strong>JPG, PNG, PDF, WEBP</strong></li>
+                <li>• Formatos aceitos: <strong>Fotos (câmera/galeria) ou PDF</strong></li>
                 <li>• Tamanho máximo: <strong>10MB por arquivo</strong></li>
               </ul>
             </div>
@@ -489,7 +493,8 @@ export default function DocumentosUploadPage() {
                     )}
                     <input
                       type="file"
-                      accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
+                      accept="image/*,application/pdf"
+                      capture="environment"
                       className="hidden"
                       disabled={isUploading}
                       onChange={(e) => {
@@ -614,7 +619,8 @@ export default function DocumentosUploadPage() {
                       )}
                       <input
                         type="file"
-                        accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
+                        accept="image/*,application/pdf"
+                        capture="environment"
                         className="hidden"
                         disabled={isUploading}
                         onChange={(e) => {
