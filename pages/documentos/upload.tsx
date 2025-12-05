@@ -1,8 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Upload, CheckCircle, XCircle, FileText, AlertCircle, Loader2, LogOut, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import {
+  ArrowUpTrayIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  DocumentTextIcon,
+  ExclamationTriangleIcon,
+  ArrowPathIcon,
+  ArrowRightOnRectangleIcon,
+  UserIcon,
+  CameraIcon,
+  IdentificationIcon,
+  HomeIcon,
+  DocumentIcon,
+  ShieldCheckIcon,
+  TicketIcon,
+  DocumentCheckIcon,
+  UserGroupIcon,
+  GlobeAltIcon,
+} from '@heroicons/react/24/outline';
+import {
+  CheckCircleIcon as CheckCircleSolidIcon,
+} from '@heroicons/react/24/solid';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
 
@@ -210,26 +231,26 @@ export default function DocumentosUploadPage() {
   };
 
   const documentos = [
-    { key: 'foto_3x4', label: 'Foto 3x4', icon: '📸', info: null },
-    { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: '📄', info: null },
-    { key: 'identidade_frente', label: 'Identidade (Frente)', icon: '🪪', info: null },
-    { key: 'identidade_verso', label: 'Identidade (Verso)', icon: '🪪', info: null },
-    { key: 'comprovante_residencia', label: 'Comprovante de Residência', icon: '🏠', info: 'Conta de água, luz ou internet de até 3 meses' },
-    { key: 'certidao_nascimento_casamento', label: 'Certidão de Nascimento/Casamento', icon: '📜', info: null },
-    { key: 'reservista', label: 'Certificado de Reservista', icon: '🎖️', info: 'Obrigatório apenas para candidatos do sexo masculino' },
-    { key: 'titulo_eleitor', label: 'Título de Eleitor', icon: '🗳️', info: null },
-    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: '📋', info: '⚠️ Aceito APENAS se emitido pelo Tribunal de Justiça ou Fórum da sua região' },
+    { key: 'foto_3x4', label: 'Foto 3x4', icon: CameraIcon, color: 'text-purple-600', info: null },
+    { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: DocumentTextIcon, color: 'text-blue-600', info: null },
+    { key: 'identidade_frente', label: 'Identidade (Frente)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
+    { key: 'identidade_verso', label: 'Identidade (Verso)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
+    { key: 'comprovante_residencia', label: 'Comprovante de Residência', icon: HomeIcon, color: 'text-green-600', info: 'Conta de água, luz ou internet de até 3 meses' },
+    { key: 'certidao_nascimento_casamento', label: 'Certidão de Nascimento/Casamento', icon: DocumentIcon, color: 'text-amber-600', info: null },
+    { key: 'reservista', label: 'Certificado de Reservista', icon: ShieldCheckIcon, color: 'text-emerald-600', info: 'Obrigatório apenas para candidatos do sexo masculino' },
+    { key: 'titulo_eleitor', label: 'Título de Eleitor', icon: TicketIcon, color: 'text-cyan-600', info: null },
+    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: DocumentCheckIcon, color: 'text-red-600', info: '⚠️ Aceito APENAS se emitido pelo Tribunal de Justiça ou Fórum da sua região' },
   ];
 
   const documentosDependentes = [
-    { key: 'certidao_nascimento_dependente', label: 'Certidão de Nascimento (Dependente)', icon: '👶', info: 'Obrigatório para filhos de até 13 anos' },
-    { key: 'cpf_dependente', label: 'CPF do Dependente', icon: '📋', info: 'Obrigatório para filhos de até 13 anos' },
+    { key: 'certidao_nascimento_dependente', label: 'Certidão de Nascimento (Dependente)', icon: UserGroupIcon, color: 'text-pink-600', info: 'Obrigatório para filhos de até 13 anos' },
+    { key: 'cpf_dependente', label: 'CPF do Dependente', icon: DocumentTextIcon, color: 'text-pink-600', info: 'Obrigatório para filhos de até 13 anos' },
   ];
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+        <ArrowPathIcon className="w-12 h-12 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -241,7 +262,7 @@ export default function DocumentosUploadPage() {
         <div className="bg-white rounded-2xl shadow-lg p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-white" />
+              <UserIcon className="w-8 h-8 text-white" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
@@ -254,7 +275,7 @@ export default function DocumentosUploadPage() {
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           >
-            <LogOut className="w-5 h-5" />
+            <ArrowRightOnRectangleIcon className="w-5 h-5" />
             Sair
           </button>
         </div>
@@ -269,7 +290,7 @@ export default function DocumentosUploadPage() {
             className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-8 text-white text-center"
           >
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-12 h-12 text-green-600" />
+              <CheckCircleSolidIcon className="w-12 h-12 text-green-600" />
             </div>
             <h2 className="text-3xl font-bold mb-2">Documentação Completa!</h2>
             <p className="text-lg opacity-90 mb-4">
@@ -330,9 +351,9 @@ export default function DocumentosUploadPage() {
           className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg"
         >
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
+            <ExclamationTriangleIcon className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="font-bold text-yellow-900 mb-2">⚠️ Atenção - Requisitos Importantes:</h3>
+              <h3 className="font-bold text-yellow-900 mb-2">Atenção - Requisitos Importantes:</h3>
               <ul className="text-yellow-800 space-y-1 text-sm">
                 <li>• Todas as fotos devem estar <strong>nítidas e legíveis</strong></li>
                 <li>• Documentos não podem estar <strong>rasurados ou embaçados</strong></li>
@@ -374,24 +395,26 @@ export default function DocumentosUploadPage() {
                 {/* Header do Card */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl">{doc.icon}</span>
+                    <div className={`w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center ${doc.color}`}>
+                      <doc.icon className="w-7 h-7" />
+                    </div>
                     <div>
                       <h3 className="font-bold text-gray-900 text-sm">{doc.label}</h3>
                       {isValidated && (
                         <span className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                          <CheckCircle className="w-3 h-3" />
+                          <CheckCircleIcon className="w-3 h-3" />
                           Validado
                         </span>
                       )}
                       {isRejected && (
                         <span className="text-xs text-red-600 flex items-center gap-1 mt-1">
-                          <XCircle className="w-3 h-3" />
+                          <XCircleIcon className="w-3 h-3" />
                           Rejeitado
                         </span>
                       )}
                       {isUploaded && !isValidated && !isRejected && (
                         <span className="text-xs text-blue-600 flex items-center gap-1 mt-1">
-                          <FileText className="w-3 h-3" />
+                          <DocumentTextIcon className="w-3 h-3" />
                           Em análise
                         </span>
                       )}
@@ -433,12 +456,12 @@ export default function DocumentosUploadPage() {
                 >
                   {isUploading ? (
                     <span className="flex items-center justify-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <ArrowPathIcon className="w-4 h-4 animate-spin" />
                       Enviando...
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      <Upload className="w-4 h-4" />
+                      <ArrowUpTrayIcon className="w-4 h-4" />
                       {isUploaded ? 'Reenviar' : 'Enviar'}
                     </span>
                   )}
@@ -469,7 +492,9 @@ export default function DocumentosUploadPage() {
           className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6 border-2 border-purple-200"
         >
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-3xl">👨‍👩‍👧‍👦</span>
+            <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
+              <UserGroupIcon className="w-7 h-7" />
+            </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Documentos de Dependentes</h2>
               <p className="text-sm text-gray-600">Obrigatório para filhos de até 13 anos</p>
@@ -502,24 +527,26 @@ export default function DocumentosUploadPage() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{doc.icon}</span>
+                      <div className={`w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center ${doc.color}`}>
+                        <doc.icon className="w-7 h-7" />
+                      </div>
                       <div>
                         <h3 className="font-bold text-gray-900 text-sm">{doc.label}</h3>
                         {isValidated && (
                           <span className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                            <CheckCircle className="w-3 h-3" />
+                            <CheckCircleIcon className="w-3 h-3" />
                             Validado
                           </span>
                         )}
                         {isRejected && (
                           <span className="text-xs text-red-600 flex items-center gap-1 mt-1">
-                            <XCircle className="w-3 h-3" />
+                            <XCircleIcon className="w-3 h-3" />
                             Rejeitado
                           </span>
                         )}
                         {isUploaded && !isValidated && !isRejected && (
                           <span className="text-xs text-blue-600 flex items-center gap-1 mt-1">
-                            <FileText className="w-3 h-3" />
+                            <DocumentTextIcon className="w-3 h-3" />
                             Em análise
                           </span>
                         )}
@@ -548,12 +575,12 @@ export default function DocumentosUploadPage() {
                   >
                     {isUploading ? (
                       <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <ArrowPathIcon className="w-4 h-4 animate-spin" />
                         Enviando...
                       </span>
                     ) : (
                       <span className="flex items-center justify-center gap-2">
-                        <Upload className="w-4 h-4" />
+                        <ArrowUpTrayIcon className="w-4 h-4" />
                         {isUploaded ? 'Reenviar' : 'Enviar'}
                       </span>
                     )}
@@ -591,14 +618,16 @@ export default function DocumentosUploadPage() {
           }`}
         >
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-3xl">🌍</span>
+            <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+              <GlobeAltIcon className="w-7 h-7" />
+            </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Autodeclaração Racial</h2>
               <p className="text-sm text-gray-600">Conforme Lei nº 12.288/2010</p>
             </div>
             {racaSalva && (
               <span className="ml-auto flex items-center gap-1 text-green-600 font-medium">
-                <CheckCircle className="w-5 h-5" />
+                <CheckCircleIcon className="w-5 h-5" />
                 Salvo
               </span>
             )}
@@ -673,7 +702,7 @@ export default function DocumentosUploadPage() {
             >
               {salvandoRaca ? (
                 <span className="flex items-center justify-center gap-2">
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <ArrowPathIcon className="w-5 h-5 animate-spin" />
                   Salvando...
                 </span>
               ) : (
@@ -684,7 +713,7 @@ export default function DocumentosUploadPage() {
 
           {racaSalva && (
             <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-              <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <CheckCircleSolidIcon className="w-8 h-8 text-green-600 mx-auto mb-2" />
               <p className="text-green-800 font-medium">Autodeclaração registrada com sucesso!</p>
               <p className="text-green-600 text-sm mt-1">
                 Raça/cor declarada: <strong>{opcoesRaca.find(o => o.value === racaSelecionada)?.label}</strong>
