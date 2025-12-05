@@ -5,6 +5,7 @@ import { FileText, CheckCircle, XCircle, Clock, AlertCircle, ExternalLink, Eye }
 
 interface Documento {
   id: number;
+  candidato_id: number;
   candidato_nome: string;
   candidato_email: string;
   candidato_telefone: string;
@@ -12,9 +13,18 @@ interface Documento {
   status: string;
   data_envio_link: string;
   data_ultimo_upload: string;
+  data_conclusao: string;
   token_acesso: string;
   
+  // Autodeclaração Racial
+  autodeclaracao_racial: string;
+  autodeclaracao_data: string;
+  
   // Documentos
+  foto_3x4_url: string;
+  foto_3x4_validado: boolean;
+  foto_3x4_rejeitado: boolean;
+  
   ctps_digital_url: string;
   ctps_digital_validado: boolean;
   ctps_digital_rejeitado: boolean;
@@ -47,12 +57,21 @@ interface Documento {
   antecedentes_criminais_url: string;
   antecedentes_criminais_validado: boolean;
   antecedentes_criminais_rejeitado: boolean;
+  
+  // Documentos de Dependentes
+  certidao_nascimento_dependente_url: string;
+  certidao_nascimento_dependente_validado: boolean;
+  certidao_nascimento_dependente_rejeitado: boolean;
+  
+  cpf_dependente_url: string;
+  cpf_dependente_validado: boolean;
+  cpf_dependente_rejeitado: boolean;
 }
 
 export default function DocumentosPage() {
   const [documentos, setDocumentos] = useState<Documento[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filtro, setFiltro] = useState<'todos' | 'pendente' | 'em_analise' | 'aprovado' | 'rejeitado'>('todos');
+  const [filtro, setFiltro] = useState<'todos' | 'pendente' | 'documentos_enviados' | 'em_analise' | 'aprovado' | 'rejeitado'>('todos');
 
   useEffect(() => {
     buscarDocumentos();
@@ -102,6 +121,7 @@ export default function DocumentosPage() {
   const contadores = {
     todos: documentos.length,
     pendente: documentos.filter(d => d.status === 'pendente').length,
+    documentos_enviados: documentos.filter(d => d.status === 'documentos_enviados').length,
     em_analise: documentos.filter(d => d.status === 'em_analise').length,
     aprovado: documentos.filter(d => d.status === 'aprovado').length,
     rejeitado: documentos.filter(d => d.status === 'rejeitado').length,
@@ -137,6 +157,16 @@ export default function DocumentosPage() {
             }`}
           >
             Pendente ({contadores.pendente})
+          </button>
+          <button
+            onClick={() => setFiltro('documentos_enviados')}
+            className={`px-4 py-2 rounded-xl font-medium transition-all ${
+              filtro === 'documentos_enviados'
+                ? 'bg-purple-500 text-white shadow-md'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+            }`}
+          >
+            📋 Docs Enviados ({contadores.documentos_enviados})
           </button>
           <button
             onClick={() => setFiltro('em_analise')}
@@ -202,19 +232,33 @@ function DocumentoCard({ doc, onValidar }: DocumentoCardProps) {
   const [expandido, setExpandido] = useState(false);
 
   const documentosLista = [
-    { key: 'ctps_digital', label: 'CTPS Digital' },
-    { key: 'identidade_frente', label: 'Identidade (Frente)' },
-    { key: 'identidade_verso', label: 'Identidade (Verso)' },
-    { key: 'comprovante_residencia', label: 'Comprovante de Residência' },
-    { key: 'certidao_nascimento_casamento', label: 'Certidão' },
-    { key: 'reservista', label: 'Reservista' },
-    { key: 'titulo_eleitor', label: 'Título de Eleitor' },
-    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais' },
+    { key: 'foto_3x4', label: '📸 Foto 3x4' },
+    { key: 'ctps_digital', label: '📄 CTPS Digital' },
+    { key: 'identidade_frente', label: '🪪 Identidade (Frente)' },
+    { key: 'identidade_verso', label: '🪪 Identidade (Verso)' },
+    { key: 'comprovante_residencia', label: '🏠 Comprovante de Residência' },
+    { key: 'certidao_nascimento_casamento', label: '📜 Certidão Nascimento/Casamento' },
+    { key: 'reservista', label: '🎖️ Reservista' },
+    { key: 'titulo_eleitor', label: '🗳️ Título de Eleitor' },
+    { key: 'antecedentes_criminais', label: '📋 Antecedentes Criminais' },
+    { key: 'certidao_nascimento_dependente', label: '👶 Certidão Dependente' },
+    { key: 'cpf_dependente', label: '📋 CPF Dependente' },
   ];
+
+  // Mapeamento de raça/cor
+  const racaLabels: Record<string, string> = {
+    branca: 'Branca',
+    preta: 'Preta',
+    parda: 'Parda',
+    amarela: 'Amarela',
+    indigena: 'Indígena',
+    nao_declarar: 'Prefere não declarar',
+  };
 
   const getStatusBadge = () => {
     const badges = {
       pendente: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pendente', icon: Clock },
+      documentos_enviados: { bg: 'bg-purple-100', text: 'text-purple-800', label: '📋 Docs Enviados', icon: FileText },
       em_analise: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Em Análise', icon: AlertCircle },
       aprovado: { bg: 'bg-green-100', text: 'text-green-800', label: 'Aprovado', icon: CheckCircle },
       rejeitado: { bg: 'bg-red-100', text: 'text-red-800', label: 'Rejeitado', icon: XCircle },
@@ -260,6 +304,37 @@ function DocumentoCard({ doc, onValidar }: DocumentoCardProps) {
       {/* Documentos (expandido) */}
       {expandido && (
         <div className="border-t border-gray-200 p-6 bg-gray-50 space-y-4">
+          {/* Autodeclaração Racial */}
+          <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 mb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🌍</span>
+                <div>
+                  <h4 className="font-bold text-gray-900">Autodeclaração Racial</h4>
+                  {doc.autodeclaracao_racial ? (
+                    <p className="text-lg font-semibold text-orange-700">
+                      {racaLabels[doc.autodeclaracao_racial] || doc.autodeclaracao_racial}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500">Não preenchida</p>
+                  )}
+                </div>
+              </div>
+              {doc.autodeclaracao_racial && (
+                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  Preenchida
+                </span>
+              )}
+            </div>
+            {doc.autodeclaracao_data && (
+              <p className="text-xs text-gray-500 mt-2">
+                Declarado em: {new Date(doc.autodeclaracao_data).toLocaleDateString('pt-BR')}
+              </p>
+            )}
+          </div>
+
+          <h4 className="font-bold text-gray-700 mb-2">📄 Documentos Enviados</h4>
           {documentosLista.map(({ key, label }) => {
             const urlKey = `${key}_url` as keyof Documento;
             const validadoKey = `${key}_validado` as keyof Documento;
