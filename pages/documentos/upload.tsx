@@ -48,6 +48,34 @@ export default function DocumentosUploadPage() {
   const [confirmacaoRaca, setConfirmacaoRaca] = useState(false);
   const [salvandoRaca, setSalvandoRaca] = useState(false);
   const [racaSalva, setRacaSalva] = useState(false);
+  
+  // Progresso e completude
+  const [documentosCompletos, setDocumentosCompletos] = useState(false);
+
+  // Documentos obrigatórios
+  const DOCUMENTOS_OBRIGATORIOS = [
+    'foto_3x4', 'ctps_digital', 'identidade_frente', 'identidade_verso',
+    'comprovante_residencia', 'certidao_nascimento_casamento', 'titulo_eleitor', 'antecedentes_criminais'
+  ];
+
+  // Calcular progresso
+  const calcularProgresso = () => {
+    if (!dados) return { enviados: 0, total: DOCUMENTOS_OBRIGATORIOS.length, percentual: 0 };
+    
+    let enviados = 0;
+    DOCUMENTOS_OBRIGATORIOS.forEach(key => {
+      const doc = dados.documentos[key as keyof typeof dados.documentos];
+      if (doc?.url) enviados++;
+    });
+    
+    return {
+      enviados,
+      total: DOCUMENTOS_OBRIGATORIOS.length,
+      percentual: Math.round((enviados / DOCUMENTOS_OBRIGATORIOS.length) * 100)
+    };
+  };
+
+  const progresso = calcularProgresso();
 
   const opcoesRaca = [
     { value: 'branca', label: 'Branca' },
@@ -72,7 +100,7 @@ export default function DocumentosUploadPage() {
       setSalvandoRaca(true);
       const token = localStorage.getItem('documentos_token');
       
-      await axios.post(`${API_URL}/documentos/autodeclaracao`, {
+      const response = await axios.post(`${API_URL}/documentos/autodeclaracao`, {
         raca: racaSelecionada,
       }, {
         headers: {
@@ -81,7 +109,14 @@ export default function DocumentosUploadPage() {
       });
 
       setRacaSalva(true);
-      alert('✅ Autodeclaração racial salva com sucesso!');
+      
+      // Verificar se completou todos os documentos
+      if (response.data.completude?.completo) {
+        setDocumentosCompletos(true);
+        alert('🎉 Parabéns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrará em contato em breve.');
+      } else {
+        alert('✅ Autodeclaração racial salva com sucesso!');
+      }
     } catch (error) {
       console.error('Erro ao salvar autodeclaração:', error);
       alert('❌ Erro ao salvar autodeclaração. Tente novamente.');
@@ -145,14 +180,21 @@ export default function DocumentosUploadPage() {
 
       const token = localStorage.getItem('documentos_token');
 
-      await axios.post(`${API_URL}/documentos/upload`, formData, {
+      const response = await axios.post(`${API_URL}/documentos/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
         },
       });
 
-      alert('✅ Documento enviado com sucesso!');
+      // Verificar se completou todos os documentos
+      if (response.data.completude?.completo) {
+        setDocumentosCompletos(true);
+        alert('🎉 Parabéns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrará em contato em breve.');
+      } else {
+        alert('✅ Documento enviado com sucesso!');
+      }
+      
       buscarDados();
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
@@ -216,6 +258,68 @@ export default function DocumentosUploadPage() {
             Sair
           </button>
         </div>
+      </div>
+
+      {/* Card de Conclusão (se completo) */}
+      {documentosCompletos && (
+        <div className="max-w-6xl mx-auto mb-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-8 text-white text-center"
+          >
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-12 h-12 text-green-600" />
+            </div>
+            <h2 className="text-3xl font-bold mb-2">Documentação Completa!</h2>
+            <p className="text-lg opacity-90 mb-4">
+              Todos os seus documentos foram recebidos com sucesso.
+            </p>
+            <p className="text-sm opacity-80">
+              Nossa equipe de RH foi notificada e entrará em contato em breve com os próximos passos do processo de admissão.
+            </p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Barra de Progresso */}
+      <div className="max-w-6xl mx-auto mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl shadow-lg p-6"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-bold text-gray-900">📊 Progresso do Envio</h3>
+            <span className="text-sm font-medium text-gray-600">
+              {progresso.enviados}/{progresso.total} documentos obrigatórios
+              {racaSalva && ' + Autodeclaração ✓'}
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${progresso.percentual}%` }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className={`h-full rounded-full ${
+                progresso.percentual === 100 && racaSalva
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+                  : 'bg-gradient-to-r from-blue-500 to-purple-500'
+              }`}
+            />
+          </div>
+          <div className="flex justify-between mt-2 text-xs text-gray-500">
+            <span>0%</span>
+            <span className="font-medium text-lg">
+              {progresso.percentual === 100 && racaSalva ? (
+                <span className="text-green-600">✅ Completo!</span>
+              ) : (
+                <span className="text-blue-600">{progresso.percentual}%</span>
+              )}
+            </span>
+            <span>100%</span>
+          </div>
+        </motion.div>
       </div>
 
       {/* Instruções */}
