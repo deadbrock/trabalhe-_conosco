@@ -490,7 +490,7 @@ export default function DocumentosUploadPage() {
             <span className="text-3xl">🌍</span>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Autodeclaração Racial</h2>
-              <p className="text-sm text-gray-600">Conforme Lei nº 12.990/2014</p>
+              <p className="text-sm text-gray-600">Conforme Lei nº 12.288/2010</p>
             </div>
             {racaSalva && (
               <span className="ml-auto flex items-center gap-1 text-green-600 font-medium">
