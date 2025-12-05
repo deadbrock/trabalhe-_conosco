@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import RHLayout from '../../components/RHLayout';
 import api from '../../lib/api';
-import { FileText, CheckCircle, XCircle, Clock, AlertCircle, ExternalLink, Eye } from 'lucide-react';
+import { FileText, CheckCircle, XCircle, Clock, AlertCircle, ExternalLink, Eye, Download, CheckCheck, Ban } from 'lucide-react';
 
 interface Documento {
   id: number;
@@ -113,6 +113,130 @@ export default function DocumentosPage() {
     }
   };
 
+  const validarTodosDocumentos = async (docId: number, acao: 'aprovar' | 'rejeitar') => {
+    try {
+      let motivo = null;
+      
+      if (acao === 'rejeitar') {
+        motivo = prompt('Informe o motivo da rejeição de todos os documentos:');
+        if (!motivo) return;
+      }
+      
+      const confirmacao = confirm(
+        acao === 'aprovar' 
+          ? '✅ Deseja APROVAR TODOS os documentos deste candidato?' 
+          : '❌ Deseja REPROVAR TODOS os documentos deste candidato?'
+      );
+      
+      if (!confirmacao) return;
+      
+      await api.put(`/documentos/rh/${docId}/validar-todos`, {
+        acao,
+        motivo_rejeicao: motivo,
+      });
+      
+      alert(acao === 'aprovar' ? '✅ Todos os documentos foram aprovados!' : '❌ Todos os documentos foram rejeitados!');
+      buscarDocumentos();
+    } catch (error) {
+      console.error('Erro ao validar todos os documentos:', error);
+      alert('Erro ao validar documentos');
+    }
+  };
+
+  // Função para baixar formulário de autodeclaração
+  const baixarFormularioAutodeclaracao = () => {
+    // Criar conteúdo do formulário em HTML para impressão
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Autodeclaração Racial</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.6; }
+    h1 { text-align: center; color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; }
+    h2 { color: #555; margin-top: 30px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .logo { font-size: 24px; font-weight: bold; color: #0f4c81; }
+    .form-group { margin: 20px 0; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+    .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .checkbox-group { margin: 15px 0; padding-left: 20px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; }
+    .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; }
+    .signature-area { margin-top: 50px; display: flex; justify-content: space-between; }
+    .signature-box { width: 45%; text-align: center; }
+    .signature-line { border-top: 1px solid #333; margin-top: 60px; padding-top: 5px; }
+    .legal-text { font-size: 12px; color: #666; margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+    .date-field { margin-top: 30px; }
+    @media print { body { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">FG Services</div>
+    <p>Sistema de Gestão de Candidatos</p>
+  </div>
+  
+  <h1>FORMULÁRIO DE AUTODECLARAÇÃO RACIAL</h1>
+  
+  <div class="form-group">
+    <label>Nome Completo:</label>
+    <input type="text" style="border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+  </div>
+  
+  <div class="form-group">
+    <label>CPF:</label>
+    <input type="text" style="width: 200px; border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+  </div>
+  
+  <div class="form-group">
+    <label>Cargo/Vaga:</label>
+    <input type="text" style="border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+  </div>
+  
+  <h2>Declaro que me identifico como:</h2>
+  
+  <div class="checkbox-group">
+    <label><input type="checkbox" /> Branca</label>
+    <label><input type="checkbox" /> Preta</label>
+    <label><input type="checkbox" /> Parda</label>
+    <label><input type="checkbox" /> Amarela</label>
+    <label><input type="checkbox" /> Indígena</label>
+    <label><input type="checkbox" /> Prefiro não declarar</label>
+  </div>
+  
+  <div class="legal-text">
+    <strong>DECLARAÇÃO:</strong><br><br>
+    Declaro, para os devidos fins e sob as penas da lei, que as informações prestadas neste formulário são verdadeiras e de minha inteira responsabilidade, conforme o disposto na Lei nº 12.990/2014 e na Portaria Normativa nº 4/2018 do Ministério do Planejamento, Desenvolvimento e Gestão.
+    <br><br>
+    Estou ciente de que a prestação de declaração falsa caracteriza crime previsto no art. 299 do Código Penal Brasileiro, bem como pode acarretar a eliminação do processo seletivo ou a rescisão do contrato de trabalho, caso já tenha sido admitido(a).
+  </div>
+  
+  <div class="date-field">
+    <label>Local e Data: _________________________________, _____ de _______________ de 20_____</label>
+  </div>
+  
+  <div class="signature-area">
+    <div class="signature-box">
+      <div class="signature-line">Assinatura do(a) Candidato(a)</div>
+    </div>
+    <div class="signature-box">
+      <div class="signature-line">Assinatura do(a) Responsável RH</div>
+    </div>
+  </div>
+  
+  <script>window.print();</script>
+</body>
+</html>
+    `;
+    
+    // Criar blob e abrir em nova janela para impressão/download
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  };
+
   const documentosFiltrados = documentos.filter(doc => {
     if (filtro === 'todos') return true;
     return doc.status === filtro;
@@ -131,9 +255,20 @@ export default function DocumentosPage() {
     <RHLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">📄 Documentos de Admissão</h1>
-          <p className="text-gray-600">Visualize e valide os documentos enviados pelos candidatos aprovados</p>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">📄 Documentos de Admissão</h1>
+            <p className="text-gray-600">Visualize e valide os documentos enviados pelos candidatos aprovados</p>
+          </div>
+          
+          {/* Botão Download Formulário */}
+          <button
+            onClick={baixarFormularioAutodeclaracao}
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-amber-600 transition-all shadow-md hover:shadow-lg"
+          >
+            <Download className="w-5 h-5" />
+            Baixar Formulário Autodeclaração
+          </button>
         </div>
 
         {/* Filtros */}
@@ -214,7 +349,12 @@ export default function DocumentosPage() {
         ) : (
           <div className="grid gap-6">
             {documentosFiltrados.map(doc => (
-              <DocumentoCard key={doc.id} doc={doc} onValidar={validarDocumento} />
+              <DocumentoCard 
+                key={doc.id} 
+                doc={doc} 
+                onValidar={validarDocumento} 
+                onValidarTodos={validarTodosDocumentos}
+              />
             ))}
           </div>
         )}
@@ -226,9 +366,10 @@ export default function DocumentosPage() {
 interface DocumentoCardProps {
   doc: Documento;
   onValidar: (docId: number, tipoDocumento: string, acao: 'aprovar' | 'rejeitar') => void;
+  onValidarTodos: (docId: number, acao: 'aprovar' | 'rejeitar') => void;
 }
 
-function DocumentoCard({ doc, onValidar }: DocumentoCardProps) {
+function DocumentoCard({ doc, onValidar, onValidarTodos }: DocumentoCardProps) {
   const [expandido, setExpandido] = useState(false);
 
   const documentosLista = [
@@ -304,6 +445,27 @@ function DocumentoCard({ doc, onValidar }: DocumentoCardProps) {
       {/* Documentos (expandido) */}
       {expandido && (
         <div className="border-t border-gray-200 p-6 bg-gray-50 space-y-4">
+          {/* Botões de Ação em Massa */}
+          <div className="flex flex-wrap gap-3 mb-6 p-4 bg-white rounded-xl border-2 border-gray-200">
+            <span className="text-sm font-semibold text-gray-700 flex items-center">
+              ⚡ Ações Rápidas:
+            </span>
+            <button
+              onClick={() => onValidarTodos(doc.id, 'aprovar')}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-medium hover:from-green-600 hover:to-emerald-600 transition-all shadow-md hover:shadow-lg"
+            >
+              <CheckCheck className="w-5 h-5" />
+              Aprovar Todos os Documentos
+            </button>
+            <button
+              onClick={() => onValidarTodos(doc.id, 'rejeitar')}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-lg font-medium hover:from-red-600 hover:to-rose-600 transition-all shadow-md hover:shadow-lg"
+            >
+              <Ban className="w-5 h-5" />
+              Reprovar Todos os Documentos
+            </button>
+          </div>
+
           {/* Autodeclaração Racial */}
           <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 mb-4">
             <div className="flex items-center justify-between">
