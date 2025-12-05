@@ -42,6 +42,53 @@ export default function DocumentosUploadPage() {
   const [loading, setLoading] = useState(true);
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  
+  // Autodeclaração Racial
+  const [racaSelecionada, setRacaSelecionada] = useState<string>('');
+  const [confirmacaoRaca, setConfirmacaoRaca] = useState(false);
+  const [salvandoRaca, setSalvandoRaca] = useState(false);
+  const [racaSalva, setRacaSalva] = useState(false);
+
+  const opcoesRaca = [
+    { value: 'branca', label: 'Branca' },
+    { value: 'preta', label: 'Preta' },
+    { value: 'parda', label: 'Parda' },
+    { value: 'amarela', label: 'Amarela' },
+    { value: 'indigena', label: 'Indígena' },
+    { value: 'nao_declarar', label: 'Prefiro não declarar' },
+  ];
+
+  const handleSalvarAutodeclaracao = async () => {
+    if (!racaSelecionada) {
+      alert('Por favor, selecione uma opção de raça/cor.');
+      return;
+    }
+    if (!confirmacaoRaca) {
+      alert('Por favor, confirme a autodeclaração marcando a caixa de confirmação.');
+      return;
+    }
+
+    try {
+      setSalvandoRaca(true);
+      const token = localStorage.getItem('documentos_token');
+      
+      await axios.post(`${API_URL}/documentos/autodeclaracao`, {
+        raca: racaSelecionada,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      setRacaSalva(true);
+      alert('✅ Autodeclaração racial salva com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar autodeclaração:', error);
+      alert('❌ Erro ao salvar autodeclaração. Tente novamente.');
+    } finally {
+      setSalvandoRaca(false);
+    }
+  };
 
   useEffect(() => {
     // Verificar se está autenticado
@@ -427,6 +474,118 @@ export default function DocumentosUploadPage() {
           <p className="mt-4 text-xs text-gray-500 text-center italic">
             * Se você não possui filhos de até 13 anos, não é necessário enviar estes documentos.
           </p>
+        </motion.div>
+      </div>
+
+      {/* Autodeclaração Racial */}
+      <div className="max-w-6xl mx-auto mt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`bg-white rounded-2xl shadow-lg p-6 border-2 ${
+            racaSalva ? 'border-green-500' : 'border-orange-200'
+          }`}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-3xl">🌍</span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Autodeclaração Racial</h2>
+              <p className="text-sm text-gray-600">Conforme Lei nº 12.990/2014</p>
+            </div>
+            {racaSalva && (
+              <span className="ml-auto flex items-center gap-1 text-green-600 font-medium">
+                <CheckCircle className="w-5 h-5" />
+                Salvo
+              </span>
+            )}
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-blue-800">
+              <strong>Informação importante:</strong> A autodeclaração racial é um instrumento de identificação 
+              étnico-racial utilizado para fins de políticas públicas e estatísticas. A declaração é de 
+              responsabilidade exclusiva do(a) candidato(a) e deve refletir sua própria percepção sobre 
+              sua identidade racial.
+            </p>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Selecione sua raça/cor:
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {opcoesRaca.map((opcao) => (
+                <label
+                  key={opcao.value}
+                  className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    racaSelecionada === opcao.value
+                      ? 'border-orange-500 bg-orange-50'
+                      : 'border-gray-200 hover:border-orange-300 bg-white'
+                  } ${racaSalva ? 'opacity-60 cursor-not-allowed' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="raca"
+                    value={opcao.value}
+                    checked={racaSelecionada === opcao.value}
+                    onChange={(e) => setRacaSelecionada(e.target.value)}
+                    disabled={racaSalva}
+                    className="w-4 h-4 text-orange-600 focus:ring-orange-500"
+                  />
+                  <span className="font-medium text-gray-900">{opcao.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+            <label className={`flex items-start gap-3 cursor-pointer ${racaSalva ? 'opacity-60 cursor-not-allowed' : ''}`}>
+              <input
+                type="checkbox"
+                checked={confirmacaoRaca}
+                onChange={(e) => setConfirmacaoRaca(e.target.checked)}
+                disabled={racaSalva}
+                className="w-5 h-5 mt-0.5 text-orange-600 focus:ring-orange-500 rounded"
+              />
+              <span className="text-sm text-amber-900">
+                <strong>Declaro</strong>, sob as penas da lei, que as informações prestadas nesta autodeclaração 
+                são verdadeiras e que estou ciente de que a falsidade de declaração configura crime previsto 
+                no art. 299 do Código Penal Brasileiro, sujeitando-me às sanções legais cabíveis. 
+                Confirmo que a raça/cor selecionada corresponde à minha autoidentificação étnico-racial.
+              </span>
+            </label>
+          </div>
+
+          {!racaSalva && (
+            <button
+              onClick={handleSalvarAutodeclaracao}
+              disabled={!racaSelecionada || !confirmacaoRaca || salvandoRaca}
+              className={`w-full py-4 rounded-lg font-bold text-lg transition-all ${
+                racaSelecionada && confirmacaoRaca && !salvandoRaca
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 shadow-lg'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {salvandoRaca ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Salvando...
+                </span>
+              ) : (
+                'Confirmar Autodeclaração'
+              )}
+            </button>
+          )}
+
+          {racaSalva && (
+            <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+              <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+              <p className="text-green-800 font-medium">Autodeclaração registrada com sucesso!</p>
+              <p className="text-green-600 text-sm mt-1">
+                Raça/cor declarada: <strong>{opcoesRaca.find(o => o.value === racaSelecionada)?.label}</strong>
+              </p>
+            </div>
+          )}
         </motion.div>
       </div>
 
