@@ -186,12 +186,14 @@ export default function DocumentosUploadPage() {
       const maxSize = 10 * 1024 * 1024; // 10MB
       if (file.size > maxSize) {
         alert('❌ Arquivo muito grande! Máximo: 10MB');
+        setUploadingDoc(null);
         return;
       }
 
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
         alert('❌ Formato não permitido! Use: JPG, PNG, PDF ou WEBP');
+        setUploadingDoc(null);
         return;
       }
 
@@ -208,6 +210,22 @@ export default function DocumentosUploadPage() {
         },
       });
 
+      // Atualizar estado local imediatamente (sem recarregar página)
+      if (dados) {
+        const novosDados = { ...dados };
+        const docKey = tipoDocumento as keyof typeof dados.documentos;
+        novosDados.documentos = {
+          ...novosDados.documentos,
+          [docKey]: {
+            ...novosDados.documentos[docKey],
+            url: response.data.url || 'uploaded',
+            validado: false,
+            rejeitado: false,
+          }
+        };
+        setDados(novosDados);
+      }
+
       // Verificar se completou todos os documentos
       if (response.data.completude?.completo) {
         setDocumentosCompletos(true);
@@ -216,7 +234,7 @@ export default function DocumentosUploadPage() {
         alert('✅ Documento enviado com sucesso!');
       }
       
-      buscarDados();
+      // Não chamar buscarDados() para evitar recarregar a página
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
       alert('❌ Erro ao enviar documento. Tente novamente.');
@@ -440,44 +458,49 @@ export default function DocumentosUploadPage() {
                   </div>
                 )}
 
-                {/* Botão de Upload */}
-                <label
-                  className={`block w-full py-3 px-4 rounded-lg font-medium text-center cursor-pointer transition-all ${
-                    isUploading
-                      ? 'bg-gray-300 cursor-not-allowed'
-                      : isValidated
-                      ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                      : isRejected
-                      ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                      : isUploaded
-                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
-                  }`}
-                >
-                  {isUploading ? (
+                {/* Botão de Upload ou Status Enviado */}
+                {isUploaded && !isRejected ? (
+                  <div className="w-full py-3 px-4 rounded-lg font-medium text-center bg-green-100 text-green-700 border-2 border-green-300">
                     <span className="flex items-center justify-center gap-2">
-                      <ArrowPathIcon className="w-4 h-4 animate-spin" />
-                      Enviando...
+                      <CheckCircleIcon className="w-5 h-5" />
+                      Documento Enviado
                     </span>
-                  ) : (
-                    <span className="flex items-center justify-center gap-2">
-                      <ArrowUpTrayIcon className="w-4 h-4" />
-                      {isUploaded ? 'Reenviar' : 'Enviar'}
-                    </span>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
-                    className="hidden"
-                    disabled={isUploading}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        handleUpload(doc.key, file);
-                      }
-                    }}
-                  />
-                </label>
+                  </div>
+                ) : (
+                  <label
+                    className={`block w-full py-3 px-4 rounded-lg font-medium text-center cursor-pointer transition-all ${
+                      isUploading
+                        ? 'bg-gray-300 cursor-not-allowed'
+                        : isRejected
+                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
+                    }`}
+                  >
+                    {isUploading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <ArrowPathIcon className="w-4 h-4 animate-spin" />
+                        Enviando...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        <ArrowUpTrayIcon className="w-4 h-4" />
+                        {isRejected ? 'Reenviar' : 'Enviar'}
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
+                      className="hidden"
+                      disabled={isUploading}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleUpload(doc.key, file);
+                        }
+                      }}
+                    />
+                  </label>
+                )}
               </motion.div>
             );
           })}
@@ -560,43 +583,49 @@ export default function DocumentosUploadPage() {
                     </div>
                   )}
 
-                  <label
-                    className={`block w-full py-3 px-4 rounded-lg font-medium text-center cursor-pointer transition-all ${
-                      isUploading
-                        ? 'bg-gray-300 cursor-not-allowed'
-                        : isValidated
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : isRejected
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                        : isUploaded
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
-                    }`}
-                  >
-                    {isUploading ? (
+                  {/* Botão de Upload ou Status Enviado */}
+                  {isUploaded && !isRejected ? (
+                    <div className="w-full py-3 px-4 rounded-lg font-medium text-center bg-green-100 text-green-700 border-2 border-green-300">
                       <span className="flex items-center justify-center gap-2">
-                        <ArrowPathIcon className="w-4 h-4 animate-spin" />
-                        Enviando...
+                        <CheckCircleIcon className="w-5 h-5" />
+                        Documento Enviado
                       </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <ArrowUpTrayIcon className="w-4 h-4" />
-                        {isUploaded ? 'Reenviar' : 'Enviar'}
-                      </span>
-                    )}
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
-                      className="hidden"
-                      disabled={isUploading}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleUpload(doc.key, file);
-                        }
-                      }}
-                    />
-                  </label>
+                    </div>
+                  ) : (
+                    <label
+                      className={`block w-full py-3 px-4 rounded-lg font-medium text-center cursor-pointer transition-all ${
+                        isUploading
+                          ? 'bg-gray-300 cursor-not-allowed'
+                          : isRejected
+                          ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                          : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
+                      }`}
+                    >
+                      {isUploading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <ArrowPathIcon className="w-4 h-4 animate-spin" />
+                          Enviando...
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-center gap-2">
+                          <ArrowUpTrayIcon className="w-4 h-4" />
+                          {isRejected ? 'Reenviar' : 'Enviar'}
+                        </span>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,application/pdf,image/webp"
+                        className="hidden"
+                        disabled={isUploading}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleUpload(doc.key, file);
+                          }
+                        }}
+                      />
+                    </label>
+                  )}
                 </motion.div>
               );
             })}
