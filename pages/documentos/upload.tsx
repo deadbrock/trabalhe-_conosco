@@ -69,6 +69,7 @@ export default function DocumentosUploadPage() {
   const [confirmacaoRaca, setConfirmacaoRaca] = useState(false);
   const [salvandoRaca, setSalvandoRaca] = useState(false);
   const [racaSalva, setRacaSalva] = useState(false);
+  const [hashVerificacao, setHashVerificacao] = useState<string | null>(null);
   
   // Progresso e completude
   const [documentosCompletos, setDocumentosCompletos] = useState(false);
@@ -123,6 +124,7 @@ export default function DocumentosUploadPage() {
       
       const response = await axios.post(`${API_URL}/documentos/autodeclaracao`, {
         raca: racaSelecionada,
+        aceiteTermos: true, // Confirma que aceitou os termos legais
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -130,6 +132,11 @@ export default function DocumentosUploadPage() {
       });
 
       setRacaSalva(true);
+      
+      // Salvar hash de verificação
+      if (response.data.hashVerificacao) {
+        setHashVerificacao(response.data.hashVerificacao);
+      }
       
       // Verificar se completou todos os documentos
       if (response.data.completude?.completo) {
@@ -753,6 +760,19 @@ export default function DocumentosUploadPage() {
               <p className="text-green-600 text-sm mt-1">
                 Raça/cor declarada: <strong>{opcoesRaca.find(o => o.value === racaSelecionada)?.label}</strong>
               </p>
+              
+              {/* Código de Verificação */}
+              {hashVerificacao && (
+                <div className="mt-4 p-3 bg-white rounded-lg border-2 border-green-300">
+                  <p className="text-xs text-gray-500 mb-1">Código de Verificação</p>
+                  <p className="text-xl font-mono font-bold text-green-700 tracking-wider">
+                    {hashVerificacao}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Guarde este código. Ele comprova a autenticidade da sua autodeclaração.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </motion.div>

@@ -19,6 +19,11 @@ interface Documento {
   // Autodeclaração Racial
   autodeclaracao_racial: string;
   autodeclaracao_data: string;
+  autodeclaracao_ip: string;
+  autodeclaracao_user_agent: string;
+  autodeclaracao_hash: string;
+  autodeclaracao_aceite_termos: boolean;
+  autodeclaracao_aceite_data: string;
   
   // Documentos
   foto_3x4_url: string;
@@ -259,6 +264,15 @@ export default function DocumentosPage() {
           year: 'numeric' 
         })
       : new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    
+    const horaDeclaracao = doc.autodeclaracao_data
+      ? new Date(doc.autodeclaracao_data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+      : '';
+    
+    // Dados de verificação
+    const codigoVerificacao = doc.autodeclaracao_hash || 'N/D';
+    const ipOrigem = doc.autodeclaracao_ip || 'Não registrado';
+    const aceiteTermos = doc.autodeclaracao_aceite_termos ? 'Sim' : 'Não';
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -281,14 +295,20 @@ export default function DocumentosPage() {
     .legal-text { font-size: 12px; color: #666; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: justify; }
     .legal-text strong { color: #333; }
     .confirmacao { background: #d4edda; border: 2px solid #28a745; padding: 20px; border-radius: 12px; margin: 25px 0; }
-    .confirmacao p { margin: 0; color: #155724; font-weight: 500; }
+    .confirmacao p { margin: 5px 0; color: #155724; font-weight: 500; }
     .confirmacao .check { color: #28a745; font-size: 20px; margin-right: 10px; }
+    .verificacao-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #1976d2; padding: 20px; border-radius: 12px; margin: 25px 0; }
+    .verificacao-box h4 { color: #1565c0; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .verificacao-box .codigo { font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; color: #0d47a1; background: white; padding: 10px 20px; border-radius: 8px; display: inline-block; letter-spacing: 3px; border: 2px dashed #1976d2; }
+    .verificacao-box .info-tecnica { margin-top: 15px; font-size: 11px; color: #555; }
+    .verificacao-box .info-tecnica p { margin: 5px 0; }
     .signature-area { margin-top: 60px; display: flex; justify-content: space-between; gap: 40px; }
     .signature-box { flex: 1; text-align: center; }
     .signature-line { border-top: 2px solid #333; margin-top: 80px; padding-top: 10px; font-size: 13px; color: #666; }
     .footer { margin-top: 50px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #ddd; padding-top: 20px; }
     .data-geracao { font-size: 11px; color: #999; text-align: right; margin-top: 20px; }
     .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 100px; color: rgba(15, 76, 129, 0.05); font-weight: bold; pointer-events: none; z-index: -1; }
+    .aviso-verificacao { background: #fff8e1; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 11px; color: #856404; }
     @media print { 
       body { padding: 20px; } 
       .watermark { display: none; }
@@ -310,7 +330,7 @@ export default function DocumentosPage() {
     <p><strong>E-mail:</strong> ${doc.candidato_email}</p>
     <p><strong>Telefone:</strong> ${doc.candidato_telefone || 'Não informado'}</p>
     <p><strong>Vaga/Cargo:</strong> ${doc.vaga_titulo}</p>
-    <p><strong>Data da Declaração:</strong> ${dataDeclaracao}</p>
+    <p><strong>Data da Declaração:</strong> ${dataDeclaracao}${horaDeclaracao ? ` às ${horaDeclaracao}` : ''}</p>
   </div>
   
   <div class="declaracao-box">
@@ -320,6 +340,23 @@ export default function DocumentosPage() {
   
   <div class="confirmacao">
     <p><span class="check">✓</span> O(A) candidato(a) confirmou eletronicamente que leu e concorda com os termos desta declaração.</p>
+    <p><span class="check">✓</span> Aceite dos termos legais: <strong>${aceiteTermos}</strong></p>
+  </div>
+  
+  <!-- Seção de Verificação de Autenticidade -->
+  <div class="verificacao-box">
+    <h4>Verificação de Autenticidade</h4>
+    <p style="margin: 0 0 10px 0; font-size: 12px; color: #555;">Código único que comprova a autenticidade desta declaração:</p>
+    <div class="codigo">${codigoVerificacao}</div>
+    
+    <div class="info-tecnica">
+      <p><strong>IP de origem:</strong> ${ipOrigem}</p>
+      <p><strong>Data/hora do registro:</strong> ${dataDeclaracao}${horaDeclaracao ? ` às ${horaDeclaracao}` : ''}</p>
+    </div>
+    
+    <div class="aviso-verificacao">
+      <strong>Como verificar:</strong> Acesse <em>trabalheconoscofg.com.br/verificar</em> e insira o código acima para confirmar a autenticidade desta declaração.
+    </div>
   </div>
   
   <div class="legal-text">
@@ -327,6 +364,8 @@ export default function DocumentosPage() {
     Declaro, para os devidos fins e sob as penas da lei, que as informações prestadas neste formulário são verdadeiras e de minha inteira responsabilidade, conforme o disposto na <strong>Lei nº 12.990/2014</strong> e na <strong>Portaria Normativa nº 4/2018</strong> do Ministério do Planejamento, Desenvolvimento e Gestão.
     <br><br>
     Estou ciente de que a prestação de declaração falsa caracteriza crime previsto no <strong>art. 299 do Código Penal Brasileiro</strong>, bem como pode acarretar a eliminação do processo seletivo ou a rescisão do contrato de trabalho, caso já tenha sido admitido(a).
+    <br><br>
+    <strong>COMPROVAÇÃO ELETRÔNICA:</strong> Esta declaração foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificação digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e não-repúdio.
   </div>
   
   <div class="signature-area">
@@ -341,6 +380,7 @@ export default function DocumentosPage() {
   <div class="footer">
     <p>Documento gerado eletronicamente pelo Sistema FG Services</p>
     <p>Este documento é válido como comprovante de autodeclaração étnico-racial para fins de admissão.</p>
+    <p style="margin-top: 10px;"><strong>Código de Verificação: ${codigoVerificacao}</strong></p>
   </div>
   
   <div class="data-geracao">
@@ -622,10 +662,38 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                 )}
               </div>
             </div>
-            {doc.autodeclaracao_data && (
-              <p className="text-xs text-gray-500 mt-2">
-                Declarado em: {new Date(doc.autodeclaracao_data).toLocaleDateString('pt-BR')}
-              </p>
+            
+            {/* Dados de Verificação */}
+            {doc.autodeclaracao_racial && (
+              <div className="mt-3 pt-3 border-t border-orange-200">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                  <div className="bg-white p-2 rounded-lg">
+                    <span className="text-gray-500">Data/Hora:</span>
+                    <p className="font-medium text-gray-700">
+                      {doc.autodeclaracao_data 
+                        ? new Date(doc.autodeclaracao_data).toLocaleString('pt-BR')
+                        : 'N/D'}
+                    </p>
+                  </div>
+                  <div className="bg-white p-2 rounded-lg">
+                    <span className="text-gray-500">Código de Verificação:</span>
+                    <p className="font-mono font-bold text-blue-700 tracking-wider">
+                      {doc.autodeclaracao_hash || 'N/D'}
+                    </p>
+                  </div>
+                  <div className="bg-white p-2 rounded-lg">
+                    <span className="text-gray-500">Aceite dos Termos:</span>
+                    <p className={`font-medium ${doc.autodeclaracao_aceite_termos ? 'text-green-700' : 'text-red-700'}`}>
+                      {doc.autodeclaracao_aceite_termos ? '✓ Sim' : '✗ Não'}
+                    </p>
+                  </div>
+                </div>
+                {doc.autodeclaracao_ip && (
+                  <p className="text-xs text-gray-400 mt-2">
+                    IP de origem: {doc.autodeclaracao_ip}
+                  </p>
+                )}
+              </div>
             )}
           </div>
 
