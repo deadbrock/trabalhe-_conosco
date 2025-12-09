@@ -207,13 +207,25 @@ export default function DocumentosUploadPage() {
         return;
       }
 
+      // Para foto 3x4, validar que é imagem (não PDF)
+      if (tipoDocumento === 'foto_3x4' && !isImage) {
+        alert('❌ A foto 3x4 deve ser uma imagem (JPG, PNG, etc). PDF não é permitido para este documento.');
+        setUploadingDoc(null);
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('tipo_documento', tipoDocumento);
 
       const token = localStorage.getItem('documentos_token');
 
-      const response = await axios.post(`${API_URL}/documentos/upload`, formData, {
+      // Usar endpoint específico para foto 3x4 (com processamento automático)
+      const endpoint = tipoDocumento === 'foto_3x4' 
+        ? `${API_URL}/documentos/upload-foto-3x4`
+        : `${API_URL}/documentos/upload`;
+
+      const response = await axios.post(endpoint, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`,
@@ -259,7 +271,7 @@ export default function DocumentosUploadPage() {
   };
 
   const documentos = [
-    { key: 'foto_3x4', label: 'Foto 3x4', icon: CameraIcon, color: 'text-purple-600', info: null },
+    { key: 'foto_3x4', label: 'Foto 3x4', icon: CameraIcon, color: 'text-purple-600', info: 'A foto será automaticamente ajustada para o formato 3x4' },
     { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: DocumentTextIcon, color: 'text-blue-600', info: null },
     { key: 'identidade_frente', label: 'Identidade (Frente)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
     { key: 'identidade_verso', label: 'Identidade (Verso)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
