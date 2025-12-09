@@ -143,15 +143,14 @@ export default function DocumentosPage() {
     }
   };
 
-  // Função para baixar formulário de autodeclaração
-  const baixarFormularioAutodeclaracao = () => {
-    // Criar conteúdo do formulário em HTML para impressão
+  // Função para baixar formulário em branco de autodeclaração
+  const baixarFormularioEmBranco = () => {
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Formulário de Autodeclaração Racial</title>
+  <title>Formulário de Autodeclaração Racial - Em Branco</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.6; }
     h1 { text-align: center; color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; }
@@ -160,14 +159,14 @@ export default function DocumentosPage() {
     .logo { font-size: 24px; font-weight: bold; color: #0f4c81; }
     .form-group { margin: 20px 0; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
-    .form-group input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    .field-line { border-bottom: 1px solid #333; min-height: 25px; margin-top: 5px; }
     .checkbox-group { margin: 15px 0; padding-left: 20px; }
-    .checkbox-group label { display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; }
-    .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+    .checkbox-box { width: 18px; height: 18px; border: 2px solid #333; display: inline-block; }
     .signature-area { margin-top: 50px; display: flex; justify-content: space-between; }
     .signature-box { width: 45%; text-align: center; }
     .signature-line { border-top: 1px solid #333; margin-top: 60px; padding-top: 5px; }
-    .legal-text { font-size: 12px; color: #666; margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+    .legal-text { font-size: 11px; color: #666; margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 8px; }
     .date-field { margin-top: 30px; }
     @media print { body { padding: 20px; } }
   </style>
@@ -182,28 +181,28 @@ export default function DocumentosPage() {
   
   <div class="form-group">
     <label>Nome Completo:</label>
-    <input type="text" style="border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+    <div class="field-line"></div>
   </div>
   
   <div class="form-group">
     <label>CPF:</label>
-    <input type="text" style="width: 200px; border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+    <div class="field-line" style="width: 200px;"></div>
   </div>
   
   <div class="form-group">
     <label>Cargo/Vaga:</label>
-    <input type="text" style="border-bottom: 1px solid #333; border-top: none; border-left: none; border-right: none;" />
+    <div class="field-line"></div>
   </div>
   
   <h2>Declaro que me identifico como:</h2>
   
   <div class="checkbox-group">
-    <label><input type="checkbox" /> Branca</label>
-    <label><input type="checkbox" /> Preta</label>
-    <label><input type="checkbox" /> Parda</label>
-    <label><input type="checkbox" /> Amarela</label>
-    <label><input type="checkbox" /> Indígena</label>
-    <label><input type="checkbox" /> Prefiro não declarar</label>
+    <label><span class="checkbox-box"></span> Branca</label>
+    <label><span class="checkbox-box"></span> Preta</label>
+    <label><span class="checkbox-box"></span> Parda</label>
+    <label><span class="checkbox-box"></span> Amarela</label>
+    <label><span class="checkbox-box"></span> Indígena</label>
+    <label><span class="checkbox-box"></span> Prefiro não declarar</label>
   </div>
   
   <div class="legal-text">
@@ -231,7 +230,128 @@ export default function DocumentosPage() {
 </html>
     `;
     
-    // Criar blob e abrir em nova janela para impressão/download
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  };
+
+  // Função para baixar autodeclaração preenchida do candidato
+  const baixarAutodeclaracaoPreenchida = (doc: Documento) => {
+    if (!doc.autodeclaracao_racial) {
+      alert('Este candidato ainda não preencheu a autodeclaração racial.');
+      return;
+    }
+
+    const racaLabels: Record<string, string> = {
+      branca: 'Branca',
+      preta: 'Preta',
+      parda: 'Parda',
+      amarela: 'Amarela',
+      indigena: 'Indígena',
+      nao_declarar: 'Prefere não declarar',
+    };
+
+    const racaDeclarada = racaLabels[doc.autodeclaracao_racial] || doc.autodeclaracao_racial;
+    const dataDeclaracao = doc.autodeclaracao_data 
+      ? new Date(doc.autodeclaracao_data).toLocaleDateString('pt-BR', { 
+          day: '2-digit', 
+          month: 'long', 
+          year: 'numeric' 
+        })
+      : new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Autodeclaração Racial - ${doc.candidato_nome}</title>
+  <style>
+    body { font-family: 'Georgia', serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.8; color: #333; }
+    .header { text-align: center; margin-bottom: 40px; border-bottom: 3px double #0f4c81; padding-bottom: 20px; }
+    .logo { font-size: 28px; font-weight: bold; color: #0f4c81; letter-spacing: 2px; }
+    .subtitle { font-size: 14px; color: #666; margin-top: 5px; }
+    h1 { text-align: center; color: #0f4c81; font-size: 22px; margin: 30px 0; text-transform: uppercase; letter-spacing: 1px; }
+    .documento-info { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px; border-radius: 12px; margin: 25px 0; border-left: 4px solid #0f4c81; }
+    .documento-info p { margin: 12px 0; font-size: 15px; }
+    .documento-info strong { color: #0f4c81; min-width: 180px; display: inline-block; }
+    .declaracao-box { background: #fff3cd; border: 2px solid #ffc107; padding: 25px; border-radius: 12px; margin: 30px 0; text-align: center; }
+    .declaracao-box h3 { color: #856404; margin-bottom: 15px; font-size: 16px; }
+    .declaracao-box .raca { font-size: 28px; font-weight: bold; color: #0f4c81; text-transform: uppercase; letter-spacing: 2px; padding: 15px; background: white; border-radius: 8px; display: inline-block; margin-top: 10px; border: 2px solid #0f4c81; }
+    .legal-text { font-size: 12px; color: #666; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: justify; }
+    .legal-text strong { color: #333; }
+    .confirmacao { background: #d4edda; border: 2px solid #28a745; padding: 20px; border-radius: 12px; margin: 25px 0; }
+    .confirmacao p { margin: 0; color: #155724; font-weight: 500; }
+    .confirmacao .check { color: #28a745; font-size: 20px; margin-right: 10px; }
+    .signature-area { margin-top: 60px; display: flex; justify-content: space-between; gap: 40px; }
+    .signature-box { flex: 1; text-align: center; }
+    .signature-line { border-top: 2px solid #333; margin-top: 80px; padding-top: 10px; font-size: 13px; color: #666; }
+    .footer { margin-top: 50px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #ddd; padding-top: 20px; }
+    .data-geracao { font-size: 11px; color: #999; text-align: right; margin-top: 20px; }
+    .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 100px; color: rgba(15, 76, 129, 0.05); font-weight: bold; pointer-events: none; z-index: -1; }
+    @media print { 
+      body { padding: 20px; } 
+      .watermark { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="watermark">FG SERVICES</div>
+  
+  <div class="header">
+    <div class="logo">FG SERVICES</div>
+    <div class="subtitle">Sistema de Gestão de Candidatos</div>
+  </div>
+  
+  <h1>Autodeclaração Étnico-Racial</h1>
+  
+  <div class="documento-info">
+    <p><strong>Nome Completo:</strong> ${doc.candidato_nome}</p>
+    <p><strong>E-mail:</strong> ${doc.candidato_email}</p>
+    <p><strong>Telefone:</strong> ${doc.candidato_telefone || 'Não informado'}</p>
+    <p><strong>Vaga/Cargo:</strong> ${doc.vaga_titulo}</p>
+    <p><strong>Data da Declaração:</strong> ${dataDeclaracao}</p>
+  </div>
+  
+  <div class="declaracao-box">
+    <h3>DECLARO QUE ME IDENTIFICO COMO:</h3>
+    <div class="raca">${racaDeclarada}</div>
+  </div>
+  
+  <div class="confirmacao">
+    <p><span class="check">✓</span> O(A) candidato(a) confirmou eletronicamente que leu e concorda com os termos desta declaração.</p>
+  </div>
+  
+  <div class="legal-text">
+    <strong>DECLARAÇÃO LEGAL:</strong><br><br>
+    Declaro, para os devidos fins e sob as penas da lei, que as informações prestadas neste formulário são verdadeiras e de minha inteira responsabilidade, conforme o disposto na <strong>Lei nº 12.990/2014</strong> e na <strong>Portaria Normativa nº 4/2018</strong> do Ministério do Planejamento, Desenvolvimento e Gestão.
+    <br><br>
+    Estou ciente de que a prestação de declaração falsa caracteriza crime previsto no <strong>art. 299 do Código Penal Brasileiro</strong>, bem como pode acarretar a eliminação do processo seletivo ou a rescisão do contrato de trabalho, caso já tenha sido admitido(a).
+  </div>
+  
+  <div class="signature-area">
+    <div class="signature-box">
+      <div class="signature-line">Assinatura do(a) Candidato(a)</div>
+    </div>
+    <div class="signature-box">
+      <div class="signature-line">Assinatura do(a) Responsável RH</div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>Documento gerado eletronicamente pelo Sistema FG Services</p>
+    <p>Este documento é válido como comprovante de autodeclaração étnico-racial para fins de admissão.</p>
+  </div>
+  
+  <div class="data-geracao">
+    Gerado em: ${new Date().toLocaleString('pt-BR')}
+  </div>
+  
+  <script>window.print();</script>
+</body>
+</html>
+    `;
+    
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
@@ -261,13 +381,13 @@ export default function DocumentosPage() {
             <p className="text-gray-600">Visualize e valide os documentos enviados pelos candidatos aprovados</p>
           </div>
           
-          {/* Botão Download Formulário */}
+          {/* Botão Download Formulário em Branco */}
           <button
-            onClick={baixarFormularioAutodeclaracao}
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-amber-600 transition-all shadow-md hover:shadow-lg"
+            onClick={baixarFormularioEmBranco}
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-medium hover:from-gray-600 hover:to-gray-700 transition-all shadow-md hover:shadow-lg"
           >
             <Download className="w-5 h-5" />
-            Baixar Formulário Autodeclaração
+            Formulário em Branco
           </button>
         </div>
 
@@ -354,6 +474,7 @@ export default function DocumentosPage() {
                 doc={doc} 
                 onValidar={validarDocumento} 
                 onValidarTodos={validarTodosDocumentos}
+                onBaixarAutodeclaracao={baixarAutodeclaracaoPreenchida}
               />
             ))}
           </div>
@@ -367,9 +488,10 @@ interface DocumentoCardProps {
   doc: Documento;
   onValidar: (docId: number, tipoDocumento: string, acao: 'aprovar' | 'rejeitar') => void;
   onValidarTodos: (docId: number, acao: 'aprovar' | 'rejeitar') => void;
+  onBaixarAutodeclaracao: (doc: Documento) => void;
 }
 
-function DocumentoCard({ doc, onValidar, onValidarTodos }: DocumentoCardProps) {
+function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao }: DocumentoCardProps) {
   const [expandido, setExpandido] = useState(false);
 
   const documentosLista = [
@@ -482,12 +604,23 @@ function DocumentoCard({ doc, onValidar, onValidarTodos }: DocumentoCardProps) {
                   )}
                 </div>
               </div>
-              {doc.autodeclaracao_racial && (
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" />
-                  Preenchida
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {doc.autodeclaracao_racial && (
+                  <>
+                    <button
+                      onClick={() => onBaixarAutodeclaracao(doc)}
+                      className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-600 transition-all flex items-center gap-1 shadow-md"
+                    >
+                      <Download className="w-4 h-4" />
+                      Baixar Declaração
+                    </button>
+                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
+                      <CheckCircle className="w-4 h-4" />
+                      Preenchida
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
             {doc.autodeclaracao_data && (
               <p className="text-xs text-gray-500 mt-2">
