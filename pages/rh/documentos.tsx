@@ -212,9 +212,7 @@ export default function DocumentosPage() {
   
   <div class="legal-text">
     <strong>DECLARAÇÃO:</strong><br><br>
-    Declaro, para os devidos fins e sob as penas da lei, que as informações prestadas neste formulário são verdadeiras e de minha inteira responsabilidade, conforme o disposto na Lei nº 12.990/2014 e na Portaria Normativa nº 4/2018 do Ministério do Planejamento, Desenvolvimento e Gestão.
-    <br><br>
-    Estou ciente de que a prestação de declaração falsa caracteriza crime previsto no art. 299 do Código Penal Brasileiro, bem como pode acarretar a eliminação do processo seletivo ou a rescisão do contrato de trabalho, caso já tenha sido admitido(a).
+    Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do art. 299 do Código Penal Brasileiro e demais disposições legais vigentes.
   </div>
   
   <div class="date-field">
@@ -361,9 +359,7 @@ export default function DocumentosPage() {
   
   <div class="legal-text">
     <strong>DECLARAÇÃO LEGAL:</strong><br><br>
-    Declaro, para os devidos fins e sob as penas da lei, que as informações prestadas neste formulário são verdadeiras e de minha inteira responsabilidade, conforme o disposto na <strong>Lei nº 12.990/2014</strong> e na <strong>Portaria Normativa nº 4/2018</strong> do Ministério do Planejamento, Desenvolvimento e Gestão.
-    <br><br>
-    Estou ciente de que a prestação de declaração falsa caracteriza crime previsto no <strong>art. 299 do Código Penal Brasileiro</strong>, bem como pode acarretar a eliminação do processo seletivo ou a rescisão do contrato de trabalho, caso já tenha sido admitido(a).
+    Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do <strong>art. 299 do Código Penal Brasileiro</strong> e demais disposições legais vigentes.
     <br><br>
     <strong>COMPROVAÇÃO ELETRÔNICA:</strong> Esta declaração foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificação digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e não-repúdio.
   </div>

@@ -724,10 +724,10 @@ export default function DocumentosUploadPage() {
                 className="w-5 h-5 mt-0.5 text-orange-600 focus:ring-orange-500 rounded"
               />
               <span className="text-sm text-amber-900">
-                <strong>Declaro</strong>, sob as penas da lei, que as informações prestadas nesta autodeclaração 
-                são verdadeiras e que estou ciente de que a falsidade de declaração configura crime previsto 
-                no art. 299 do Código Penal Brasileiro, sujeitando-me às sanções legais cabíveis. 
-                Confirmo que a raça/cor selecionada corresponde à minha autoidentificação étnico-racial.
+                <strong>Declaro</strong>, para os devidos fins, que as informações aqui prestadas são verdadeiras 
+                e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá 
+                acarretar responsabilização civil, administrativa e penal, nos termos do art. 299 do Código 
+                Penal Brasileiro e demais disposições legais vigentes.
               </span>
             </label>
           </div>
