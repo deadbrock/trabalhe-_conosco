@@ -183,17 +183,31 @@ export default function RHCandidatosPorVaga() {
                         <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
                           {/* Botão de Currículo */}
                           {c.curriculo ? (
-                            <a 
-                              href={c.curriculo.startsWith('http') ? c.curriculo : `${getApiBase()}/uploads/${c.curriculo}`} 
-                              target="_blank" 
-                              rel="noreferrer" 
-                              className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all flex items-center gap-1.5 shadow-sm"
-                              onClick={(e) => e.stopPropagation()}
+                            <button 
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                try {
+                                  // Buscar URL assinada do backend
+                                  const response = await fetch(`${getApiBase()}/candidatos/${c.id}/curriculo`);
+                                  const data = await response.json();
+                                  if (data.url) {
+                                    window.open(data.url, '_blank');
+                                  } else {
+                                    // Fallback para URL direta
+                                    window.open(c.curriculo!, '_blank');
+                                  }
+                                } catch (error) {
+                                  console.error('Erro ao baixar currículo:', error);
+                                  // Fallback para URL direta
+                                  window.open(c.curriculo!, '_blank');
+                                }
+                              }}
+                              className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
                               title="Baixar Currículo"
                             >
                               <Download className="w-3.5 h-3.5" />
                               Currículo
-                            </a>
+                            </button>
                           ) : (
                             <span className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-400 flex items-center gap-1.5">
                               <FileText className="w-3.5 h-3.5" />
