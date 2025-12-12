@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, Edit2, Copy, Trash2, Eye, Power, Plus, Search } from 'lucide-react';
 import { apiGet, apiDelete, apiPost, apiPatch } from '../lib/api';
 
@@ -68,7 +68,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
   };
 
   const handleDeletar = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar este template? Esta aÃ§Ã£o nÃ£o pode ser desfeita.')) return;
+    if (!confirm('Tem certeza que deseja deletar este template? Esta ação não pode ser desfeita.')) return;
 
     try {
       await apiDelete(`/templates/${id}`);
@@ -125,7 +125,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">ðŸ“¬ Templates de ComunicaÃ§Ã£o</h2>
+          <h2 className="text-2xl font-bold text-gray-900">📬 Templates de Comunicação</h2>
           <p className="text-gray-600 mt-1">Gerencie templates de Email e WhatsApp</p>
         </div>
         <button
@@ -161,8 +161,8 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">Todos os tipos</option>
-            <option value="email">ðŸ“§ Email</option>
-            <option value="whatsapp">ðŸ’¬ WhatsApp</option>
+            <option value="email">📧 Email</option>
+            <option value="whatsapp">💬 WhatsApp</option>
           </select>
 
           {/* Filtro Status */}
@@ -172,24 +172,24 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="all">Todos os status</option>
-            <option value="ativo">âœ… Ativos</option>
-            <option value="inativo">âŒ Inativos</option>
+            <option value="ativo">✅ Ativos</option>
+            <option value="inativo">❌ Inativos</option>
           </select>
         </div>
 
         <div className="flex items-center gap-4 text-sm text-gray-600">
           <span>Total: <strong>{templatesFiltrados.length}</strong> templates</span>
-          <span>â€¢</span>
-          <span>ðŸ“§ Email: <strong>{templatesFiltrados.filter(t => t.tipo === 'email').length}</strong></span>
-          <span>â€¢</span>
-          <span>ðŸ’¬ WhatsApp: <strong>{templatesFiltrados.filter(t => t.tipo === 'whatsapp').length}</strong></span>
+          <span>•</span>
+          <span>📧 Email: <strong>{templatesFiltrados.filter(t => t.tipo === 'email').length}</strong></span>
+          <span>•</span>
+          <span>💬 WhatsApp: <strong>{templatesFiltrados.filter(t => t.tipo === 'whatsapp').length}</strong></span>
         </div>
       </div>
 
       {/* Lista de Templates */}
       {templatesFiltrados.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-          <div className="text-6xl mb-4">ðŸ“­</div>
+          <div className="text-6xl mb-4">📭</div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhum template encontrado</h3>
           <p className="text-gray-600 mb-6">
             {busca ? 'Tente ajustar os filtros de busca' : 'Comece criando seu primeiro template!'}
@@ -216,7 +216,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 flex-1">
-                    {/* Ãcone do Tipo */}
+                    {/* Ícone do Tipo */}
                     <div className={`p-3 rounded-lg ${
                       template.tipo === 'email' 
                         ? 'bg-blue-50 text-blue-600' 
@@ -257,7 +257,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
                         ))}
                       </div>
 
-                      {/* EstatÃ­sticas */}
+                      {/* Estatísticas */}
                       <div className="flex flex-wrap gap-4 text-sm">
                         <div className="flex items-center gap-1">
                           <span className="text-gray-600">Enviados:</span>
@@ -283,7 +283,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
                     </div>
                   </div>
 
-                  {/* AÃ§Ãµes */}
+                  {/* Ações */}
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleToggleAtivo(template.id)}
@@ -342,12 +342,12 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-gray-900">ðŸ‘ï¸ Preview do Template</h3>
+                <h3 className="text-xl font-bold text-gray-900">👁️ Preview do Template</h3>
                 <button
                   onClick={() => setTemplatePreview(null)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  âœ•
+                  ✕
                 </button>
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function TemplateManager({ onEdit, onNew }: TemplateManagerProps)
                 )}
 
                 <div>
-                  <span className="text-sm font-medium text-gray-600">ConteÃºdo:</span>
+                  <span className="text-sm font-medium text-gray-600">Conteúdo:</span>
                   {templatePreview.tipo === 'email' ? (
                     <div
                       className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200 max-h-96 overflow-y-auto"

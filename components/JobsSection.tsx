@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Job, getActiveJobs } from "@/lib/jobs";
 import { Briefcase } from "lucide-react";
@@ -22,14 +22,14 @@ export default function JobsSection() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-12 text-center">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full mb-4">
-            <span className="text-primary font-semibold">Junte-se a n├│s</span>
+            <span className="text-primary font-semibold">Junte-se a nós</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-gray-900 via-primary to-secondary bg-clip-text text-transparent">
-              Vagas Dispon├¡veis
+              Vagas Disponíveis
             </span>
           </h2>
-          <p className="text-gray-600 text-lg">Encontre a oportunidade ideal para voc├¬.</p>
+          <p className="text-gray-600 text-lg">Encontre a oportunidade ideal para você.</p>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full mt-4" />
         </div>
 
@@ -41,8 +41,8 @@ export default function JobsSection() {
         ) : jobs.length === 0 ? (
           <div className="text-center py-20">
             <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Nenhuma vaga dispon├¡vel no momento</h3>
-            <p className="text-gray-600">Novas oportunidades ser├úo publicadas em breve. Volte mais tarde!</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Nenhuma vaga disponível no momento</h3>
+            <p className="text-gray-600">Novas oportunidades serão publicadas em breve. Volte mais tarde!</p>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -56,7 +56,7 @@ export default function JobsSection() {
                 Nova
               </div>
 
-              {/* Conte├║do */}
+              {/* Conteúdo */}
               <div className="relative z-10 flex flex-col h-full min-h-[200px]">
                 <div className="flex-grow">
                   <h3 className="text-xl font-bold text-gray-900 mb-3 pr-12 leading-tight">
@@ -79,7 +79,7 @@ export default function JobsSection() {
                   </div>
                 </div>
 
-                {/* CTA sempre vis├¡vel no rodap├® */}
+                {/* CTA sempre visível no rodapé */}
                 <div className="mt-4 pt-4 border-t border-gray-100">
                   <Link
                     href={`/vagas/${job.id}`}

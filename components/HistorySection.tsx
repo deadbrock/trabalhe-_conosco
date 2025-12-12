@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 type Milestone = {
@@ -7,14 +7,14 @@ type Milestone = {
 };
 
 const milestones: Milestone[] = [
-  { year: "2010", description: "Funda├º├úo como loja de materiais de limpeza." },
-  { year: "2012", description: "In├¡cio da distribui├º├úo de materiais de limpeza." },
-  { year: "2015", description: "Virada de chave: primeiros contratos de terceiriza├º├úo." },
-  { year: "2020", description: "Pandemia: manuten├º├úo de todos os empregos e crescimento de 30%." },
-  { year: "2022", description: "Alcan├ºamos 1.500 colaboradores." },
+  { year: "2010", description: "Fundação como loja de materiais de limpeza." },
+  { year: "2012", description: "Início da distribuição de materiais de limpeza." },
+  { year: "2015", description: "Virada de chave: primeiros contratos de terceirização." },
+  { year: "2020", description: "Pandemia: manutenção de todos os empregos e crescimento de 30%." },
+  { year: "2022", description: "Alcançamos 1.500 colaboradores." },
   { year: "2023", description: "Conquista do selo GPTW (Great Place to Work)." },
-  { year: "2024", description: "Expans├úo para 15 estados e marca de 3.500 colaboradores." },
-  { year: "2025", description: "Inaugura├º├úo da nova sede administrativa e consolida├º├úo nacional." },
+  { year: "2024", description: "Expansão para 15 estados e marca de 3.500 colaboradores." },
+  { year: "2025", description: "Inauguração da nova sede administrativa e consolidação nacional." },
 ];
 
 export default function HistorySection() {
@@ -43,7 +43,7 @@ export default function HistorySection() {
             
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-gray-900 via-primary to-secondary bg-clip-text text-transparent">
-                Cronologia ÔÇô Nossos Marcos
+                Cronologia – Nossos Marcos
               </span>
             </h2>
             
@@ -70,7 +70,7 @@ export default function HistorySection() {
                     <div className="w-5 h-5 rounded-full bg-white shadow-inner" />
                   </div>
                   
-                  {/* Conte├║do */}
+                  {/* Conteúdo */}
                   <div className={`ml-16 sm:ml-0 sm:w-[calc(50%-40px)] ${
                     idx % 2 === 0 ? "sm:text-right sm:pr-12" : "sm:pl-12"
                   }`}>

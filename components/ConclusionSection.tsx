@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Target, Sparkles } from "lucide-react";
 
@@ -32,7 +32,7 @@ export default function ConclusionSection() {
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8">
             <span className="bg-gradient-to-r from-gray-900 via-primary to-secondary bg-clip-text text-transparent">
-              Fazendo a Diferen├ºa
+              Fazendo a Diferença
             </span>
           </h2>
           
@@ -51,13 +51,13 @@ export default function ConclusionSection() {
             
             <div className="relative z-10">
               <p className="text-gray-700 text-lg sm:text-xl lg:text-2xl leading-relaxed mb-8">
-                Hoje, a <span className="font-bold text-primary">FG Services</span> ├® sin├┤nimo de <span className="font-semibold text-gray-900">confian├ºa</span>, <span className="font-semibold text-gray-900">excel├¬ncia</span> e <span className="font-semibold text-gray-900">inova├º├úo</span> em terceiriza├º├úo 
-                de servi├ºos especializados. Com uma equipe forte, presente em diferentes setores e 
-                regi├Áes do Brasil, seguimos firmes em nossa miss├úo: oferecer solu├º├Áes eficientes, 
-                sustent├íveis e que fa├ºam diferen├ºa na vida de nossos clientes, colaboradores e comunidades.
+                Hoje, a <span className="font-bold text-primary">FG Services</span> é sinônimo de <span className="font-semibold text-gray-900">confiança</span>, <span className="font-semibold text-gray-900">excelência</span> e <span className="font-semibold text-gray-900">inovação</span> em terceirização 
+                de serviços especializados. Com uma equipe forte, presente em diferentes setores e 
+                regiões do Brasil, seguimos firmes em nossa missão: oferecer soluções eficientes, 
+                sustentáveis e que façam diferença na vida de nossos clientes, colaboradores e comunidades.
               </p>
 
-              {/* ├ìcones de valores */}
+              {/* Ícones de valores */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -83,8 +83,8 @@ export default function ConclusionSection() {
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 shadow-lg">
                     <Target className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg">Excel├¬ncia</h3>
-                  <p className="text-gray-600 text-sm mt-1">Em servi├ºos</p>
+                  <h3 className="font-bold text-gray-900 text-lg">Excelência</h3>
+                  <p className="text-gray-600 text-sm mt-1">Em serviços</p>
                 </motion.div>
 
                 <motion.div
@@ -97,7 +97,7 @@ export default function ConclusionSection() {
                   <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center mb-3 shadow-lg">
                     <Sparkles className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg">Inova├º├úo</h3>
+                  <h3 className="font-bold text-gray-900 text-lg">Inovação</h3>
                   <p className="text-gray-600 text-sm mt-1">Constante</p>
                 </motion.div>
               </div>
@@ -114,7 +114,7 @@ export default function ConclusionSection() {
                   href="#oportunidades"
                   className="inline-flex items-center justify-center rounded-full px-8 py-4 font-bold text-lg text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-2xl hover:shadow-primary/50 hover:scale-105"
                 >
-                  Fa├ºa Parte da Nossa Hist├│ria
+                  Faça Parte da Nossa História
                 </a>
               </motion.div>
             </div>

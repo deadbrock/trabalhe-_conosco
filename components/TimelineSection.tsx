@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 type Milestone = {
@@ -8,19 +8,19 @@ type Milestone = {
 };
 
 const milestones: Milestone[] = [
-  { year: "2018", title: "FundaÃ§Ã£o", text: "Nasce nossa missÃ£o de conectar talentos a propÃ³sito." },
-  { year: "2020", title: "ExpansÃ£o", text: "Ampliamos operaÃ§Ãµes e times em todo o paÃ­s." },
-  { year: "2022", title: "Parcerias", text: "Firmamos alianÃ§as estratÃ©gicas para crescer mais rÃ¡pido." },
-  { year: "2024", title: "InovaÃ§Ã£o", text: "Novas soluÃ§Ãµes digitais e foco em experiÃªncia." },
+  { year: "2018", title: "Fundação", text: "Nasce nossa missão de conectar talentos a propósito." },
+  { year: "2020", title: "Expansão", text: "Ampliamos operações e times em todo o país." },
+  { year: "2022", title: "Parcerias", text: "Firmamos alianças estratégicas para crescer mais rápido." },
+  { year: "2024", title: "Inovação", text: "Novas soluções digitais e foco em experiência." },
 ];
 
 export default function TimelineSection() {
   return (
     <section className="relative py-16">
-      {/* Camada clara translÃºcida para destacar timeline */}
+      {/* Camada clara translúcida para destacar timeline */}
       <div className="absolute inset-0 -z-10 bg-[color-mix(in_oklab,var(--secondary),white_75%)]/20 backdrop-blur-sm" />
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-8">Nossa HistÃ³ria</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8">Nossa História</h2>
 
         <div className="relative overflow-x-auto pb-6">
           {/* Linha base */}

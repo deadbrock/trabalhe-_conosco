@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Sparkles, Heart, Star } from "lucide-react";
@@ -44,7 +44,7 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
       });
     }, 250);
 
-    // Fogos de artifÃ­cio depois de 1 segundo
+    // Fogos de artifício depois de 1 segundo
     setTimeout(() => {
       const count = 200;
       const defaults2 = {
@@ -84,7 +84,7 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
       });
     }, 1000);
 
-    // Auto-fechar apÃ³s 15 segundos
+    // Auto-fechar após 15 segundos
     const closeTimer = setTimeout(() => {
       setShow(false);
       setTimeout(onClose, 500);
@@ -120,9 +120,9 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
             {/* Background gradient animado */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 animate-pulse"></div>
             
-            {/* ConteÃºdo */}
+            {/* Conteúdo */}
             <div className="relative z-10 text-center">
-              {/* Ãcones flutuantes */}
+              {/* Ícones flutuantes */}
               <div className="flex justify-center gap-6 mb-6">
                 <motion.div
                   animate={{ 
@@ -176,7 +176,7 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
                 transition={{ delay: 0.3 }}
               >
                 <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-                  Bem-vinda ao Time! ðŸŽ‰
+                  Bem-vinda ao Time! 🎉
                 </h1>
               </motion.div>
 
@@ -187,10 +187,10 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
                 className="space-y-3"
               >
                 <p className="text-2xl font-bold text-gray-800">
-                  OlÃ¡, {userName}! âœ¨
+                  Olá, {userName}! ✨
                 </p>
                 <p className="text-lg text-gray-600">
-                  Estamos muito felizes em ter vocÃª no nosso sistema de RH!
+                  Estamos muito felizes em ter você no nosso sistema de RH!
                 </p>
                 <p className="text-md text-gray-500 italic">
                   {userEmail}
@@ -205,14 +205,14 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
                 className="mt-8 p-6 bg-gradient-to-r from-primary/10 to-pink-500/10 rounded-2xl border-2 border-primary/20"
               >
                 <p className="text-gray-700 font-semibold text-lg mb-2">
-                  ðŸš€ Seu acesso estÃ¡ liberado!
+                  🚀 Seu acesso está liberado!
                 </p>
                 <p className="text-gray-600">
                   Explore o painel e comece a gerenciar vagas e candidatos agora mesmo.
                 </p>
               </motion.div>
 
-              {/* BotÃ£o */}
+              {/* Botão */}
               <motion.button
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -225,7 +225,7 @@ export default function WelcomeAnimation({ userName, userEmail, onClose }: Welco
                 }}
                 className="mt-8 px-8 py-4 bg-gradient-to-r from-primary to-red-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
-                ComeÃ§ar Agora! ðŸŽ¯
+                Começar Agora! 🎯
               </motion.button>
             </div>
           </motion.div>

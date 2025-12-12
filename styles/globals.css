@@ -1,6 +1,6 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
-/* Tema escuro com gradiente como padr├úo */
+/* Tema escuro com gradiente como padrão */
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
@@ -8,13 +8,13 @@
   --secondary: #354a80; /* azul base */
 }
 
-/* Cores espec├¡ficas para o painel RH AstronTalent */
+/* Cores específicas para o painel RH AstronTalent */
 .rh-theme {
   --primary: #373f49; /* azul acinzentado */
   --secondary: #535d67; /* azul apagado */
 }
 
-/* Mapeia vari├íveis para tokens Tailwind v4 */
+/* Mapeia variáveis para tokens Tailwind v4 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -25,11 +25,11 @@
   --font-sans: Inter, Poppins, var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* Anima├º├Áes personalizadas */
+  /* Animações personalizadas */
   --animate-fadeInUp: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Opcional: modo claro autom├ítico para quem prefere */
+/* Opcional: modo claro automático para quem prefere */
 @media (prefers-color-scheme: light) {
   :root {
     --background: #ffffff;
@@ -52,7 +52,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Part├¡culas simples via CSS */
+/* Partículas simples via CSS */
 .particles {
   position: absolute;
   inset: 0;
@@ -83,7 +83,7 @@ body {
   50% { opacity: 0; }
 }
 
-/* Bot├úo neon pulsante */
+/* Botão neon pulsante */
 .animate-neon {
   box-shadow: 0 0 10px color-mix(in oklab, var(--primary), white 30%), 0 0 20px var(--primary);
   animation: neonPulse 1.8s ease-in-out infinite;
@@ -94,7 +94,7 @@ body {
   50% { box-shadow: 0 0 16px var(--primary), 0 0 30px color-mix(in oklab, var(--primary), white 35%); }
 }
 
-/* Bot├úo com gradiente animado */
+/* Botão com gradiente animado */
 .btn-gradient {
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   background-size: 200% 200%;
@@ -108,7 +108,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Fundo de gradiente animado para p├íginas de detalhe */
+/* Fundo de gradiente animado para páginas de detalhe */
 .animated-gradient {
   background: radial-gradient(ellipse at top left, color-mix(in oklab, var(--primary), transparent 70%), transparent 40%),
               radial-gradient(ellipse at bottom right, color-mix(in oklab, var(--secondary), transparent 70%), transparent 40%);

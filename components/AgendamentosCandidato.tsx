@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar, Clock, MapPin, Video, Plus, Trash2, Edit2 } from 'lucide-react';
 import { apiGet, apiPost, apiDelete, apiPut } from '@/lib/api';
 import { AgendamentosSkeleton } from './Skeleton';
@@ -68,7 +68,7 @@ export default function AgendamentosCandidato({
 
   const salvarAgendamento = async () => {
     if (!form.titulo || !form.data_hora) {
-      alert('TÃ­tulo e data sÃ£o obrigatÃ³rios');
+      alert('Título e data são obrigatórios');
       return;
     }
 
@@ -172,7 +172,7 @@ export default function AgendamentosCandidato({
         )}
       </div>
 
-      {/* FormulÃ¡rio */}
+      {/* Formulário */}
       {mostrarForm && (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
           <h4 className="font-semibold text-gray-800 mb-3">
@@ -182,14 +182,14 @@ export default function AgendamentosCandidato({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                TÃ­tulo *
+                Título *
               </label>
               <input
                 type="text"
                 value={form.titulo}
                 onChange={(e) => setForm({ ...form, titulo: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Ex: Entrevista TÃ©cnica"
+                placeholder="Ex: Entrevista Técnica"
               />
             </div>
 
@@ -232,13 +232,13 @@ export default function AgendamentosCandidato({
                 value={form.local}
                 onChange={(e) => setForm({ ...form, local: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="EscritÃ³rio, Sala X"
+                placeholder="Escritório, Sala X"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Link VÃ­deo
+                Link Vídeo
               </label>
               <input
                 type="url"
@@ -251,14 +251,14 @@ export default function AgendamentosCandidato({
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                DescriÃ§Ã£o
+                Descrição
               </label>
               <textarea
                 value={form.descricao}
                 onChange={(e) => setForm({ ...form, descricao: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 rows={2}
-                placeholder="ObservaÃ§Ãµes sobre o agendamento..."
+                placeholder="Observações sobre o agendamento..."
               />
             </div>
           </div>

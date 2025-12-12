@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
@@ -12,31 +12,31 @@ export default function Hero() {
       try {
         const response = await fetch('/fg.mp4', { method: 'HEAD' });
         if (!response.ok) {
-          console.error(`ÔØî Arquivo fg.mp4 n├úo encontrado. Status: ${response.status}`);
-          console.error(`­ƒôü URL tentada: ${window.location.origin}/fg.mp4`);
+          console.error(`❌ Arquivo fg.mp4 não encontrado. Status: ${response.status}`);
+          console.error(`📁 URL tentada: ${window.location.origin}/fg.mp4`);
           setVideoError(true);
           return;
         }
-        console.log("Ô£à Arquivo fg.mp4 encontrado, iniciando carregamento...");
+        console.log("✅ Arquivo fg.mp4 encontrado, iniciando carregamento...");
       } catch (error) {
-        console.error("ÔØî Erro ao verificar arquivo:", error);
+        console.error("❌ Erro ao verificar arquivo:", error);
         setVideoError(true);
       }
     };
 
     checkVideoExists();
 
-    // For├ºar o v├¡deo a carregar e reproduzir
+    // Forçar o vídeo a carregar e reproduzir
     if (videoRef.current) {
       const video = videoRef.current;
       
-      // Verificar se o v├¡deo existe
+      // Verificar se o vídeo existe
       video.addEventListener('loadstart', () => {
-        console.log("­ƒƒí Iniciando carregamento do v├¡deo fg.mp4");
+        console.log("🟡 Iniciando carregamento do vídeo fg.mp4");
       });
       
       video.addEventListener('loadedmetadata', () => {
-        console.log("­ƒôè Metadados do v├¡deo carregados:", {
+        console.log("📊 Metadados do vídeo carregados:", {
           duration: video.duration,
           videoWidth: video.videoWidth,
           videoHeight: video.videoHeight,
@@ -45,9 +45,9 @@ export default function Hero() {
       });
       
       video.addEventListener('canplay', () => {
-        console.log("­ƒƒó V├¡deo pronto para reproduzir");
+        console.log("🟢 Vídeo pronto para reproduzir");
         video.play().catch((error) => {
-          console.error("ÔØî Erro ao reproduzir v├¡deo:", error);
+          console.error("❌ Erro ao reproduzir vídeo:", error);
           setVideoError(true);
         });
       });
@@ -56,7 +56,7 @@ export default function Hero() {
         const videoElement = e.target as HTMLVideoElement;
         const error = videoElement.error;
         if (error) {
-          console.error("ÔØî Erro detalhado no v├¡deo:", {
+          console.error("❌ Erro detalhado no vídeo:", {
             code: error.code,
             message: error.message,
             MEDIA_ERR_ABORTED: error.MEDIA_ERR_ABORTED,
@@ -68,31 +68,31 @@ export default function Hero() {
           let errorMsg = "Erro desconhecido";
           switch(error.code) {
             case error.MEDIA_ERR_ABORTED:
-              errorMsg = "Carregamento abortado pelo usu├írio";
+              errorMsg = "Carregamento abortado pelo usuário";
               break;
             case error.MEDIA_ERR_NETWORK:
-              errorMsg = "Erro de rede ao carregar v├¡deo";
+              errorMsg = "Erro de rede ao carregar vídeo";
               break;
             case error.MEDIA_ERR_DECODE:
-              errorMsg = "Erro ao decodificar v├¡deo (formato n├úo suportado?)";
+              errorMsg = "Erro ao decodificar vídeo (formato não suportado?)";
               break;
             case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-              errorMsg = "Formato de v├¡deo n├úo suportado ou arquivo n├úo encontrado";
+              errorMsg = "Formato de vídeo não suportado ou arquivo não encontrado";
               break;
           }
-          console.error(`ÔØî ${errorMsg}`);
+          console.error(`❌ ${errorMsg}`);
         }
         setVideoError(true);
       });
       
-      // Carregar o v├¡deo
+      // Carregar o vídeo
       video.load();
     }
   }, []);
 
   return (
     <section className="relative flex items-center justify-center overflow-hidden h-[70vh]">
-      {/* V├¡deo de fundo ou imagem de fallback */}
+      {/* Vídeo de fundo ou imagem de fallback */}
       <div className="absolute inset-0 w-full h-full z-0">
         {!videoError ? (
           <video
@@ -108,56 +108,56 @@ export default function Hero() {
               const video = e.currentTarget;
               const error = video.error;
               
-              console.error("ÔØî ERRO DETALHADO NO V├ìDEO:");
-              console.error("- URL do v├¡deo:", video.src);
+              console.error("❌ ERRO DETALHADO NO VÍDEO:");
+              console.error("- URL do vídeo:", video.src);
               console.error("- currentSrc:", video.currentSrc);
               console.error("- networkState:", video.networkState, ["NETWORK_EMPTY", "NETWORK_IDLE", "NETWORK_LOADING", "NETWORK_NO_SOURCE"][video.networkState]);
               console.error("- readyState:", video.readyState, ["HAVE_NOTHING", "HAVE_METADATA", "HAVE_CURRENT_DATA", "HAVE_FUTURE_DATA", "HAVE_ENOUGH_DATA"][video.readyState]);
               
               if (error) {
-                console.error("- C├│digo do erro:", error.code);
+                console.error("- Código do erro:", error.code);
                 console.error("- Mensagem:", error.message);
                 const errorMessages = [
                   "Erro desconhecido",
                   "MEDIA_ERR_ABORTED: Download abortado",
                   "MEDIA_ERR_NETWORK: Erro de rede",
                   "MEDIA_ERR_DECODE: Erro ao decodificar",
-                  "MEDIA_ERR_SRC_NOT_SUPPORTED: Formato n├úo suportado ou arquivo muito grande"
+                  "MEDIA_ERR_SRC_NOT_SUPPORTED: Formato não suportado ou arquivo muito grande"
                 ];
                 console.error("- Tipo:", errorMessages[error.code] || errorMessages[0]);
               }
               
-              console.warn("ÔÜá´©Å V├¡deo n├úo pode ser carregado. Usando fallback visual.");
+              console.warn("⚠️ Vídeo não pode ser carregado. Usando fallback visual.");
               
-              // Tentar verificar se ├® problema de tamanho
+              // Tentar verificar se é problema de tamanho
               fetch(video.src, { method: 'HEAD' }).then(response => {
                 const size = response.headers.get('content-length');
                 if (size) {
                   const sizeMB = (parseInt(size) / 1024 / 1024).toFixed(2);
-                  console.info(`­ƒôè Tamanho do arquivo: ${sizeMB} MB`);
+                  console.info(`📊 Tamanho do arquivo: ${sizeMB} MB`);
                   if (parseInt(size) > 50 * 1024 * 1024) {
-                    console.warn("ÔÜá´©Å ARQUIVO MUITO GRANDE! Vercel tem limite de 50MB para servir arquivos.");
-                    console.info("­ƒÆí Solu├º├úo: Comprimir o v├¡deo ou hospedar externamente (Cloudinary, S3, etc)");
+                    console.warn("⚠️ ARQUIVO MUITO GRANDE! Vercel tem limite de 50MB para servir arquivos.");
+                    console.info("💡 Solução: Comprimir o vídeo ou hospedar externamente (Cloudinary, S3, etc)");
                   }
                 }
               }).catch(err => {
-                console.error("ÔØî Erro ao verificar tamanho:", err);
+                console.error("❌ Erro ao verificar tamanho:", err);
               });
               
               setVideoError(true);
             }}
             onLoadedData={() => {
-              console.log("Ô£à V├¡deo fg.mp4 carregado com sucesso");
+              console.log("✅ Vídeo fg.mp4 carregado com sucesso");
             }}
           >
-            {/* V├¡deo hospedado no Cloudinary para melhor performance e CDN global */}
+            {/* Vídeo hospedado no Cloudinary para melhor performance e CDN global */}
             <source src="https://res.cloudinary.com/djbvjlw1m/video/upload/v1762443018/fg_oecdza.mp4" type="video/mp4" />
-            {/* Fallback para arquivo local caso Cloudinary esteja indispon├¡vel */}
+            {/* Fallback para arquivo local caso Cloudinary esteja indisponível */}
             <source src="/fg.mp4" type="video/mp4" />
-            Seu navegador n├úo suporta v├¡deo HTML5.
+            Seu navegador não suporta vídeo HTML5.
           </video>
         ) : (
-          // Fallback visual elegante quando o v├¡deo n├úo carrega
+          // Fallback visual elegante quando o vídeo não carrega
           <div className="absolute inset-0 w-full h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-red-900 to-purple-900 animate-gradient-xy" />
             <div className="absolute inset-0 opacity-30">
@@ -175,12 +175,12 @@ export default function Hero() {
       {/* Efeito de vinheta nas bordas */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] z-[1]" />
 
-      {/* Part├¡culas */}
+      {/* Partículas */}
       <div className="absolute inset-0">
         <div className="particles" />
       </div>
 
-      {/* Conte├║do */}
+      {/* Conteúdo */}
       <div className="relative z-10 mx-auto max-w-6xl px-6 text-center py-24">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -194,7 +194,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="inline-block px-6 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-4"
           >
-            <span className="text-white font-medium">Ô£¿ Sua carreira come├ºa aqui</span>
+            <span className="text-white font-medium">✨ Sua carreira começa aqui</span>
           </motion.div>
 
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight">
@@ -212,7 +212,7 @@ export default function Hero() {
             transition={{ delay: 0.4 }}
             className="mt-6 text-white/90 text-xl sm:text-2xl font-light drop-shadow-lg max-w-3xl mx-auto"
           >
-            Conhe├ºa a fam├¡lia FG Services
+            Conheça a família FG Services
           </motion.p>
 
           <motion.div

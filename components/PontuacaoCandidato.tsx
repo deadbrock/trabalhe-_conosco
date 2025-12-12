@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, TrendingUp, Award } from 'lucide-react';
 import { apiPost } from '@/lib/api';
 
@@ -23,10 +23,10 @@ export default function PontuacaoCandidato({
     try {
       const result = await apiPost<{ candidatoId: string; score: number; message: string }>(`/pontuacao/calcular/${candidatoId}`, {});
       setScore(result.score);
-      alert(`PontuaÃ§Ã£o atualizada: ${result.score} pontos`);
+      alert(`Pontuação atualizada: ${result.score} pontos`);
     } catch (error) {
-      console.error('Erro ao recalcular pontuaÃ§Ã£o:', error);
-      alert('Erro ao recalcular pontuaÃ§Ã£o');
+      console.error('Erro ao recalcular pontuação:', error);
+      alert('Erro ao recalcular pontuação');
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function PontuacaoCandidato({
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
           <Award className="w-5 h-5 text-primary" />
-          PontuaÃ§Ã£o
+          Pontuação
         </h3>
 
         <button
@@ -97,23 +97,23 @@ export default function PontuacaoCandidato({
           </div>
 
           <p className="text-xs text-gray-500 mt-2">
-            PontuaÃ§Ã£o calculada automaticamente baseada em diversos critÃ©rios
+            Pontuação calculada automaticamente baseada em diversos critérios
           </p>
         </div>
       </div>
 
-      {/* Legenda de critÃ©rios */}
+      {/* Legenda de critérios */}
       <div className="mt-4 p-3 bg-gray-50 rounded-lg">
         <p className="text-xs font-semibold text-gray-700 mb-2">
-          CritÃ©rios de pontuaÃ§Ã£o:
+          Critérios de pontuação:
         </p>
         <ul className="text-xs text-gray-600 space-y-1">
-          <li>â€¢ Tempo de resposta rÃ¡pido: atÃ© +20 pontos</li>
-          <li>â€¢ LocalizaÃ§Ã£o prÃ³xima: +15 pontos</li>
-          <li>â€¢ CurrÃ­culo anexado: +10 pontos</li>
-          <li>â€¢ Tags adicionadas: +5 pontos cada</li>
-          <li>â€¢ ComentÃ¡rios importantes: +5 pontos cada</li>
-          <li>â€¢ Status avanÃ§ado: atÃ© +20 pontos</li>
+          <li>• Tempo de resposta rápido: até +20 pontos</li>
+          <li>• Localização próxima: +15 pontos</li>
+          <li>• Currículo anexado: +10 pontos</li>
+          <li>• Tags adicionadas: +5 pontos cada</li>
+          <li>• Comentários importantes: +5 pontos cada</li>
+          <li>• Status avançado: até +20 pontos</li>
         </ul>
       </div>
     </div>

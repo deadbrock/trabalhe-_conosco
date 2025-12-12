@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { apiGet } from '../lib/api';
 
@@ -32,7 +32,7 @@ export default function DashboardComunicacao() {
       const data = await apiGet<Estatisticas>(`/comunicacao/estatisticas?dias=${periodo}`);
       setEstatisticas(data);
     } catch (error) {
-      console.error('Erro ao carregar estatÃ­sticas:', error);
+      console.error('Erro ao carregar estatísticas:', error);
     } finally {
       setLoading(false);
     }
@@ -60,19 +60,19 @@ export default function DashboardComunicacao() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">ðŸ“Š MÃ©tricas de ComunicaÃ§Ã£o</h2>
-          <p className="text-gray-600 mt-1">AnÃ¡lise detalhada dos Ãºltimos {periodo} dias</p>
+          <h2 className="text-2xl font-bold text-gray-900">📊 Métricas de Comunicação</h2>
+          <p className="text-gray-600 mt-1">Análise detalhada dos últimos {periodo} dias</p>
         </div>
         <select
           value={periodo}
           onChange={(e) => setPeriodo(Number(e.target.value))}
           className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
         >
-          <option value={7}>Ãšltimos 7 dias</option>
-          <option value={15}>Ãšltimos 15 dias</option>
-          <option value={30}>Ãšltimos 30 dias</option>
-          <option value={60}>Ãšltimos 60 dias</option>
-          <option value={90}>Ãšltimos 90 dias</option>
+          <option value={7}>Últimos 7 dias</option>
+          <option value={15}>Últimos 15 dias</option>
+          <option value={30}>Últimos 30 dias</option>
+          <option value={60}>Últimos 60 dias</option>
+          <option value={90}>Últimos 90 dias</option>
         </select>
       </div>
 
@@ -120,7 +120,7 @@ export default function DashboardComunicacao() {
               <Mail className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">ðŸ“§ Email</h3>
+              <h3 className="text-lg font-semibold text-gray-900">📧 Email</h3>
               <p className="text-sm text-gray-600">{estatisticas.email.total} emails enviados</p>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function DashboardComunicacao() {
               <MessageSquare className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">ðŸ’¬ WhatsApp</h3>
+              <h3 className="text-lg font-semibold text-gray-900">💬 WhatsApp</h3>
               <p className="text-sm text-gray-600">{estatisticas.whatsapp.total} mensagens enviadas</p>
             </div>
           </div>
@@ -232,21 +232,21 @@ export default function DashboardComunicacao() {
         </div>
       </div>
 
-      {/* Insights e RecomendaÃ§Ãµes */}
+      {/* Insights e Recomendações */}
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 border border-purple-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">ðŸ’¡ Insights e RecomendaÃ§Ãµes</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">💡 Insights e Recomendações</h3>
         <div className="grid md:grid-cols-2 gap-4">
           {/* WhatsApp vs Email */}
           {estatisticas.whatsapp.taxa_leitura > estatisticas.email.taxa_abertura && (
             <div className="bg-white rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <div className="text-2xl">ðŸ“±</div>
+                <div className="text-2xl">📱</div>
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-1">WhatsApp tem melhor engajamento</h4>
                   <p className="text-sm text-gray-600">
-                    A taxa de leitura do WhatsApp ({estatisticas.whatsapp.taxa_leitura}%) Ã© 
+                    A taxa de leitura do WhatsApp ({estatisticas.whatsapp.taxa_leitura}%) é 
                     {' '}{Math.round(estatisticas.whatsapp.taxa_leitura - estatisticas.email.taxa_abertura)}% 
-                    maior que a taxa de abertura de emails. Continue priorizando WhatsApp para comunicaÃ§Ãµes urgentes.
+                    maior que a taxa de abertura de emails. Continue priorizando WhatsApp para comunicações urgentes.
                   </p>
                 </div>
               </div>
@@ -257,12 +257,12 @@ export default function DashboardComunicacao() {
           {falhasGeral > 0 && (
             <div className="bg-white rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <div className="text-2xl">âš ï¸</div>
+                <div className="text-2xl">⚠️</div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">AtenÃ§Ã£o Ã s falhas</h4>
+                  <h4 className="font-semibold text-gray-900 mb-1">Atenção às falhas</h4>
                   <p className="text-sm text-gray-600">
-                    {falhasGeral} {falhasGeral === 1 ? 'comunicaÃ§Ã£o falhou' : 'comunicaÃ§Ãµes falharam'} nos Ãºltimos {periodo} dias.
-                    Verifique se as credenciais de API estÃ£o corretas e se os dados dos candidatos estÃ£o atualizados.
+                    {falhasGeral} {falhasGeral === 1 ? 'comunicação falhou' : 'comunicações falharam'} nos últimos {periodo} dias.
+                    Verifique se as credenciais de API estão corretas e se os dados dos candidatos estão atualizados.
                   </p>
                 </div>
               </div>
@@ -273,12 +273,12 @@ export default function DashboardComunicacao() {
           {taxaSucessoGeral >= 95 && (
             <div className="bg-white rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <div className="text-2xl">ðŸŽ‰</div>
+                <div className="text-2xl">🎉</div>
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-1">Excelente desempenho!</h4>
                   <p className="text-sm text-gray-600">
-                    Sua taxa de sucesso de {taxaSucessoGeral}% estÃ¡ Ã³tima! Continue monitorando para manter
-                    este alto padrÃ£o de entrega.
+                    Sua taxa de sucesso de {taxaSucessoGeral}% está ótima! Continue monitorando para manter
+                    este alto padrão de entrega.
                   </p>
                 </div>
               </div>
@@ -289,17 +289,17 @@ export default function DashboardComunicacao() {
           {totalGeral > 0 && (
             <div className="bg-white rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <div className="text-2xl">ðŸ“Š</div>
+                <div className="text-2xl">📊</div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">DistribuiÃ§Ã£o dos canais</h4>
+                  <h4 className="font-semibold text-gray-900 mb-1">Distribuição dos canais</h4>
                   <p className="text-sm text-gray-600">
-                    {Math.round((estatisticas.email.total / totalGeral) * 100)}% Email â€¢ 
+                    {Math.round((estatisticas.email.total / totalGeral) * 100)}% Email • 
                     {' '}{Math.round((estatisticas.whatsapp.total / totalGeral) * 100)}% WhatsApp
                     {estatisticas.whatsapp.total > estatisticas.email.total * 2 
-                      ? ' - Considere usar mais emails para comunicaÃ§Ãµes formais.'
+                      ? ' - Considere usar mais emails para comunicações formais.'
                       : estatisticas.email.total > estatisticas.whatsapp.total * 2
                       ? ' - Considere usar mais WhatsApp para aumentar engajamento.'
-                      : ' - DistribuiÃ§Ã£o equilibrada entre os canais!'}
+                      : ' - Distribuição equilibrada entre os canais!'}
                   </p>
                 </div>
               </div>
@@ -310,15 +310,15 @@ export default function DashboardComunicacao() {
 
       {/* Comparativo Visual */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">ðŸ“ˆ Comparativo de Performance</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">📈 Comparativo de Performance</h3>
         <div className="space-y-6">
           {/* Total */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">Volume Total</span>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-blue-600 font-semibold">ðŸ“§ {estatisticas.email.total}</span>
-                <span className="text-green-600 font-semibold">ðŸ’¬ {estatisticas.whatsapp.total}</span>
+                <span className="text-blue-600 font-semibold">📧 {estatisticas.email.total}</span>
+                <span className="text-green-600 font-semibold">💬 {estatisticas.whatsapp.total}</span>
               </div>
             </div>
             <div className="flex gap-1 h-4 bg-gray-100 rounded-full overflow-hidden">
@@ -338,8 +338,8 @@ export default function DashboardComunicacao() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">Taxa de Entrega</span>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-blue-600 font-semibold">ðŸ“§ {estatisticas.email.taxa_sucesso}%</span>
-                <span className="text-green-600 font-semibold">ðŸ’¬ {estatisticas.whatsapp.taxa_sucesso}%</span>
+                <span className="text-blue-600 font-semibold">📧 {estatisticas.email.taxa_sucesso}%</span>
+                <span className="text-green-600 font-semibold">💬 {estatisticas.whatsapp.taxa_sucesso}%</span>
               </div>
             </div>
             <div className="flex gap-4">
@@ -367,8 +367,8 @@ export default function DashboardComunicacao() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">Taxa de Leitura/Abertura</span>
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-blue-600 font-semibold">ðŸ“§ {estatisticas.email.taxa_abertura}%</span>
-                <span className="text-green-600 font-semibold">ðŸ’¬ {estatisticas.whatsapp.taxa_leitura}%</span>
+                <span className="text-blue-600 font-semibold">📧 {estatisticas.email.taxa_abertura}%</span>
+                <span className="text-green-600 font-semibold">💬 {estatisticas.whatsapp.taxa_leitura}%</span>
               </div>
             </div>
             <div className="flex gap-4">

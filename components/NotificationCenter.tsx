@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Bell, X, Check, Trash2, MailOpen } from 'lucide-react';
 import { apiGet, apiPut, apiDelete } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,7 +33,7 @@ export default function NotificationCenter() {
       setNotificacoes(data.notificacoes);
       setNaoLidas(data.nao_lidas);
     } catch (error) {
-      console.error('Erro ao carregar notificaÃ§Ãµes:', error);
+      console.error('Erro ao carregar notificações:', error);
     }
   }, [filter]);
 
@@ -50,7 +50,7 @@ export default function NotificationCenter() {
       await apiPut(`/notificacoes/${id}/marcar-lida`, {});
       await carregarNotificacoes();
     } catch (error) {
-      console.error('Erro ao marcar notificaÃ§Ã£o:', error);
+      console.error('Erro ao marcar notificação:', error);
     }
   };
 
@@ -71,22 +71,22 @@ export default function NotificationCenter() {
       await apiDelete(`/notificacoes/${id}`);
       await carregarNotificacoes();
     } catch (error) {
-      console.error('Erro ao excluir notificaÃ§Ã£o:', error);
+      console.error('Erro ao excluir notificação:', error);
     }
   };
 
   const getTipoIcone = (tipo: string) => {
     const icons: Record<string, string> = {
-      novo_candidato: 'ðŸ†•',
-      status_alterado: 'ðŸ”„',
-      novo_comentario: 'ðŸ’¬',
-      nova_tag: 'ðŸ·ï¸',
-      agendamento: 'ðŸ“…',
-      avaliacao: 'â­',
-      aprovado: 'âœ…',
-      reprovado: 'âŒ'
+      novo_candidato: '🆕',
+      status_alterado: '🔄',
+      novo_comentario: '💬',
+      nova_tag: '🏷️',
+      agendamento: '📅',
+      avaliacao: '⭐',
+      aprovado: '✅',
+      reprovado: '❌'
     };
-    return icons[tipo] || 'ðŸ””';
+    return icons[tipo] || '🔔';
   };
 
   const getTipoColor = (tipo: string) => {
@@ -112,19 +112,19 @@ export default function NotificationCenter() {
     const dias = Math.floor(diff / 86400000);
 
     if (minutos < 1) return 'Agora mesmo';
-    if (minutos < 60) return `HÃ¡ ${minutos}m`;
-    if (horas < 24) return `HÃ¡ ${horas}h`;
-    if (dias < 7) return `HÃ¡ ${dias}d`;
+    if (minutos < 60) return `Há ${minutos}m`;
+    if (horas < 24) return `Há ${horas}h`;
+    if (dias < 7) return `Há ${dias}d`;
     return d.toLocaleDateString('pt-BR');
   };
 
   return (
     <div className="relative">
-      {/* BotÃ£o de NotificaÃ§Ãµes */}
+      {/* Botão de Notificações */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors h-10 flex items-center justify-center"
-        title="NotificaÃ§Ãµes"
+        title="Notificações"
       >
         <Bell className="w-5 h-5 text-gray-700" />
         
@@ -135,7 +135,7 @@ export default function NotificationCenter() {
         )}
       </button>
 
-      {/* Dropdown de NotificaÃ§Ãµes */}
+      {/* Dropdown de Notificações */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -156,7 +156,7 @@ export default function NotificationCenter() {
               {/* Header */}
               <div className="bg-gradient-to-r from-primary to-secondary p-4 text-white">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-bold">NotificaÃ§Ãµes</h3>
+                  <h3 className="text-lg font-bold">Notificações</h3>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-1 rounded-lg hover:bg-white/20 transition-colors"
@@ -165,7 +165,7 @@ export default function NotificationCenter() {
                   </button>
                 </div>
 
-                {/* Filtros e AÃ§Ãµes */}
+                {/* Filtros e Ações */}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setFilter('all')}
@@ -185,7 +185,7 @@ export default function NotificationCenter() {
                         : 'bg-white/20 hover:bg-white/30'
                     }`}
                   >
-                    NÃ£o lidas ({naoLidas})
+                    Não lidas ({naoLidas})
                   </button>
 
                   {naoLidas > 0 && (
@@ -201,13 +201,13 @@ export default function NotificationCenter() {
                 </div>
               </div>
 
-              {/* Lista de NotificaÃ§Ãµes */}
+              {/* Lista de Notificações */}
               <div className="max-h-96 overflow-y-auto">
                 {notificacoes.length === 0 ? (
                   <div className="p-8 text-center text-gray-400">
                     <Bell className="w-12 h-12 mx-auto mb-3 opacity-30" />
                     <p className="text-sm">
-                      {filter === 'unread' ? 'Nenhuma notificaÃ§Ã£o nÃ£o lida' : 'Nenhuma notificaÃ§Ã£o'}
+                      {filter === 'unread' ? 'Nenhuma notificação não lida' : 'Nenhuma notificação'}
                     </p>
                   </div>
                 ) : (
@@ -223,12 +223,12 @@ export default function NotificationCenter() {
                         }`}
                       >
                         <div className="flex items-start gap-3">
-                          {/* Ãcone */}
+                          {/* Ícone */}
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${getTipoColor(notif.tipo)}`}>
                             {getTipoIcone(notif.tipo)}
                           </div>
 
-                          {/* ConteÃºdo */}
+                          {/* Conteúdo */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <h4 className="text-sm font-semibold text-gray-900 line-clamp-1">
@@ -243,7 +243,7 @@ export default function NotificationCenter() {
                               {notif.mensagem}
                             </p>
 
-                            {/* AÃ§Ãµes */}
+                            {/* Ações */}
                             <div className="flex items-center gap-2 mt-2">
                               {!notif.lida && (
                                 <button
@@ -275,7 +275,7 @@ export default function NotificationCenter() {
               {notificacoes.length > 0 && (
                 <div className="bg-gray-50 px-4 py-3 text-center border-t border-gray-200">
                   <p className="text-xs text-gray-500">
-                    {notificacoes.length} notificaÃ§Ã£o{notificacoes.length !== 1 ? 'Ãµes' : ''}
+                    {notificacoes.length} notificação{notificacoes.length !== 1 ? 'ões' : ''}
                   </p>
                 </div>
               )}

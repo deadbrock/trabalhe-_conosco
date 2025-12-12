@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText, ChevronDown } from "lucide-react";
@@ -19,7 +19,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Removido 'router' das dependÃªncias para evitar loop
+  }, []); // Removido 'router' das dependências para evitar loop
 
   const handleLogout = () => {
     localStorage.removeItem("rh_token");
@@ -43,10 +43,10 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       ]
     },
     { 
-      label: "ComunicaÃ§Ã£o", 
+      label: "Comunicação", 
       icon: MessageCircle, 
       submenu: [
-        { href: "/rh/comunicacao", icon: MessageCircle, label: "ComunicaÃ§Ã£o" },
+        { href: "/rh/comunicacao", icon: MessageCircle, label: "Comunicação" },
         { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
       ]
     },
@@ -66,7 +66,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
               </div>
               <div className="leading-tight">
                 <div className="text-sm font-semibold text-slate-900">AstronTalent</div>
-                <div className="text-xs text-slate-500">Sistema de GestÃ£o de Talentos</div>
+                <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
               </div>
             </div>
 
@@ -132,7 +132,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   );
                 }
                 
-                // Se nÃ£o tem submenu, renderiza link normal
+                // Se não tem submenu, renderiza link normal
                 const isActive = router.pathname === item.href;
                 return (
                   <Link
@@ -249,7 +249,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
                   );
                 }
                 
-                // Se nÃ£o tem submenu
+                // Se não tem submenu
                 const isActive = router.pathname === item.href;
                 return (
                   <Link
@@ -298,12 +298,12 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      {/* Footer com crÃ©ditos */}
+      {/* Footer com créditos */}
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4">
         <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
             <div className="text-gray-600">
-              <span className="font-semibold text-primary">AstronTalent</span> Â© {new Date().getFullYear()} Aestron
+              <span className="font-semibold text-primary">AstronTalent</span> © {new Date().getFullYear()} Aestron
             </div>
           </div>
         </div>
