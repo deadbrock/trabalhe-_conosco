@@ -463,7 +463,7 @@ export default function DocumentosPage() {
             onClick={() => setFiltro('em_analise')}
             className={`px-4 py-2 rounded-xl font-medium transition-all ${
               filtro === 'em_analise'
-                ? 'bg-blue-500 text-white shadow-md'
+                ? 'bg-primary text-white shadow-md'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
@@ -725,7 +725,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 text-sm bg-primary text-white rounded-lg hover:bg-secondary transition-colors flex items-center gap-1"
                   >
                     <Eye className="w-4 h-4" />
                     Ver

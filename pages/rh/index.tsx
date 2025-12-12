@@ -87,34 +87,34 @@ export default function RHDashboard() {
       label: "Vagas Abertas", 
       value: metrics?.vagas_abertas ?? "--",
       icon: Briefcase,
-      color: "from-secondary to-blue-600",
-      bgColor: "bg-blue-50",
-      textColor: "text-secondary",
-      borderColor: "border-secondary"
+      color: "from-primary to-secondary",
+      bgColor: "bg-gray-50",
+      textColor: "text-primary",
+      borderColor: "border-primary"
     },
     { 
       label: "Total de Candidatos", 
       value: metrics?.total_candidatos ?? "--",
       icon: Users,
-      color: "from-primary to-red-600",
-      bgColor: "bg-red-50",
-      textColor: "text-primary",
-      borderColor: "border-primary"
+      color: "from-secondary to-primary",
+      bgColor: "bg-gray-50",
+      textColor: "text-secondary",
+      borderColor: "border-secondary"
     },
     { 
       label: "Candidatos Hoje", 
       value: metrics?.candidatos_hoje ?? "--",
       icon: TrendingUp,
-      color: "from-purple-500 to-purple-600",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-700",
-      borderColor: "border-purple-500"
+      color: "from-primary to-secondary",
+      bgColor: "bg-gray-50",
+      textColor: "text-primary",
+      borderColor: "border-primary"
     },
   ];
 
   const quickActions = [
-    { label: "Nova Vaga", href: "/rh/vagas", icon: Briefcase, color: "from-primary to-red-700" },
-    { label: "Ver Candidatos", href: "/rh/candidatos", icon: UserCheck, color: "from-secondary to-blue-700" },
+    { label: "Nova Vaga", href: "/rh/vagas", icon: Briefcase, color: "from-primary to-secondary" },
+    { label: "Ver Candidatos", href: "/rh/candidatos", icon: UserCheck, color: "from-secondary to-primary" },
   ];
 
   return (
@@ -185,7 +185,7 @@ export default function RHDashboard() {
             <h2 className="text-2xl font-semibold text-dark tracking-wide">Últimas Candidaturas</h2>
             <Link 
               href="/rh/candidatos" 
-              className="text-sm text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-red-50"
+              className="text-sm text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-gray-50"
             >
               Ver Todos
               <ExternalLink className="w-4 h-4" />
@@ -212,7 +212,7 @@ export default function RHDashboard() {
                       <div className="flex items-center gap-3 mb-3">
                         <h3 className="font-semibold text-dark text-lg">{candidato.nome}</h3>
                         {candidato.status === "novo" && (
-                          <span className="bg-gradient-to-r from-primary to-red-500 text-white text-xs font-bold px-3 py-1 rounded-md uppercase shadow-sm">
+                          <span className="bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold px-3 py-1 rounded-md uppercase shadow-sm">
                             Novo
                           </span>
                         )}
@@ -242,7 +242,7 @@ export default function RHDashboard() {
                     </div>
                     <Link
                       href={`/rh/candidatos/${candidato.vaga_id}`}
-                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-blue-600 text-white font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-secondary to-primary text-white font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
                     >
                       Ver Kanban
                     </Link>
