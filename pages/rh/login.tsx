@@ -355,12 +355,7 @@ export default function RHLogin() {
         >
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 inline-block">
             <p className="text-sm text-white font-medium flex items-center gap-2 justify-center">
-              ⭐ © 2025 FG Services - Feliz Natal e Próspero Ano Novo! 🎊
-            </p>
-          </div>
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 inline-block">
-            <p className="text-xs text-white/80 font-medium">
-              💻 Desenvolvido por <span className="font-bold text-white">Aestron</span>
+              ⭐ © 2025 Aestron - Feliz Natal e Próspero Ano Novo! 🎊
             </p>
           </div>
         </motion.div>

@@ -177,7 +177,7 @@ export default function DocumentosLoginPage() {
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            © 2025 FG Services - Sistema de Documentos
+            © 2025 Aestron
           </p>
         </div>
       </motion.div>

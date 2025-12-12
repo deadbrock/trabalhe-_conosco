@@ -15,10 +15,7 @@ export default function Layout({ children }: PropsWithChildren) {
             <a aria-label="Instagram" href="#" className="text-white/90 hover:text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] transition">ig</a>
             <a aria-label="YouTube" href="#" className="text-white/90 hover:text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] transition">yt</a>
           </div>
-          <div>© {new Date().getFullYear()} Trabalhe Conosco</div>
-          <div className="text-xs text-white/80">
-            Desenvolvido por <span className="font-semibold text-white">Aestron</span>
-          </div>
+          <div>© {new Date().getFullYear()} Aestron</div>
         </div>
       </footer>
     </div>

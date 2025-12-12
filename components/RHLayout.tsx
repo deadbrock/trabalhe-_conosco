@@ -265,9 +265,9 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
             <div className="text-gray-600">
-              © {new Date().getFullYear()} <span className="font-semibold text-primary">AstronTalent</span>
+              <span className="font-semibold text-primary">AstronTalent</span> © {new Date().getFullYear()} Aestron
             </div>
-            </div>
+          </div>
         </div>
       </footer>
     </div>
