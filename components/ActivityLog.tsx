@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { History, Filter, User, Calendar, Tag, FileText, MessageCircle, Star, ArrowRight } from 'lucide-react';
 import { apiGet } from '@/lib/api';
 import { motion } from 'framer-motion';
@@ -104,18 +104,18 @@ export default function ActivityLog({
 
     const hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    if (dataStr === hojeStr) return `Hoje às ${hora}`;
-    if (dataStr === ontemStr) return `Ontem às ${hora}`;
-    return `${dataStr} às ${hora}`;
+    if (dataStr === hojeStr) return `Hoje Ã s ${hora}`;
+    if (dataStr === ontemStr) return `Ontem Ã s ${hora}`;
+    return `${dataStr} Ã s ${hora}`;
   };
 
   const tiposFiltro = [
     { value: 'all', label: 'Todas' },
     { value: 'status_alterado', label: 'Status' },
-    { value: 'comentario_adicionado', label: 'Comentários' },
+    { value: 'comentario_adicionado', label: 'ComentÃ¡rios' },
     { value: 'tag_adicionada', label: 'Tags' },
     { value: 'agendamento_criado', label: 'Agendamentos' },
-    { value: 'avaliacao_adicionada', label: 'Avaliações' },
+    { value: 'avaliacao_adicionada', label: 'AvaliaÃ§Ãµes' },
   ];
 
   if (loading) {
@@ -179,7 +179,7 @@ export default function ActivityLog({
                   transition={{ delay: index * 0.05 }}
                   className="relative pl-14"
                 >
-                  {/* Ícone da atividade */}
+                  {/* Ãcone da atividade */}
                   <div className={`absolute left-0 w-10 h-10 rounded-full flex items-center justify-center ${getTipoColor(atividade.tipo)} shadow-md z-10`}>
                     <IconeComponent className="w-5 h-5" />
                   </div>
@@ -203,13 +203,13 @@ export default function ActivityLog({
 
                       {atividade.candidato_nome && (
                         <span className="flex items-center gap-1">
-                          👤 {atividade.candidato_nome}
+                          ðŸ‘¤ {atividade.candidato_nome}
                         </span>
                       )}
 
                       {atividade.vaga_titulo && (
                         <span className="flex items-center gap-1">
-                          💼 {atividade.vaga_titulo}
+                          ðŸ’¼ {atividade.vaga_titulo}
                         </span>
                       )}
                     </div>
@@ -242,13 +242,13 @@ export default function ActivityLog({
   );
 }
 
-// Componente compacto para exibição em modal
+// Componente compacto para exibiÃ§Ã£o em modal
 export function ActivityLogCompact({ candidatoId }: { candidatoId: number }) {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6">
       <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
         <History className="w-5 h-5 text-primary" />
-        Histórico de Atividades
+        HistÃ³rico de Atividades
       </h3>
       <ActivityLog 
         candidatoId={candidatoId} 

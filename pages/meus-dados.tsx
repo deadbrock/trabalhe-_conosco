@@ -1,9 +1,9 @@
-/**
- * 🔐 PORTAL LGPD - Solicitação de Dados Pessoais
+﻿/**
+ * ðŸ” PORTAL LGPD - SolicitaÃ§Ã£o de Dados Pessoais
  * 
- * Página pública onde candidatos podem:
+ * PÃ¡gina pÃºblica onde candidatos podem:
  * - Exportar seus dados
- * - Solicitar exclusão de dados
+ * - Solicitar exclusÃ£o de dados
  */
 
 import React, { useState } from 'react';
@@ -39,14 +39,14 @@ export default function MeusDados() {
   const [erro, setErro] = useState('');
 
   // ==========================================
-  // ETAPA 1: Formulário Inicial
+  // ETAPA 1: FormulÃ¡rio Inicial
   // ==========================================
   const handleSubmitFormulario = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro('');
 
     if (!formData.email || !formData.tipo) {
-      setErro('Por favor, preencha todos os campos obrigatórios');
+      setErro('Por favor, preencha todos os campos obrigatÃ³rios');
       return;
     }
 
@@ -58,21 +58,21 @@ export default function MeusDados() {
       setEtapa('codigo');
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } } };
-      setErro(err.response?.data?.error || 'Erro ao processar solicitação');
+      setErro(err.response?.data?.error || 'Erro ao processar solicitaÃ§Ã£o');
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================
-  // ETAPA 2: Validar Código
+  // ETAPA 2: Validar CÃ³digo
   // ==========================================
   const handleValidarCodigo = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro('');
 
     if (!codigo || codigo.length !== 6) {
-      setErro('Por favor, insira o código de 6 dígitos');
+      setErro('Por favor, insira o cÃ³digo de 6 dÃ­gitos');
       return;
     }
 
@@ -86,20 +86,20 @@ export default function MeusDados() {
       setEtapa('sucesso');
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } } };
-      setErro(err.response?.data?.error || 'Código inválido');
+      setErro(err.response?.data?.error || 'CÃ³digo invÃ¡lido');
     } finally {
       setLoading(false);
     }
   };
 
   // ==========================================
-  // RENDERIZAÇÃO
+  // RENDERIZAÃ‡ÃƒO
   // ==========================================
   return (
     <>
       <Head>
         <title>Meus Dados Pessoais - LGPD | FG Services</title>
-        <meta name="description" content="Solicite acesso, exportação ou exclusão dos seus dados pessoais" />
+        <meta name="description" content="Solicite acesso, exportaÃ§Ã£o ou exclusÃ£o dos seus dados pessoais" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
@@ -115,13 +115,13 @@ export default function MeusDados() {
               Meus Dados Pessoais
             </h1>
             <p className="text-gray-600">
-              Gerencie seus dados conforme a Lei Geral de Proteção de Dados (LGPD)
+              Gerencie seus dados conforme a Lei Geral de ProteÃ§Ã£o de Dados (LGPD)
             </p>
           </div>
 
           {/* Card Principal */}
           <div className="bg-white rounded-lg shadow-xl p-8">
-            {/* ETAPA 1: Formulário */}
+            {/* ETAPA 1: FormulÃ¡rio */}
             {etapa === 'formulario' && (
               <>
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
@@ -163,10 +163,10 @@ export default function MeusDados() {
                     />
                   </div>
 
-                  {/* Tipo de Solicitação */}
+                  {/* Tipo de SolicitaÃ§Ã£o */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      O que você deseja fazer? *
+                      O que vocÃª deseja fazer? *
                     </label>
                     <div className="space-y-3">
                       {/* Exportar */}
@@ -184,9 +184,9 @@ export default function MeusDados() {
                           className="mt-1 mr-3"
                         />
                         <div>
-                          <div className="font-medium text-gray-900">📦 Exportar Meus Dados</div>
+                          <div className="font-medium text-gray-900">ðŸ“¦ Exportar Meus Dados</div>
                           <div className="text-sm text-gray-600 mt-1">
-                            Receba uma cópia de todos os seus dados pessoais que temos armazenados
+                            Receba uma cÃ³pia de todos os seus dados pessoais que temos armazenados
                           </div>
                         </div>
                       </label>
@@ -206,16 +206,16 @@ export default function MeusDados() {
                           className="mt-1 mr-3"
                         />
                         <div>
-                          <div className="font-medium text-gray-900">🗑️ Excluir Meus Dados</div>
+                          <div className="font-medium text-gray-900">ðŸ—‘ï¸ Excluir Meus Dados</div>
                           <div className="text-sm text-gray-600 mt-1">
-                            Solicite a exclusão permanente de todos os seus dados pessoais
+                            Solicite a exclusÃ£o permanente de todos os seus dados pessoais
                           </div>
                         </div>
                       </label>
                     </div>
                   </div>
 
-                  {/* Alerta Exclusão */}
+                  {/* Alerta ExclusÃ£o */}
                   {formData.tipo === 'exclusao' && (
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                       <div className="flex items-start">
@@ -223,9 +223,9 @@ export default function MeusDados() {
                           <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
                         <div>
-                          <h4 className="font-medium text-yellow-900">⚠️ Atenção</h4>
+                          <h4 className="font-medium text-yellow-900">âš ï¸ AtenÃ§Ã£o</h4>
                           <p className="text-sm text-yellow-800 mt-1">
-                            A exclusão de dados é <strong>irreversível</strong>. Você não poderá se candidatar novamente com os mesmos dados. Certifique-se de que realmente deseja prosseguir.
+                            A exclusÃ£o de dados Ã© <strong>irreversÃ­vel</strong>. VocÃª nÃ£o poderÃ¡ se candidatar novamente com os mesmos dados. Certifique-se de que realmente deseja prosseguir.
                           </p>
                         </div>
                       </div>
@@ -239,38 +239,38 @@ export default function MeusDados() {
                     </div>
                   )}
 
-                  {/* Botão */}
+                  {/* BotÃ£o */}
                   <button
                     type="submit"
                     disabled={loading || !formData.tipo}
                     className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                   >
-                    {loading ? 'Processando...' : 'Enviar Solicitação'}
+                    {loading ? 'Processando...' : 'Enviar SolicitaÃ§Ã£o'}
                   </button>
                 </form>
 
-                {/* Informações LGPD */}
+                {/* InformaÃ§Ãµes LGPD */}
                 <div className="mt-8 pt-8 border-t border-gray-200">
-                  <h3 className="font-medium text-gray-900 mb-3">📋 Seus Direitos LGPD</h3>
+                  <h3 className="font-medium text-gray-900 mb-3">ðŸ“‹ Seus Direitos LGPD</h3>
                   <ul className="text-sm text-gray-600 space-y-2">
                     <li className="flex items-start">
-                      <span className="mr-2">✓</span>
+                      <span className="mr-2">âœ“</span>
                       <span>Acessar seus dados pessoais</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="mr-2">✓</span>
-                      <span>Solicitar correção de dados incorretos</span>
+                      <span className="mr-2">âœ“</span>
+                      <span>Solicitar correÃ§Ã£o de dados incorretos</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="mr-2">✓</span>
+                      <span className="mr-2">âœ“</span>
                       <span>Exportar seus dados em formato estruturado</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="mr-2">✓</span>
-                      <span>Solicitar exclusão de dados pessoais</span>
+                      <span className="mr-2">âœ“</span>
+                      <span>Solicitar exclusÃ£o de dados pessoais</span>
                     </li>
                     <li className="flex items-start">
-                      <span className="mr-2">✓</span>
+                      <span className="mr-2">âœ“</span>
                       <span>Revogar consentimento a qualquer momento</span>
                     </li>
                   </ul>
@@ -278,7 +278,7 @@ export default function MeusDados() {
               </>
             )}
 
-            {/* ETAPA 2: Validar Código */}
+            {/* ETAPA 2: Validar CÃ³digo */}
             {etapa === 'codigo' && solicitacao && (
               <>
                 <div className="text-center mb-8">
@@ -291,16 +291,16 @@ export default function MeusDados() {
                     Verifique seu Email
                   </h2>
                   <p className="text-gray-600">
-                    Enviamos um código de 6 dígitos para<br />
+                    Enviamos um cÃ³digo de 6 dÃ­gitos para<br />
                     <strong>{solicitacao.email}</strong>
                   </p>
                 </div>
 
                 <form onSubmit={handleValidarCodigo} className="space-y-6">
-                  {/* Campo Código */}
+                  {/* Campo CÃ³digo */}
                   <div>
                     <label htmlFor="codigo" className="block text-sm font-medium text-gray-700 mb-2 text-center">
-                      Digite o Código de Verificação
+                      Digite o CÃ³digo de VerificaÃ§Ã£o
                     </label>
                     <input
                       type="text"
@@ -314,13 +314,13 @@ export default function MeusDados() {
                       autoComplete="off"
                     />
                     <p className="mt-2 text-sm text-gray-500 text-center">
-                      Válido por 15 minutos
+                      VÃ¡lido por 15 minutos
                     </p>
                   </div>
 
                   {/* Protocolo */}
                   <div className="bg-gray-50 rounded-lg p-4 text-center">
-                    <p className="text-sm text-gray-600">Protocolo da Solicitação</p>
+                    <p className="text-sm text-gray-600">Protocolo da SolicitaÃ§Ã£o</p>
                     <p className="font-mono font-bold text-gray-900">{solicitacao.protocolo}</p>
                   </div>
 
@@ -331,14 +331,14 @@ export default function MeusDados() {
                     </div>
                   )}
 
-                  {/* Botões */}
+                  {/* BotÃµes */}
                   <div className="space-y-3">
                     <button
                       type="submit"
                       disabled={loading || codigo.length !== 6}
                       className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                     >
-                      {loading ? 'Validando...' : 'Confirmar Código'}
+                      {loading ? 'Validando...' : 'Confirmar CÃ³digo'}
                     </button>
 
                     <button
@@ -355,9 +355,9 @@ export default function MeusDados() {
                   </div>
                 </form>
 
-                {/* Não recebeu? */}
+                {/* NÃ£o recebeu? */}
                 <div className="mt-6 text-center text-sm text-gray-600">
-                  Não recebeu o código?{' '}
+                  NÃ£o recebeu o cÃ³digo?{' '}
                   <button
                     onClick={() => setEtapa('formulario')}
                     className="text-indigo-600 hover:text-indigo-700 font-medium"
@@ -379,11 +379,11 @@ export default function MeusDados() {
                   </div>
 
                   <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                    ✅ Solicitação Confirmada!
+                    âœ… SolicitaÃ§Ã£o Confirmada!
                   </h2>
 
                   <p className="text-gray-600 mb-8">
-                    Sua solicitação de <strong>{solicitacao.tipo === 'exportacao' ? 'Exportação' : 'Exclusão'}</strong> foi recebida e está sendo processada.
+                    Sua solicitaÃ§Ã£o de <strong>{solicitacao.tipo === 'exportacao' ? 'ExportaÃ§Ã£o' : 'ExclusÃ£o'}</strong> foi recebida e estÃ¡ sendo processada.
                   </p>
 
                   <div className="bg-indigo-50 rounded-lg p-6 mb-8">
@@ -392,27 +392,27 @@ export default function MeusDados() {
                       {solicitacao.protocolo}
                     </div>
                     <div className="text-sm text-gray-600">
-                      Guarde este número para acompanhamento
+                      Guarde este nÃºmero para acompanhamento
                     </div>
                   </div>
 
                   <div className="text-left bg-gray-50 rounded-lg p-6 mb-8">
-                    <h3 className="font-medium text-gray-900 mb-3">📧 Próximos Passos</h3>
+                    <h3 className="font-medium text-gray-900 mb-3">ðŸ“§ PrÃ³ximos Passos</h3>
                     <ul className="text-sm text-gray-600 space-y-2">
                       <li className="flex items-start">
                         <span className="mr-2">1.</span>
-                        <span>Nossa equipe irá analisar sua solicitação</span>
+                        <span>Nossa equipe irÃ¡ analisar sua solicitaÃ§Ã£o</span>
                       </li>
                       <li className="flex items-start">
                         <span className="mr-2">2.</span>
-                        <span>Você receberá uma confirmação por email em até <strong>48 horas úteis</strong></span>
+                        <span>VocÃª receberÃ¡ uma confirmaÃ§Ã£o por email em atÃ© <strong>48 horas Ãºteis</strong></span>
                       </li>
                       <li className="flex items-start">
                         <span className="mr-2">3.</span>
                         <span>
                           {solicitacao.tipo === 'exportacao' 
-                            ? 'Seus dados serão enviados por email em formato estruturado'
-                            : 'Você receberá um comprovante de exclusão quando o processo for concluído'
+                            ? 'Seus dados serÃ£o enviados por email em formato estruturado'
+                            : 'VocÃª receberÃ¡ um comprovante de exclusÃ£o quando o processo for concluÃ­do'
                           }
                         </span>
                       </li>
@@ -423,7 +423,7 @@ export default function MeusDados() {
                     onClick={() => window.location.href = '/'}
                     className="bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
                   >
-                    Voltar ao Início
+                    Voltar ao InÃ­cio
                   </button>
                 </div>
               </>
@@ -433,16 +433,16 @@ export default function MeusDados() {
           {/* Footer */}
           <div className="mt-8 text-center text-sm text-gray-600">
             <p>
-              Para dúvidas sobre o tratamento de dados pessoais:
+              Para dÃºvidas sobre o tratamento de dados pessoais:
             </p>
             <a href="mailto:lgpd@fgservices.com.br" className="text-indigo-600 hover:text-indigo-700 font-medium">
               lgpd@fgservices.com.br
             </a>
             <p className="mt-4">
               <Link href="/politica-privacidade" className="text-indigo-600 hover:text-indigo-700">
-                Política de Privacidade
+                PolÃ­tica de Privacidade
               </Link>
-              {' • '}
+              {' â€¢ '}
               <Link href="/" className="text-indigo-600 hover:text-indigo-700">
                 Voltar ao Site
               </Link>

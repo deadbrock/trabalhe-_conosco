@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckCircle, Circle, Clock, XCircle } from 'lucide-react';
 
 type TimelineStep = {
@@ -13,7 +13,7 @@ interface CandidateTimelineProps {
 }
 
 export default function CandidateTimeline({ currentStatus }: CandidateTimelineProps) {
-  // Mapeamento de status para índice na timeline
+  // Mapeamento de status para Ã­ndice na timeline
   const statusOrder: Record<string, number> = {
     'novo': 0,
     'em_analise': 1,
@@ -27,14 +27,14 @@ export default function CandidateTimeline({ currentStatus }: CandidateTimelinePr
 
   const steps: TimelineStep[] = [
     {
-      label: 'Inscrição',
+      label: 'InscriÃ§Ã£o',
       status: currentStep >= 0 ? 'completed' : 'pending',
       description: 'Candidatura recebida',
     },
     {
-      label: 'Em Análise',
+      label: 'Em AnÃ¡lise',
       status: isFailed ? 'failed' : currentStep >= 1 ? 'completed' : currentStep === 0 ? 'current' : 'pending',
-      description: 'Triagem de currículo',
+      description: 'Triagem de currÃ­culo',
     },
     {
       label: 'Entrevista',
@@ -65,7 +65,7 @@ export default function CandidateTimeline({ currentStatus }: CandidateTimelinePr
         <div className="relative flex justify-between">
           {steps.map((step, index) => (
             <div key={index} className="flex flex-col items-center" style={{ width: `${100 / steps.length}%` }}>
-              {/* Ícone do step */}
+              {/* Ãcone do step */}
               <div className="relative z-10 mb-3">
                 {step.status === 'completed' && (
                   <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-bounce-once">
@@ -89,7 +89,7 @@ export default function CandidateTimeline({ currentStatus }: CandidateTimelinePr
                 )}
               </div>
 
-              {/* Label e descrição */}
+              {/* Label e descriÃ§Ã£o */}
               <div className="text-center">
                 <p
                   className={`text-sm font-semibold mb-1 ${
@@ -111,7 +111,7 @@ export default function CandidateTimeline({ currentStatus }: CandidateTimelinePr
         </div>
       </div>
 
-      {/* Adicionar animação de bounce-once */}
+      {/* Adicionar animaÃ§Ã£o de bounce-once */}
       <style jsx>{`
         @keyframes bounce-once {
           0%, 100% {

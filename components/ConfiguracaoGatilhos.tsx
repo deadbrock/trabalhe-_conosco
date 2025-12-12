@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, Save, Power, Clock, Calendar } from 'lucide-react';
 import { apiGet, apiPut, apiPatch } from '../lib/api';
 
@@ -27,34 +27,34 @@ interface Gatilho {
 
 const EVENTOS_LABELS: Record<string, { icon: string; nome: string; descricao: string }> = {
   inscricao_recebida: {
-    icon: '✅',
-    nome: 'Inscrição Recebida',
+    icon: 'âœ…',
+    nome: 'InscriÃ§Ã£o Recebida',
     descricao: 'Quando um candidato se inscreve em uma vaga'
   },
   status_em_analise: {
-    icon: '📋',
-    nome: 'Em Análise',
-    descricao: 'Quando o status muda para "Em Análise"'
+    icon: 'ðŸ“‹',
+    nome: 'Em AnÃ¡lise',
+    descricao: 'Quando o status muda para "Em AnÃ¡lise"'
   },
   status_pre_selecionado: {
-    icon: '⭐',
-    nome: 'Pré-Selecionado',
-    descricao: 'Quando o candidato é pré-selecionado'
+    icon: 'â­',
+    nome: 'PrÃ©-Selecionado',
+    descricao: 'Quando o candidato Ã© prÃ©-selecionado'
   },
   convite_entrevista: {
-    icon: '🎉',
+    icon: 'ðŸŽ‰',
     nome: 'Convite para Entrevista',
-    descricao: 'Quando uma entrevista é agendada'
+    descricao: 'Quando uma entrevista Ã© agendada'
   },
   status_aprovado: {
-    icon: '🎊',
+    icon: 'ðŸŽŠ',
     nome: 'Candidato Aprovado',
-    descricao: 'Quando o candidato é aprovado'
+    descricao: 'Quando o candidato Ã© aprovado'
   },
   status_reprovado: {
-    icon: '💼',
+    icon: 'ðŸ’¼',
     nome: 'Candidato Reprovado',
-    descricao: 'Quando o candidato é reprovado'
+    descricao: 'Quando o candidato Ã© reprovado'
   }
 };
 
@@ -79,7 +79,7 @@ export default function ConfiguracaoGatilhos() {
       setTemplatesWhatsApp(templatesData.templates.filter(t => t.tipo === 'whatsapp'));
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
-      alert('Erro ao carregar configurações');
+      alert('Erro ao carregar configuraÃ§Ãµes');
     } finally {
       setLoading(false);
     }
@@ -123,11 +123,11 @@ export default function ConfiguracaoGatilhos() {
         horario_inicio: gatilho.horario_inicio,
         horario_fim: gatilho.horario_fim
       });
-      alert('Configurações salvas com sucesso!');
+      alert('ConfiguraÃ§Ãµes salvas com sucesso!');
       carregarDados();
     } catch (error: unknown) {
       console.error('Erro ao salvar:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Erro ao salvar configurações';
+      const errorMessage = error instanceof Error ? error.message : 'Erro ao salvar configuraÃ§Ãµes';
       alert(errorMessage);
     } finally {
       setSalvando(null);
@@ -152,21 +152,21 @@ export default function ConfiguracaoGatilhos() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">⚙️ Configuração de Gatilhos Automáticos</h2>
+        <h2 className="text-2xl font-bold text-gray-900">âš™ï¸ ConfiguraÃ§Ã£o de Gatilhos AutomÃ¡ticos</h2>
         <p className="text-gray-600 mt-1">
-          Configure quando e como enviar comunicações automáticas aos candidatos
+          Configure quando e como enviar comunicaÃ§Ãµes automÃ¡ticas aos candidatos
         </p>
       </div>
 
       {/* Info Box */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <div className="text-2xl">💡</div>
+          <div className="text-2xl">ðŸ’¡</div>
           <div className="flex-1">
             <h3 className="font-semibold text-blue-900 mb-1">Como funcionam os gatilhos?</h3>
             <p className="text-sm text-blue-800">
-              Gatilhos disparam automaticamente quando certos eventos acontecem no sistema (ex: nova inscrição, 
-              mudança de status). Você pode configurar quais canais usar (Email e/ou WhatsApp), qual template 
+              Gatilhos disparam automaticamente quando certos eventos acontecem no sistema (ex: nova inscriÃ§Ã£o, 
+              mudanÃ§a de status). VocÃª pode configurar quais canais usar (Email e/ou WhatsApp), qual template 
               enviar, e quando enviar (imediatamente ou com delay).
             </p>
           </div>
@@ -177,7 +177,7 @@ export default function ConfiguracaoGatilhos() {
       <div className="space-y-4">
         {gatilhos.map((gatilho) => {
           const eventoInfo = EVENTOS_LABELS[gatilho.evento] || { 
-            icon: '⚙️', 
+            icon: 'âš™ï¸', 
             nome: gatilho.evento,
             descricao: gatilho.descricao 
           };
@@ -212,7 +212,7 @@ export default function ConfiguracaoGatilhos() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <Mail className="w-5 h-5 text-blue-600" />
-                        <span className="font-semibold text-gray-900">📧 Email</span>
+                        <span className="font-semibold text-gray-900">ðŸ“§ Email</span>
                       </div>
                       <button
                         onClick={() => handleToggleEmail(gatilho.evento)}
@@ -252,7 +252,7 @@ export default function ConfiguracaoGatilhos() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <MessageSquare className="w-5 h-5 text-green-600" />
-                        <span className="font-semibold text-gray-900">💬 WhatsApp</span>
+                        <span className="font-semibold text-gray-900">ðŸ’¬ WhatsApp</span>
                       </div>
                       <button
                         onClick={() => handleToggleWhatsApp(gatilho.evento)}
@@ -286,10 +286,10 @@ export default function ConfiguracaoGatilhos() {
                   </div>
                 </div>
 
-                {/* Configurações Avançadas */}
+                {/* ConfiguraÃ§Ãµes AvanÃ§adas */}
                 <details className="mt-6">
                   <summary className="cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-2">
-                    <span>⚙️ Configurações Avançadas</span>
+                    <span>âš™ï¸ ConfiguraÃ§Ãµes AvanÃ§adas</span>
                   </summary>
                   
                   <div className="mt-4 grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
@@ -311,7 +311,7 @@ export default function ConfiguracaoGatilhos() {
                       </p>
                     </div>
 
-                    {/* Horário Comercial */}
+                    {/* HorÃ¡rio Comercial */}
                     <div className="space-y-3">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -321,14 +321,14 @@ export default function ConfiguracaoGatilhos() {
                           className="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary"
                         />
                         <span className="text-sm font-medium text-gray-700">
-                          Apenas em horário comercial
+                          Apenas em horÃ¡rio comercial
                         </span>
                       </label>
 
                       {gatilho.horario_comercial && (
                         <div className="grid grid-cols-2 gap-2">
                           <div>
-                            <label className="block text-xs text-gray-600 mb-1">Início</label>
+                            <label className="block text-xs text-gray-600 mb-1">InÃ­cio</label>
                             <input
                               type="time"
                               value={gatilho.horario_inicio}
@@ -349,7 +349,7 @@ export default function ConfiguracaoGatilhos() {
                       )}
                     </div>
 
-                    {/* Dias Úteis */}
+                    {/* Dias Ãšteis */}
                     <div className="md:col-span-2">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -360,7 +360,7 @@ export default function ConfiguracaoGatilhos() {
                         />
                         <Calendar className="w-4 h-4 text-gray-600" />
                         <span className="text-sm font-medium text-gray-700">
-                          Enviar apenas em dias úteis (não enviar sábados e domingos)
+                          Enviar apenas em dias Ãºteis (nÃ£o enviar sÃ¡bados e domingos)
                         </span>
                       </label>
                     </div>
@@ -374,24 +374,24 @@ export default function ConfiguracaoGatilhos() {
 
       {/* Resumo */}
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 border border-purple-200">
-        <h3 className="font-semibold text-gray-900 mb-4">📊 Resumo das Configurações</h3>
+        <h3 className="font-semibold text-gray-900 mb-4">ðŸ“Š Resumo das ConfiguraÃ§Ãµes</h3>
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="bg-white rounded-lg p-3">
-            <div className="text-2xl mb-2">📧</div>
+            <div className="text-2xl mb-2">ðŸ“§</div>
             <div className="font-semibold text-gray-900">
               {gatilhos.filter(g => g.email_ativo).length} de {gatilhos.length}
             </div>
             <div className="text-gray-600">Gatilhos com email ativo</div>
           </div>
           <div className="bg-white rounded-lg p-3">
-            <div className="text-2xl mb-2">💬</div>
+            <div className="text-2xl mb-2">ðŸ’¬</div>
             <div className="font-semibold text-gray-900">
               {gatilhos.filter(g => g.whatsapp_ativo).length} de {gatilhos.length}
             </div>
             <div className="text-gray-600">Gatilhos com WhatsApp ativo</div>
           </div>
           <div className="bg-white rounded-lg p-3">
-            <div className="text-2xl mb-2">⚡</div>
+            <div className="text-2xl mb-2">âš¡</div>
             <div className="font-semibold text-gray-900">
               {gatilhos.filter(g => g.email_ativo || g.whatsapp_ativo).length} de {gatilhos.length}
             </div>

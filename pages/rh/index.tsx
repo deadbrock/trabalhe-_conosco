@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
@@ -33,12 +33,12 @@ export default function RHDashboard() {
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
     
-    // Verificar se é o primeiro acesso dos usuários especiais
+    // Verificar se Ã© o primeiro acesso dos usuÃ¡rios especiais
     if (typeof window !== "undefined") {
       const welcomeCount = parseInt(localStorage.getItem("rh_welcome_count") || "0");
       const storedEmail = localStorage.getItem("rh_user_email");
       
-      // Emails dos usuários que devem ver a animação
+      // Emails dos usuÃ¡rios que devem ver a animaÃ§Ã£o
       const specialUsers = [
         "rh@fgservices.com.br",
         "rh-2@fgservices.com.br",
@@ -46,19 +46,19 @@ export default function RHDashboard() {
         "gestaorh@fgservices.com.br"
       ];
       
-      // Pegar nome do usuário do token JWT
+      // Pegar nome do usuÃ¡rio do token JWT
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           const email = payload.email || storedEmail || "";
-          const nome = payload.nome || "Usuário";
+          const nome = payload.nome || "UsuÃ¡rio";
           
           setUserEmail(email);
           setUserName(nome);
           localStorage.setItem("rh_user_email", email);
           
-          // Animação de boas-vindas desabilitada
-          // Se é usuário especial e viu menos de 5 vezes
+          // AnimaÃ§Ã£o de boas-vindas desabilitada
+          // Se Ã© usuÃ¡rio especial e viu menos de 5 vezes
           // if (welcomeCount < 5 && specialUsers.includes(email)) {
           //   setShowWelcome(true);
           //   // Incrementar contador
@@ -72,7 +72,7 @@ export default function RHDashboard() {
     
     apiGet<Metrics>("/metrics", token).then(setMetrics).catch(() => setMetrics({ vagas_abertas: 0, total_candidatos: 0, candidatos_hoje: 0 }));
     
-    // Carregar últimos 5 candidatos
+    // Carregar Ãºltimos 5 candidatos
     apiGet<Candidato[]>("/candidatos", token).then((data) => {
       setRecentCandidatos(data.slice(0, 5));
     }).catch(() => setRecentCandidatos([]));
@@ -119,7 +119,7 @@ export default function RHDashboard() {
 
   return (
     <RHLayout>
-      {/* Animação de Boas-Vindas */}
+      {/* AnimaÃ§Ã£o de Boas-Vindas */}
       {showWelcome && (
         <WelcomeAnimation 
           userName={userName}
@@ -135,7 +135,7 @@ export default function RHDashboard() {
           <p className="text-gray-600">Bem-vindo ao painel de gerenciamento de RH</p>
         </div>
 
-        {/* Métricas - Cards com bordas coloridas */}
+        {/* MÃ©tricas - Cards com bordas coloridas */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, i) => (
             <motion.div 
@@ -160,9 +160,9 @@ export default function RHDashboard() {
           ))}
         </div>
 
-        {/* Ações Rápidas */}
+        {/* AÃ§Ãµes RÃ¡pidas */}
         <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100">
-          <h2 className="text-2xl font-semibold text-dark mb-6 tracking-wide">Ações Rápidas</h2>
+          <h2 className="text-2xl font-semibold text-dark mb-6 tracking-wide">AÃ§Ãµes RÃ¡pidas</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {quickActions.map((action, i) => (
               <Link
@@ -179,10 +179,10 @@ export default function RHDashboard() {
           </div>
         </div>
 
-        {/* Últimos Candidatos */}
+        {/* Ãšltimos Candidatos */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
           <div className="p-8 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-            <h2 className="text-2xl font-semibold text-dark tracking-wide">Últimas Candidaturas</h2>
+            <h2 className="text-2xl font-semibold text-dark tracking-wide">Ãšltimas Candidaturas</h2>
             <Link 
               href="/rh/candidatos" 
               className="text-sm text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-slate-100"
@@ -220,7 +220,7 @@ export default function RHDashboard() {
                       <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-2">
                           <Briefcase className="w-4 h-4 text-secondary" />
-                          <span className="font-medium">{candidato.vaga_titulo || "Vaga não especificada"}</span>
+                          <span className="font-medium">{candidato.vaga_titulo || "Vaga nÃ£o especificada"}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4 text-primary" />

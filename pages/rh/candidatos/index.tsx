@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+﻿import React, { useEffect, useState, useMemo } from "react";
 import { apiGet, apiPut, apiPost, getApiBase } from "@/lib/api";
 import api from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
@@ -62,7 +62,7 @@ export default function RHCandidatos() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
   const userId = typeof window !== "undefined" ? parseInt(localStorage.getItem("rh_user_id") || "1") : 1;
-  const userName = typeof window !== "undefined" ? localStorage.getItem("rh_user_name") || "Usuário RH" : "Usuário RH";
+  const userName = typeof window !== "undefined" ? localStorage.getItem("rh_user_name") || "UsuÃ¡rio RH" : "UsuÃ¡rio RH";
 
   const load = async () => {
     setLoading(true);
@@ -88,7 +88,7 @@ export default function RHCandidatos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Agrupar candidatos por vaga e calcular estatísticas
+  // Agrupar candidatos por vaga e calcular estatÃ­sticas
   const vagasComCandidatos = useMemo<VagaComCandidatos[]>(() => {
     return vagas.map(vaga => {
       const candidatosDaVaga = candidatos.filter(c => c.vaga_id === vaga.id);
@@ -119,7 +119,7 @@ export default function RHCandidatos() {
     return new Date(date).toLocaleDateString("pt-BR");
   };
 
-  // Estatísticas gerais
+  // EstatÃ­sticas gerais
   const totalCandidatos = candidatos.length;
   const totalNovos = candidatos.filter(c => c.status === "novo").length;
   const totalEmAnalise = candidatos.filter(c => c.status === "em_analise").length;
@@ -159,14 +159,14 @@ export default function RHCandidatos() {
       await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
       await load();
       setSelectedCandidato(null);
-      alert(`✅ Status alterado com sucesso!`);
+      alert(`âœ… Status alterado com sucesso!`);
     } catch {
-      alert("❌ Erro ao alterar status");
+      alert("âŒ Erro ao alterar status");
     }
   };
 
   const handleEnviarParaFGS = async (candidatoId: number) => {
-    if (!confirm('Deseja enviar este candidato para o sistema FGS (Admissão)?\n\nOs dados e documentos serão transferidos para o sistema de admissão.')) {
+    if (!confirm('Deseja enviar este candidato para o sistema FGS (AdmissÃ£o)?\n\nOs dados e documentos serÃ£o transferidos para o sistema de admissÃ£o.')) {
       return;
     }
 
@@ -179,16 +179,16 @@ export default function RHCandidatos() {
       );
       
       if (response.success) {
-        alert(`✅ ${response.message}`);
-        // Recarregar dados para atualizar status se necessário
+        alert(`âœ… ${response.message}`);
+        // Recarregar dados para atualizar status se necessÃ¡rio
         await load();
       } else {
-        alert(`❌ ${response.message || 'Erro ao enviar para FGS'}`);
+        alert(`âŒ ${response.message || 'Erro ao enviar para FGS'}`);
       }
     } catch (error: unknown) {
       console.error('Erro ao enviar para FGS:', error);
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao enviar para FGS';
-      alert(`❌ ${errorMessage}`);
+      alert(`âŒ ${errorMessage}`);
     } finally {
       setEnviandoFGS(false);
     }
@@ -199,7 +199,7 @@ export default function RHCandidatos() {
     return (
       <RHLayout>
         <div className="space-y-6">
-          {/* Header com botão Voltar */}
+          {/* Header com botÃ£o Voltar */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => setVagaSelecionada(null)}
@@ -265,7 +265,7 @@ export default function RHCandidatos() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 font-medium flex items-center gap-2">
-                    Em Análise <StatusEmoji status="em_analise" size="sm" />
+                    Em AnÃ¡lise <StatusEmoji status="em_analise" size="sm" />
                   </p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{vagaSelecionada.em_analise}</p>
                 </div>
@@ -299,7 +299,7 @@ export default function RHCandidatos() {
                   <input
                     value={searchCandidato}
                     onChange={(e) => setSearchCandidato(e.target.value)}
-                    placeholder="Buscar candidato por nome, email, telefone ou localização..."
+                    placeholder="Buscar candidato por nome, email, telefone ou localizaÃ§Ã£o..."
                     className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
@@ -412,13 +412,13 @@ export default function RHCandidatos() {
                             target="_blank"
                             rel="noreferrer"
                             className="p-2 rounded-lg hover:bg-purple-50 text-purple-600 transition-all"
-                            title="Baixar currículo"
+                            title="Baixar currÃ­culo"
                           >
                             <Download className="w-5 h-5" />
                           </a>
                         )}
 
-                        {/* Ações de Status */}
+                        {/* AÃ§Ãµes de Status */}
                         <div className="flex items-center gap-1 ml-2 border-l pl-2">
                           {candidato.status !== "aprovado" && (
                             <button
@@ -451,7 +451,7 @@ export default function RHCandidatos() {
                             <button
                               onClick={() => handleStatusChange(candidato.id, "em_analise")}
                               className="p-2 rounded-lg hover:bg-yellow-50 text-yellow-600 transition-all"
-                              title="Colocar em análise"
+                              title="Colocar em anÃ¡lise"
                             >
                               <Clock className="w-5 h-5" />
                             </button>
@@ -495,7 +495,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    📋 Detalhes
+                    ðŸ“‹ Detalhes
                   </button>
                   <button
                     onClick={() => setAbaAtiva('comentarios')}
@@ -505,7 +505,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    💬 Comentários
+                    ðŸ’¬ ComentÃ¡rios
                   </button>
                   <button
                     onClick={() => setAbaAtiva('tags')}
@@ -515,7 +515,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    🏷️ Tags
+                    ðŸ·ï¸ Tags
                   </button>
                   <button
                     onClick={() => setAbaAtiva('agendamentos')}
@@ -525,7 +525,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    📅 Agendamentos
+                    ðŸ“… Agendamentos
                   </button>
                   <button
                     onClick={() => setAbaAtiva('pontuacao')}
@@ -535,7 +535,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ⭐ Pontuação
+                    â­ PontuaÃ§Ã£o
                   </button>
                   <button
                     onClick={() => setAbaAtiva('notas')}
@@ -545,7 +545,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    📝 Notas
+                    ðŸ“ Notas
                   </button>
                   <button
                     onClick={() => setAbaAtiva('avaliacoes')}
@@ -555,7 +555,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ⭐ Avaliações
+                    â­ AvaliaÃ§Ãµes
                   </button>
                   <button
                     onClick={() => setAbaAtiva('atividades')}
@@ -565,7 +565,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    📜 Atividades
+                    ðŸ“œ Atividades
                   </button>
                 </div>
 
@@ -613,12 +613,12 @@ export default function RHCandidatos() {
                         </div>
                       )}
 
-                      {/* Endereço */}
+                      {/* EndereÃ§o */}
                       {(selectedCandidato.cidade || selectedCandidato.estado || selectedCandidato.bairro) && (
                         <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
                           <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
                             <MapPin className="w-4 h-4 text-primary" />
-                            Endereço
+                            EndereÃ§o
                           </label>
                           <div className="grid grid-cols-3 gap-3 text-sm">
                             {selectedCandidato.estado && (
@@ -655,7 +655,7 @@ export default function RHCandidatos() {
                             onClick={() => handleStatusChange(selectedCandidato.id, "em_analise")}
                             className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all"
                           >
-                            Em Análise
+                            Em AnÃ¡lise
                           </button>
                           <button
                             onClick={() => handleStatusChange(selectedCandidato.id, "entrevista")}
@@ -667,7 +667,7 @@ export default function RHCandidatos() {
                             onClick={() => handleStatusChange(selectedCandidato.id, "aprovado")}
                             className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-semibold hover:bg-green-200 transition-all"
                           >
-                            ✓ Aprovar
+                            âœ“ Aprovar
                           </button>
                           <button
                             onClick={() => handleStatusChange(selectedCandidato.id, "banco_talentos")}
@@ -680,21 +680,21 @@ export default function RHCandidatos() {
                             onClick={() => handleStatusChange(selectedCandidato.id, "reprovado")}
                             className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
                           >
-                            ✗ Reprovar
+                            âœ— Reprovar
                           </button>
                         </div>
                       </div>
 
-                      {/* Botão Enviar para FGS - Apenas para candidatos aprovados */}
+                      {/* BotÃ£o Enviar para FGS - Apenas para candidatos aprovados */}
                       {selectedCandidato.status === "aprovado" && (
                         <>
-                          {/* Botão: Solicitar Documentos */}
+                          {/* BotÃ£o: Solicitar Documentos */}
                           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border-2 border-green-200">
                             <label className="text-sm font-semibold text-green-900 block mb-3">
-                              📄 Solicitar Documentos para Admissão
+                              ðŸ“„ Solicitar Documentos para AdmissÃ£o
                             </label>
                             <p className="text-xs text-green-700 mb-3">
-                              Gere um link único e envie por email/WhatsApp para o candidato enviar os documentos necessários.
+                              Gere um link Ãºnico e envie por email/WhatsApp para o candidato enviar os documentos necessÃ¡rios.
                             </p>
                             <button
                               onClick={async () => {
@@ -704,12 +704,12 @@ export default function RHCandidatos() {
                                   });
                                   
                                   if (response.data.success) {
-                                    alert(`✅ Credenciais geradas e enviadas!\n\nLink: ${response.data.link}\nCPF: ${response.data.cpf}\nSenha: ${response.data.senha}\n\nEmail: ${response.data.notificacao?.emailEnviado ? '✅' : '❌'}\nWhatsApp: ${response.data.notificacao?.whatsappEnviado ? '✅' : '❌'}`);
+                                    alert(`âœ… Credenciais geradas e enviadas!\n\nLink: ${response.data.link}\nCPF: ${response.data.cpf}\nSenha: ${response.data.senha}\n\nEmail: ${response.data.notificacao?.emailEnviado ? 'âœ…' : 'âŒ'}\nWhatsApp: ${response.data.notificacao?.whatsappEnviado ? 'âœ…' : 'âŒ'}`);
                                   }
                                 } catch (error: unknown) {
                                   const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
                                   console.error('Erro ao gerar link:', error);
-                                  alert(`❌ Erro: ${errorMessage}`);
+                                  alert(`âŒ Erro: ${errorMessage}`);
                                 }
                               }}
                               className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
@@ -719,13 +719,13 @@ export default function RHCandidatos() {
                             </button>
                           </div>
 
-                          {/* Botão: Enviar para FGS */}
+                          {/* BotÃ£o: Enviar para FGS */}
                           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border-2 border-blue-200">
                             <label className="text-sm font-semibold text-blue-900 block mb-3">
-                              📤 Enviar para Admissão (FGS)
+                              ðŸ“¤ Enviar para AdmissÃ£o (FGS)
                             </label>
                             <p className="text-xs text-blue-700 mb-3">
-                              Envie este candidato aprovado para o sistema FGS. Todos os dados e documentos serão transferidos.
+                              Envie este candidato aprovado para o sistema FGS. Todos os dados e documentos serÃ£o transferidos.
                             </p>
                             <button
                               onClick={() => handleEnviarParaFGS(selectedCandidato.id)}
@@ -740,7 +740,7 @@ export default function RHCandidatos() {
                               ) : (
                                 <>
                                   <Send className="w-5 h-5" />
-                                  Enviar para Admissão
+                                  Enviar para AdmissÃ£o
                                 </>
                               )}
                             </button>
@@ -750,7 +750,7 @@ export default function RHCandidatos() {
                     </>
                   )}
 
-                  {/* Aba Comentários */}
+                  {/* Aba ComentÃ¡rios */}
                   {abaAtiva === 'comentarios' && (
                     <ComentariosCandidato
                       candidatoId={selectedCandidato.id}
@@ -773,7 +773,7 @@ export default function RHCandidatos() {
                     />
                   )}
 
-                  {/* Aba Pontuação */}
+                  {/* Aba PontuaÃ§Ã£o */}
                   {abaAtiva === 'pontuacao' && (
                     <PontuacaoCandidato
                       candidatoId={selectedCandidato.id}
@@ -789,7 +789,7 @@ export default function RHCandidatos() {
                     />
                   )}
 
-                  {/* Aba Avaliações */}
+                  {/* Aba AvaliaÃ§Ãµes */}
                   {abaAtiva === 'avaliacoes' && (
                     <AvaliacaoCandidato
                       candidatoId={selectedCandidato.id}
@@ -838,7 +838,7 @@ export default function RHCandidatos() {
     );
   }
 
-  // Visualização principal: Grid de vagas
+  // VisualizaÃ§Ã£o principal: Grid de vagas
   return (
     <RHLayout>
       <div className="space-y-6">
@@ -877,7 +877,7 @@ export default function RHCandidatos() {
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover-lift smooth-hover">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Em Análise</p>
+                <p className="text-sm text-gray-600 font-medium">Em AnÃ¡lise</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">{totalEmAnalise}</p>
               </div>
               <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
@@ -908,7 +908,7 @@ export default function RHCandidatos() {
                 <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar vagas por título, endereço ou tipo de contrato..."
+                  placeholder="Buscar vagas por tÃ­tulo, endereÃ§o ou tipo de contrato..."
                   className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
                 />
               </div>
@@ -933,10 +933,10 @@ export default function RHCandidatos() {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
             <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-600 text-lg font-medium">
-              {vagas.length === 0 ? "Nenhuma vaga ativa encontrada" : "Nenhuma vaga corresponde à busca"}
+              {vagas.length === 0 ? "Nenhuma vaga ativa encontrada" : "Nenhuma vaga corresponde Ã  busca"}
             </p>
             <p className="text-gray-400 text-sm mt-2">
-              {vagas.length === 0 ? "Publique vagas para começar a receber candidaturas" : "Tente ajustar sua busca"}
+              {vagas.length === 0 ? "Publique vagas para comeÃ§ar a receber candidaturas" : "Tente ajustar sua busca"}
             </p>
           </div>
         ) : (
@@ -964,12 +964,12 @@ export default function RHCandidatos() {
                     <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </div>
 
-                  {/* Título da Vaga */}
+                  {/* TÃ­tulo da Vaga */}
                   <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
                     {vaga.titulo}
                   </h3>
 
-                  {/* Informações */}
+                  {/* InformaÃ§Ãµes */}
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Briefcase className="w-4 h-4 text-primary" />
@@ -985,7 +985,7 @@ export default function RHCandidatos() {
                     </div>
                   </div>
 
-                  {/* Estatísticas de Candidatos */}
+                  {/* EstatÃ­sticas de Candidatos */}
                   <div className="border-t border-gray-100 pt-4 grid grid-cols-3 gap-2">
                     <div className="text-center">
                       <div className="w-8 h-8 bg-green-100 rounded-lg mx-auto mb-1 flex items-center justify-center">
@@ -999,7 +999,7 @@ export default function RHCandidatos() {
                         <Clock className="w-4 h-4 text-yellow-600" />
                       </div>
                       <p className="text-lg font-bold text-gray-900">{vaga.em_analise}</p>
-                      <p className="text-xs text-gray-500">Em Análise</p>
+                      <p className="text-xs text-gray-500">Em AnÃ¡lise</p>
                     </div>
                     <div className="text-center">
                       <div className="w-8 h-8 bg-blue-100 rounded-lg mx-auto mb-1 flex items-center justify-center">

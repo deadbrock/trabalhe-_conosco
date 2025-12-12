@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 
 // Componente de borboleta flutuante
@@ -18,14 +18,14 @@ function Butterfly({ delay = 0, startX = 0, startY = 0 }: { delay?: number; star
         opacity: 0.6,
       }}
     >
-      🦋
+      ðŸ¦‹
     </div>
   );
 }
 
 // Componente de flor flutuante
 function Flower({ delay = 0, startX = 0 }: { delay?: number; startX?: number }) {
-  const flowers = ['🌸', '🌺', '🌼', '🌻', '🌷'];
+  const flowers = ['ðŸŒ¸', 'ðŸŒº', 'ðŸŒ¼', 'ðŸŒ»', 'ðŸŒ·'];
   const flower = flowers[Math.floor(Math.random() * flowers.length)];
 
   return (
@@ -62,12 +62,12 @@ function Sparkle({ delay = 0, x = 0, y = 0 }: { delay?: number; x?: number; y?: 
         zIndex: 2,
       }}
     >
-      ✨
+      âœ¨
     </div>
   );
 }
 
-// Container principal das animações delicadas
+// Container principal das animaÃ§Ãµes delicadas
 export default function DelicateAnimations() {
   const { isFeminine } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -76,7 +76,7 @@ export default function DelicateAnimations() {
     setMounted(true);
   }, []);
 
-  // Só renderiza no tema feminino e depois do mount
+  // SÃ³ renderiza no tema feminino e depois do mount
   if (!mounted || !isFeminine) return null;
 
   return (
@@ -92,7 +92,7 @@ export default function DelicateAnimations() {
       <Flower delay={6} startX={40} />
       <Flower delay={9} startX={75} />
 
-      {/* Sparkles - 6 piscando em diferentes posições */}
+      {/* Sparkles - 6 piscando em diferentes posiÃ§Ãµes */}
       <Sparkle delay={0} x={15} y={15} />
       <Sparkle delay={0.5} x={85} y={25} />
       <Sparkle delay={1} x={30} y={60} />
@@ -100,7 +100,7 @@ export default function DelicateAnimations() {
       <Sparkle delay={2} x={50} y={40} />
       <Sparkle delay={2.5} x={90} y={60} />
 
-      {/* Estilos CSS inline para animações */}
+      {/* Estilos CSS inline para animaÃ§Ãµes */}
       <style jsx>{`
         @keyframes butterflyFly {
           0% {
@@ -155,7 +155,7 @@ export default function DelicateAnimations() {
   );
 }
 
-// Componente para adicionar sparkles em hover em elementos específicos
+// Componente para adicionar sparkles em hover em elementos especÃ­ficos
 export function SparkleOnHover({ children }: { children: React.ReactNode }) {
   const { isFeminine } = useTheme();
   const [showSparkles, setShowSparkles] = useState(false);
@@ -171,8 +171,8 @@ export function SparkleOnHover({ children }: { children: React.ReactNode }) {
       {children}
       {showSparkles && (
         <>
-          <span className="absolute -top-2 -right-2 text-yellow-400 animate-ping">✨</span>
-          <span className="absolute -bottom-2 -left-2 text-pink-400 animate-pulse">💖</span>
+          <span className="absolute -top-2 -right-2 text-yellow-400 animate-ping">âœ¨</span>
+          <span className="absolute -bottom-2 -left-2 text-pink-400 animate-pulse">ðŸ’–</span>
         </>
       )}
     </div>

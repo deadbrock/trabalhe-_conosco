@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 interface SkeletonProps {
   className?: string;
@@ -106,7 +106,7 @@ export function CandidatoSkeleton() {
   );
 }
 
-// Skeleton para Lista de Comentários
+// Skeleton para Lista de ComentÃ¡rios
 export function ComentariosSkeleton() {
   return (
     <div className="space-y-3">

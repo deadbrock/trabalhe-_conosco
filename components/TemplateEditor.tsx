@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Save, X, Eye, Sparkles } from 'lucide-react';
 import { apiPost, apiPut, apiGet } from '../lib/api';
 
@@ -19,10 +19,10 @@ interface TemplateEditorProps {
 }
 
 const VARIAVEIS_DISPONIVEIS = [
-  { key: 'nome', label: 'Nome do candidato', exemplo: 'João Silva' },
+  { key: 'nome', label: 'Nome do candidato', exemplo: 'JoÃ£o Silva' },
   { key: 'email', label: 'Email do candidato', exemplo: 'joao@example.com' },
   { key: 'telefone', label: 'Telefone do candidato', exemplo: '(11) 98765-4321' },
-  { key: 'vaga', label: 'Título da vaga', exemplo: 'Desenvolvedor Full Stack' },
+  { key: 'vaga', label: 'TÃ­tulo da vaga', exemplo: 'Desenvolvedor Full Stack' },
   { key: 'empresa', label: 'Nome da empresa', exemplo: 'FG Services' },
   { key: 'data', label: 'Data atual ou agendada', exemplo: '15/01/2024' },
   { key: 'hora', label: 'Hora do agendamento', exemplo: '14:00' },
@@ -118,19 +118,19 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
   };
 
   const handleSave = async () => {
-    // Validações
+    // ValidaÃ§Ãµes
     if (!template.nome.trim()) {
-      alert('Nome do template é obrigatório');
+      alert('Nome do template Ã© obrigatÃ³rio');
       return;
     }
 
     if (!template.conteudo.trim()) {
-      alert('Conteúdo do template é obrigatório');
+      alert('ConteÃºdo do template Ã© obrigatÃ³rio');
       return;
     }
 
     if (template.tipo === 'email' && !template.assunto?.trim()) {
-      alert('Assunto é obrigatório para templates de email');
+      alert('Assunto Ã© obrigatÃ³rio para templates de email');
       return;
     }
 
@@ -184,7 +184,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">
-            {templateId ? '✏️ Editar Template' : '➕ Novo Template'}
+            {templateId ? 'âœï¸ Editar Template' : 'âž• Novo Template'}
           </h2>
           <p className="text-gray-600 mt-1">
             {previewMode ? 'Visualizando preview com dados de exemplo' : 'Preencha os campos abaixo'}
@@ -200,7 +200,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
             }`}
           >
             <Eye className="w-5 h-5" />
-            {previewMode ? 'Modo Edição' : 'Preview'}
+            {previewMode ? 'Modo EdiÃ§Ã£o' : 'Preview'}
           </button>
           <button
             onClick={onCancel}
@@ -221,10 +221,10 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        {/* Formulário */}
+        {/* FormulÃ¡rio */}
         <div className="space-y-6">
           <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
-            <h3 className="font-semibold text-gray-900 text-lg">📝 Informações Básicas</h3>
+            <h3 className="font-semibold text-gray-900 text-lg">ðŸ“ InformaÃ§Ãµes BÃ¡sicas</h3>
 
             {/* Tipo */}
             <div>
@@ -241,7 +241,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <div className="text-3xl mb-2">📧</div>
+                  <div className="text-3xl mb-2">ðŸ“§</div>
                   <div className="font-medium">Email</div>
                 </button>
                 <button
@@ -253,7 +253,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <div className="text-3xl mb-2">💬</div>
+                  <div className="text-3xl mb-2">ðŸ’¬</div>
                   <div className="font-medium">WhatsApp</div>
                 </button>
               </div>
@@ -268,12 +268,12 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                 type="text"
                 value={template.nome}
                 onChange={(e) => setTemplate({ ...template, nome: e.target.value })}
-                placeholder="Ex: Inscrição Confirmada"
+                placeholder="Ex: InscriÃ§Ã£o Confirmada"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
 
-            {/* Assunto (só para email) */}
+            {/* Assunto (sÃ³ para email) */}
             {template.tipo === 'email' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -283,11 +283,11 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                   type="text"
                   value={template.assunto || ''}
                   onChange={(e) => handleAssuntoChange(e.target.value)}
-                  placeholder="Ex: Bem-vindo à {{empresa}}!"
+                  placeholder="Ex: Bem-vindo Ã  {{empresa}}!"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Use {`{{variavel}}`} para inserir dados dinâmicos
+                  Use {`{{variavel}}`} para inserir dados dinÃ¢micos
                 </p>
               </div>
             )}
@@ -302,17 +302,17 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                   className="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary"
                 />
                 <span className="text-sm font-medium text-gray-700">
-                  Template ativo (disponível para uso)
+                  Template ativo (disponÃ­vel para uso)
                 </span>
               </label>
             </div>
           </div>
 
-          {/* Variáveis Disponíveis */}
+          {/* VariÃ¡veis DisponÃ­veis */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              <h3 className="font-semibold text-gray-900">Variáveis Disponíveis</h3>
+              <h3 className="font-semibold text-gray-900">VariÃ¡veis DisponÃ­veis</h3>
             </div>
             <div className="grid gap-2">
               {VARIAVEIS_DISPONIVEIS.map((v) => (
@@ -332,7 +332,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-4">
-              💡 Clique para inserir no cursor ou digite manualmente
+              ðŸ’¡ Clique para inserir no cursor ou digite manualmente
             </p>
           </div>
         </div>
@@ -341,15 +341,15 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
         <div className="space-y-6">
           {!previewMode ? (
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="font-semibold text-gray-900 text-lg mb-4">✍️ Conteúdo</h3>
+              <h3 className="font-semibold text-gray-900 text-lg mb-4">âœï¸ ConteÃºdo</h3>
               <textarea
                 name="conteudo"
                 value={template.conteudo}
                 onChange={(e) => handleConteudoChange(e.target.value)}
                 placeholder={
                   template.tipo === 'email'
-                    ? 'Digite o conteúdo HTML do email...\n\nDica: Use tags HTML para formatação:\n<strong>Negrito</strong>\n<em>Itálico</em>\n<a href="...">Link</a>'
-                    : 'Digite a mensagem do WhatsApp...\n\nDica: Use formatação do WhatsApp:\n*Negrito*\n_Itálico_\n~Riscado~'
+                    ? 'Digite o conteÃºdo HTML do email...\n\nDica: Use tags HTML para formataÃ§Ã£o:\n<strong>Negrito</strong>\n<em>ItÃ¡lico</em>\n<a href="...">Link</a>'
+                    : 'Digite a mensagem do WhatsApp...\n\nDica: Use formataÃ§Ã£o do WhatsApp:\n*Negrito*\n_ItÃ¡lico_\n~Riscado~'
                 }
                 rows={20}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm resize-none"
@@ -360,16 +360,16 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
                 <span>{template.conteudo.length} caracteres</span>
                 {template.tipo === 'whatsapp' && template.conteudo.length > 4096 && (
                   <span className="text-red-600 font-medium">
-                    ⚠️ WhatsApp tem limite de 4096 caracteres
+                    âš ï¸ WhatsApp tem limite de 4096 caracteres
                   </span>
                 )}
               </div>
 
-              {/* Variáveis detectadas */}
+              {/* VariÃ¡veis detectadas */}
               {template.variaveis.length > 0 && (
                 <div className="mt-4 p-3 bg-purple-50 rounded-lg">
                   <div className="text-sm font-medium text-purple-900 mb-2">
-                    🎯 Variáveis detectadas:
+                    ðŸŽ¯ VariÃ¡veis detectadas:
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {template.variaveis.map((v) => (
@@ -386,7 +386,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
             </div>
           ) : (
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="font-semibold text-gray-900 text-lg mb-4">👁️ Preview</h3>
+              <h3 className="font-semibold text-gray-900 text-lg mb-4">ðŸ‘ï¸ Preview</h3>
               
               {template.tipo === 'email' && template.assunto && (
                 <div className="mb-4 p-3 bg-blue-50 rounded-lg">
@@ -410,7 +410,7 @@ export default function TemplateEditor({ templateId, onSave, onCancel }: Templat
               </div>
 
               <div className="mt-4 p-3 bg-yellow-50 rounded-lg text-sm text-yellow-800">
-                <strong>💡 Dica:</strong> As partes destacadas em amarelo serão substituídas por dados reais ao enviar.
+                <strong>ðŸ’¡ Dica:</strong> As partes destacadas em amarelo serÃ£o substituÃ­das por dados reais ao enviar.
               </div>
             </div>
           )}

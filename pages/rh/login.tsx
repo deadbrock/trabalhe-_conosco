@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from "react";
+﻿import React, { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -58,7 +58,7 @@ function InputWithIcon({
 function LogoHeader() {
   return (
     <div className="flex flex-col items-center text-center">
-      {/* Logo: personalize aqui (arquivo/cores). Dica: use uma versão branca/monocromática */}
+      {/* Logo: personalize aqui (arquivo/cores). Dica: use uma versÃ£o branca/monocromÃ¡tica */}
       <div className="mb-5 flex items-center justify-center">
         <Image
           src="/logo-aestron.png"
@@ -74,7 +74,7 @@ function LogoHeader() {
         AstronTalent
       </h1>
       <p className="mt-2 text-sm sm:text-base text-white/80">
-        Sistema de Gestão de Talentos – Acesso RH
+        Sistema de GestÃ£o de Talentos â€“ Acesso RH
       </p>
     </div>
   );
@@ -113,7 +113,7 @@ export default function LoginPage() {
       router.push("/rh");
     } catch (err) {
       console.error("Erro de login:", err);
-      setError("Credenciais inválidas. Verifique seu email e senha.");
+      setError("Credenciais invÃ¡lidas. Verifique seu email e senha.");
     } finally {
       setLoading(false);
     }
@@ -149,7 +149,7 @@ export default function LoginPage() {
               type="password"
               value={senha}
               onChange={setSenha}
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
               autoComplete="current-password"
               required
               Icon={Lock}
@@ -157,7 +157,7 @@ export default function LoginPage() {
 
             {sessionExpired && (
               <div className="rounded-[14px] border border-amber-200/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-                Sua sessão expirou. Por favor, faça login novamente.
+                Sua sessÃ£o expirou. Por favor, faÃ§a login novamente.
               </div>
             )}
 
@@ -204,9 +204,9 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* Rodapé */}
+        {/* RodapÃ© */}
         <footer className="mt-6 text-center text-xs text-white/70">
-          © 2025 Astron – Sistema AstronTalent
+          Â© 2025 Astron â€“ Sistema AstronTalent
         </footer>
       </div>
     </BackgroundWrapper>

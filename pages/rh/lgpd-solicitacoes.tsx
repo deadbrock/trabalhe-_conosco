@@ -1,11 +1,11 @@
-/**
- * 🔐 PAINEL RH - Gestão de Solicitações LGPD
+﻿/**
+ * ðŸ” PAINEL RH - GestÃ£o de SolicitaÃ§Ãµes LGPD
  * 
  * Permite ao RH:
- * - Visualizar todas as solicitações
- * - Aprovar exportações
- * - Aprovar exclusões
- * - Rejeitar solicitações
+ * - Visualizar todas as solicitaÃ§Ãµes
+ * - Aprovar exportaÃ§Ãµes
+ * - Aprovar exclusÃµes
+ * - Rejeitar solicitaÃ§Ãµes
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -46,7 +46,7 @@ export default function LGPDSolicitacoes() {
   const [processando, setProcessando] = useState(false);
 
   // ==========================================
-  // CARREGAR SOLICITAÇÕES
+  // CARREGAR SOLICITAÃ‡Ã•ES
   // ==========================================
   const carregarSolicitacoes = useCallback(async () => {
     setLoading(true);
@@ -60,7 +60,7 @@ export default function LGPDSolicitacoes() {
       );
       setSolicitacoes(response.solicitacoes);
     } catch (error) {
-      console.error('Erro ao carregar solicitações:', error);
+      console.error('Erro ao carregar solicitaÃ§Ãµes:', error);
     } finally {
       setLoading(false);
     }
@@ -79,12 +79,12 @@ export default function LGPDSolicitacoes() {
     setProcessando(true);
     try {
       const response = await apiPost<ApiResponse>(`/lgpd/exportar/${solicitacaoSelecionada.id}`, {});
-      alert(`✅ Dados exportados com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO candidato receberá os dados por email.`);
+      alert(`âœ… Dados exportados com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO candidato receberÃ¡ os dados por email.`);
       setShowModal(false);
       carregarSolicitacoes();
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } }; message?: string };
-      alert(`❌ Erro ao exportar dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
+      alert(`âŒ Erro ao exportar dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
@@ -96,62 +96,62 @@ export default function LGPDSolicitacoes() {
   const handleExcluir = async () => {
     if (!solicitacaoSelecionada) return;
 
-    if (!confirm('⚠️ ATENÇÃO: Esta ação é IRREVERSÍVEL!\n\nTodos os dados do candidato serão ANONIMIZADOS.\n\nDeseja continuar?')) {
+    if (!confirm('âš ï¸ ATENÃ‡ÃƒO: Esta aÃ§Ã£o Ã© IRREVERSÃVEL!\n\nTodos os dados do candidato serÃ£o ANONIMIZADOS.\n\nDeseja continuar?')) {
       return;
     }
 
     setProcessando(true);
     try {
       const response = await apiPost<ApiResponse>(`/lgpd/excluir/${solicitacaoSelecionada.id}`, {
-        motivo: motivo || 'Solicitação aprovada pelo titular'
+        motivo: motivo || 'SolicitaÃ§Ã£o aprovada pelo titular'
       });
-      alert(`✅ Dados excluídos com sucesso!\n\nProtocolo: ${response.protocolo}\n\nComprovante enviado por email.`);
+      alert(`âœ… Dados excluÃ­dos com sucesso!\n\nProtocolo: ${response.protocolo}\n\nComprovante enviado por email.`);
       setShowModal(false);
       setMotivo('');
       carregarSolicitacoes();
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } }; message?: string };
-      alert(`❌ Erro ao excluir dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
+      alert(`âŒ Erro ao excluir dados:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
   };
 
   // ==========================================
-  // REJEITAR SOLICITAÇÃO
+  // REJEITAR SOLICITAÃ‡ÃƒO
   // ==========================================
   const handleRejeitar = async () => {
     if (!solicitacaoSelecionada || !motivo) {
-      alert('Por favor, informe o motivo da rejeição');
+      alert('Por favor, informe o motivo da rejeiÃ§Ã£o');
       return;
     }
 
     setProcessando(true);
     try {
       await apiPost(`/lgpd/rejeitar/${solicitacaoSelecionada.id}`, { motivo });
-      alert('✅ Solicitação rejeitada');
+      alert('âœ… SolicitaÃ§Ã£o rejeitada');
       setShowModal(false);
       setMotivo('');
       carregarSolicitacoes();
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } }; message?: string };
-      alert(`❌ Erro ao rejeitar:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
+      alert(`âŒ Erro ao rejeitar:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
   };
 
   // ==========================================
-  // NOTIFICAR EMAIL NÃO ENCONTRADO
+  // NOTIFICAR EMAIL NÃƒO ENCONTRADO
   // ==========================================
   const handleNotificarEmailNaoEncontrado = async () => {
     if (!solicitacaoSelecionada) return;
 
     const confirmar = window.confirm(
-      `⚠️ CONFIRMAR ENVIO\n\n` +
-      `Será enviado um email para ${solicitacaoSelecionada.email_solicitante} informando que:\n\n` +
-      `"Não encontramos uma candidatura associada a este email em nossa base de dados."\n\n` +
-      `O email pedirá para que o solicitante verifique se usou o email correto na candidatura.\n\n` +
+      `âš ï¸ CONFIRMAR ENVIO\n\n` +
+      `SerÃ¡ enviado um email para ${solicitacaoSelecionada.email_solicitante} informando que:\n\n` +
+      `"NÃ£o encontramos uma candidatura associada a este email em nossa base de dados."\n\n` +
+      `O email pedirÃ¡ para que o solicitante verifique se usou o email correto na candidatura.\n\n` +
       `Deseja continuar?`
     );
 
@@ -160,12 +160,12 @@ export default function LGPDSolicitacoes() {
     setProcessando(true);
     try {
       const response = await apiPost<ApiResponse>(`/lgpd/notificar-email-nao-encontrado/${solicitacaoSelecionada.id}`, {});
-      alert(`✅ Email enviado com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO solicitante foi notificado sobre o email não encontrado.`);
+      alert(`âœ… Email enviado com sucesso!\n\nProtocolo: ${response.protocolo}\n\nO solicitante foi notificado sobre o email nÃ£o encontrado.`);
       setShowModal(false);
       carregarSolicitacoes();
     } catch (error: unknown) {
       const err = error as { response?: { data?: { error?: string } }; message?: string };
-      alert(`❌ Erro ao enviar notificação:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
+      alert(`âŒ Erro ao enviar notificaÃ§Ã£o:\n${err.response?.data?.error || err.message || 'Erro desconhecido'}`);
     } finally {
       setProcessando(false);
     }
@@ -216,10 +216,10 @@ export default function LGPDSolicitacoes() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🔐 Solicitações LGPD
+            ðŸ” SolicitaÃ§Ãµes LGPD
           </h1>
           <p className="text-gray-600">
-            Gerencie solicitações de exportação e exclusão de dados pessoais
+            Gerencie solicitaÃ§Ãµes de exportaÃ§Ã£o e exclusÃ£o de dados pessoais
           </p>
         </div>
 
@@ -237,9 +237,9 @@ export default function LGPDSolicitacoes() {
               >
                 <option value="">Todos</option>
                 <option value="pendente">Pendente</option>
-                <option value="em_analise">Em Análise</option>
+                <option value="em_analise">Em AnÃ¡lise</option>
                 <option value="aprovada">Aprovada</option>
-                <option value="concluida">Concluída</option>
+                <option value="concluida">ConcluÃ­da</option>
                 <option value="rejeitada">Rejeitada</option>
               </select>
             </div>
@@ -254,8 +254,8 @@ export default function LGPDSolicitacoes() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="">Todos</option>
-                <option value="exportacao">Exportação</option>
-                <option value="exclusao">Exclusão</option>
+                <option value="exportacao">ExportaÃ§Ã£o</option>
+                <option value="exclusao">ExclusÃ£o</option>
               </select>
             </div>
 
@@ -264,7 +264,7 @@ export default function LGPDSolicitacoes() {
                 onClick={carregarSolicitacoes}
                 className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
-                🔄 Atualizar
+                ðŸ”„ Atualizar
               </button>
             </div>
           </div>
@@ -274,11 +274,11 @@ export default function LGPDSolicitacoes() {
         {loading && (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            <p className="mt-4 text-gray-600">Carregando solicitações...</p>
+            <p className="mt-4 text-gray-600">Carregando solicitaÃ§Ãµes...</p>
           </div>
         )}
 
-        {/* Lista de Solicitações */}
+        {/* Lista de SolicitaÃ§Ãµes */}
         {!loading && (
           <div className="bg-white rounded-lg shadow overflow-hidden">
             {solicitacoes.length === 0 ? (
@@ -286,7 +286,7 @@ export default function LGPDSolicitacoes() {
                 <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
-                <p className="mt-4 text-gray-600">Nenhuma solicitação encontrada</p>
+                <p className="mt-4 text-gray-600">Nenhuma solicitaÃ§Ã£o encontrada</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -303,10 +303,10 @@ export default function LGPDSolicitacoes() {
                         Status
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Data Solicitação
+                        Data SolicitaÃ§Ã£o
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Ações
+                        AÃ§Ãµes
                       </th>
                     </tr>
                   </thead>
@@ -323,7 +323,7 @@ export default function LGPDSolicitacoes() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getTipoBadge(solicitacao.tipo)}`}>
-                            {solicitacao.tipo === 'exportacao' ? '📦 Exportação' : '🗑️ Exclusão'}
+                            {solicitacao.tipo === 'exportacao' ? 'ðŸ“¦ ExportaÃ§Ã£o' : 'ðŸ—‘ï¸ ExclusÃ£o'}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -339,7 +339,7 @@ export default function LGPDSolicitacoes() {
                             onClick={() => abrirModal(solicitacao, 'detalhes')}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
-                            👁️ Ver
+                            ðŸ‘ï¸ Ver
                           </button>
 
                           {solicitacao.status === 'aguardando_aprovacao_rh' && (
@@ -347,7 +347,7 @@ export default function LGPDSolicitacoes() {
                               onClick={() => abrirModal(solicitacao, 'notificar')}
                               className="text-orange-600 hover:text-orange-900"
                             >
-                              📧 Notificar
+                              ðŸ“§ Notificar
                             </button>
                           )}
 
@@ -358,7 +358,7 @@ export default function LGPDSolicitacoes() {
                                   onClick={() => abrirModal(solicitacao, 'exportar')}
                                   className="text-green-600 hover:text-green-900"
                                 >
-                                  📦 Exportar
+                                  ðŸ“¦ Exportar
                                 </button>
                               )}
 
@@ -367,7 +367,7 @@ export default function LGPDSolicitacoes() {
                                   onClick={() => abrirModal(solicitacao, 'excluir')}
                                   className="text-red-600 hover:text-red-900"
                                 >
-                                  🗑️ Excluir
+                                  ðŸ—‘ï¸ Excluir
                                 </button>
                               )}
 
@@ -375,7 +375,7 @@ export default function LGPDSolicitacoes() {
                                 onClick={() => abrirModal(solicitacao, 'rejeitar')}
                                 className="text-gray-600 hover:text-gray-900"
                               >
-                                ❌ Rejeitar
+                                âŒ Rejeitar
                               </button>
                             </>
                           )}
@@ -397,11 +397,11 @@ export default function LGPDSolicitacoes() {
                 {/* Header Modal */}
                 <div className="flex justify-between items-start mb-6">
                   <h3 className="text-xl font-bold text-gray-900">
-                    {modalTipo === 'detalhes' && '📋 Detalhes da Solicitação'}
-                    {modalTipo === 'exportar' && '📦 Exportar Dados'}
-                    {modalTipo === 'excluir' && '🗑️ Excluir Dados'}
-                    {modalTipo === 'rejeitar' && '❌ Rejeitar Solicitação'}
-                    {modalTipo === 'notificar' && '📧 Notificar Solicitante'}
+                    {modalTipo === 'detalhes' && 'ðŸ“‹ Detalhes da SolicitaÃ§Ã£o'}
+                    {modalTipo === 'exportar' && 'ðŸ“¦ Exportar Dados'}
+                    {modalTipo === 'excluir' && 'ðŸ—‘ï¸ Excluir Dados'}
+                    {modalTipo === 'rejeitar' && 'âŒ Rejeitar SolicitaÃ§Ã£o'}
+                    {modalTipo === 'notificar' && 'ðŸ“§ Notificar Solicitante'}
                   </h3>
                   <button
                     onClick={() => {
@@ -419,7 +419,7 @@ export default function LGPDSolicitacoes() {
                 {/* Detalhes */}
                 <div className="space-y-4 mb-6">
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-3">Informações do Candidato</h4>
+                    <h4 className="font-medium text-gray-900 mb-3">InformaÃ§Ãµes do Candidato</h4>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-600">Nome:</span>
@@ -441,7 +441,7 @@ export default function LGPDSolicitacoes() {
                   </div>
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-3">Detalhes da Solicitação</h4>
+                    <h4 className="font-medium text-gray-900 mb-3">Detalhes da SolicitaÃ§Ã£o</h4>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-600">ID:</span>
@@ -449,7 +449,7 @@ export default function LGPDSolicitacoes() {
                       </div>
                       <div>
                         <span className="text-gray-600">Tipo:</span>
-                        <p className="font-medium">{solicitacaoSelecionada.tipo === 'exportacao' ? 'Exportação' : 'Exclusão'}</p>
+                        <p className="font-medium">{solicitacaoSelecionada.tipo === 'exportacao' ? 'ExportaÃ§Ã£o' : 'ExclusÃ£o'}</p>
                       </div>
                       <div>
                         <span className="text-gray-600">Data:</span>
@@ -457,7 +457,7 @@ export default function LGPDSolicitacoes() {
                       </div>
                       {solicitacaoSelecionada.data_conclusao && (
                         <div>
-                          <span className="text-gray-600">Concluída em:</span>
+                          <span className="text-gray-600">ConcluÃ­da em:</span>
                           <p className="font-medium">{formatarData(solicitacaoSelecionada.data_conclusao)}</p>
                         </div>
                       )}
@@ -465,11 +465,11 @@ export default function LGPDSolicitacoes() {
                   </div>
                 </div>
 
-                {/* Ações do Modal */}
+                {/* AÃ§Ãµes do Modal */}
                 {modalTipo === 'exportar' && (
                   <div>
                     <p className="text-gray-600 mb-4">
-                      Ao confirmar, os dados do candidato serão exportados e enviados por email.
+                      Ao confirmar, os dados do candidato serÃ£o exportados e enviados por email.
                     </p>
                     <div className="flex space-x-3">
                       <button
@@ -477,7 +477,7 @@ export default function LGPDSolicitacoes() {
                         disabled={processando}
                         className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:bg-gray-300 transition-colors"
                       >
-                        {processando ? 'Exportando...' : '✅ Confirmar Exportação'}
+                        {processando ? 'Exportando...' : 'âœ… Confirmar ExportaÃ§Ã£o'}
                       </button>
                       <button
                         onClick={() => setShowModal(false)}
@@ -492,9 +492,9 @@ export default function LGPDSolicitacoes() {
                 {modalTipo === 'excluir' && (
                   <div>
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                      <p className="text-red-800 font-medium">⚠️ ATENÇÃO: Esta ação é IRREVERSÍVEL!</p>
+                      <p className="text-red-800 font-medium">âš ï¸ ATENÃ‡ÃƒO: Esta aÃ§Ã£o Ã© IRREVERSÃVEL!</p>
                       <p className="text-red-700 text-sm mt-2">
-                        Todos os dados pessoais serão anonimizados e não poderão ser recuperados.
+                        Todos os dados pessoais serÃ£o anonimizados e nÃ£o poderÃ£o ser recuperados.
                       </p>
                     </div>
                     <div className="mb-4">
@@ -506,7 +506,7 @@ export default function LGPDSolicitacoes() {
                         onChange={(e) => setMotivo(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                         rows={3}
-                        placeholder="Ex: Solicitação aprovada conforme LGPD..."
+                        placeholder="Ex: SolicitaÃ§Ã£o aprovada conforme LGPD..."
                       />
                     </div>
                     <div className="flex space-x-3">
@@ -515,7 +515,7 @@ export default function LGPDSolicitacoes() {
                         disabled={processando}
                         className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 disabled:bg-gray-300 transition-colors"
                       >
-                        {processando ? 'Excluindo...' : '🗑️ Confirmar Exclusão'}
+                        {processando ? 'Excluindo...' : 'ðŸ—‘ï¸ Confirmar ExclusÃ£o'}
                       </button>
                       <button
                         onClick={() => {
@@ -533,9 +533,9 @@ export default function LGPDSolicitacoes() {
                 {modalTipo === 'notificar' && (
                   <div>
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
-                      <p className="text-orange-800 font-medium">⚠️ Email não encontrado na base de dados</p>
+                      <p className="text-orange-800 font-medium">âš ï¸ Email nÃ£o encontrado na base de dados</p>
                       <p className="text-orange-700 text-sm mt-2">
-                        Não encontramos uma candidatura com o email informado pelo solicitante.
+                        NÃ£o encontramos uma candidatura com o email informado pelo solicitante.
                       </p>
                     </div>
 
@@ -544,19 +544,19 @@ export default function LGPDSolicitacoes() {
                         <strong>Email solicitante:</strong> {solicitacaoSelecionada.email_solicitante}
                       </p>
                       <p className="text-sm text-gray-700 mb-2">
-                        <strong>Tipo de solicitação:</strong> {solicitacaoSelecionada.tipo === 'exportacao' ? 'Exportação' : 'Exclusão'}
+                        <strong>Tipo de solicitaÃ§Ã£o:</strong> {solicitacaoSelecionada.tipo === 'exportacao' ? 'ExportaÃ§Ã£o' : 'ExclusÃ£o'}
                       </p>
                       <p className="text-sm text-gray-700">
-                        <strong>Data da solicitação:</strong> {formatarData(solicitacaoSelecionada.created_at)}
+                        <strong>Data da solicitaÃ§Ã£o:</strong> {formatarData(solicitacaoSelecionada.created_at)}
                       </p>
                     </div>
 
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                      <p className="text-blue-800 font-medium text-sm">📧 O que será enviado?</p>
+                      <p className="text-blue-800 font-medium text-sm">ðŸ“§ O que serÃ¡ enviado?</p>
                       <ul className="text-blue-700 text-sm mt-2 ml-4 list-disc space-y-1">
-                        <li>Email informando que não encontramos dados cadastrados</li>
-                        <li>Orientação para verificar se o email está correto</li>
-                        <li>Sugestão para tentar com outro email caso possua</li>
+                        <li>Email informando que nÃ£o encontramos dados cadastrados</li>
+                        <li>OrientaÃ§Ã£o para verificar se o email estÃ¡ correto</li>
+                        <li>SugestÃ£o para tentar com outro email caso possua</li>
                         <li>Contatos da empresa para suporte</li>
                       </ul>
                     </div>
@@ -567,7 +567,7 @@ export default function LGPDSolicitacoes() {
                         disabled={processando}
                         className="flex-1 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 disabled:bg-gray-300 transition-colors"
                       >
-                        {processando ? 'Enviando...' : '📧 Enviar Notificação'}
+                        {processando ? 'Enviando...' : 'ðŸ“§ Enviar NotificaÃ§Ã£o'}
                       </button>
                       <button
                         onClick={() => setShowModal(false)}
@@ -583,14 +583,14 @@ export default function LGPDSolicitacoes() {
                   <div>
                     <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Motivo da Rejeição *
+                        Motivo da RejeiÃ§Ã£o *
                       </label>
                       <textarea
                         value={motivo}
                         onChange={(e) => setMotivo(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                         rows={4}
-                        placeholder="Explique o motivo da rejeição..."
+                        placeholder="Explique o motivo da rejeiÃ§Ã£o..."
                         required
                       />
                     </div>
@@ -600,7 +600,7 @@ export default function LGPDSolicitacoes() {
                         disabled={processando || !motivo}
                         className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 disabled:bg-gray-300 transition-colors"
                       >
-                        {processando ? 'Rejeitando...' : '❌ Confirmar Rejeição'}
+                        {processando ? 'Rejeitando...' : 'âŒ Confirmar RejeiÃ§Ã£o'}
                       </button>
                       <button
                         onClick={() => {

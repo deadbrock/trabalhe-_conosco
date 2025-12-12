@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { StickyNote, Star, Trash2, Edit2, Save, X } from 'lucide-react';
 import { apiGet, apiPost, apiPut, apiDelete } from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -42,7 +42,7 @@ type AvaliacaoResponse = {
   };
 };
 
-// Componente de Notas Rápidas
+// Componente de Notas RÃ¡pidas
 export function NotasRapidas({ candidatoId, usuarioId }: { 
   candidatoId: number; 
   usuarioId: number;
@@ -148,7 +148,7 @@ export function NotasRapidas({ candidatoId, usuarioId }: {
             <textarea
               value={novaNota}
               onChange={(e) => setNovaNota(e.target.value)}
-              placeholder="Adicionar nota rápida..."
+              placeholder="Adicionar nota rÃ¡pida..."
               className="w-full bg-white border border-yellow-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-yellow-500"
               rows={3}
             />
@@ -174,7 +174,7 @@ export function NotasRapidas({ candidatoId, usuarioId }: {
             className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow"
           >
             {editandoId === nota.id ? (
-              // Modo de edição
+              // Modo de ediÃ§Ã£o
               <div className="space-y-2">
                 <textarea
                   value={textoEditando}
@@ -203,7 +203,7 @@ export function NotasRapidas({ candidatoId, usuarioId }: {
                 </div>
               </div>
             ) : (
-              // Modo de visualização
+              // Modo de visualizaÃ§Ã£o
               <>
                 <p className="text-sm text-gray-900 mb-2 whitespace-pre-wrap">{nota.nota}</p>
                 <div className="flex items-center justify-between text-xs text-gray-500">
@@ -244,7 +244,7 @@ export function NotasRapidas({ candidatoId, usuarioId }: {
   );
 }
 
-// Componente de Avaliação com Estrelas
+// Componente de AvaliaÃ§Ã£o com Estrelas
 export function AvaliacaoCandidato({ candidatoId }: { 
   candidatoId: number;
 }) {
@@ -268,7 +268,7 @@ export function AvaliacaoCandidato({ candidatoId }: {
       setAvaliacoes(data.avaliacoes);
       setMedia(data.media);
     } catch (error) {
-      console.error('Erro ao carregar avaliações:', error);
+      console.error('Erro ao carregar avaliaÃ§Ãµes:', error);
     } finally {
       setLoading(false);
     }
@@ -279,9 +279,9 @@ export function AvaliacaoCandidato({ candidatoId }: {
   }, [carregarAvaliacoes]);
 
   const submeterAvaliacao = async () => {
-    // Validar que pelo menos um critério foi preenchido
+    // Validar que pelo menos um critÃ©rio foi preenchido
     if (!form.comunicacao && !form.experiencia_tecnica && !form.fit_cultural && !form.apresentacao && !form.disponibilidade) {
-      alert('Preencha pelo menos um critério de avaliação');
+      alert('Preencha pelo menos um critÃ©rio de avaliaÃ§Ã£o');
       return;
     }
 
@@ -303,8 +303,8 @@ export function AvaliacaoCandidato({ candidatoId }: {
       setMostrarForm(false);
       await carregarAvaliacoes();
     } catch (error) {
-      console.error('Erro ao submeter avaliação:', error);
-      alert('Erro ao submeter avaliação');
+      console.error('Erro ao submeter avaliaÃ§Ã£o:', error);
+      alert('Erro ao submeter avaliaÃ§Ã£o');
     }
   };
 
@@ -354,21 +354,21 @@ export function AvaliacaoCandidato({ candidatoId }: {
   }
 
   const criterios = [
-    { key: 'comunicacao', label: 'Comunicação' },
-    { key: 'experiencia_tecnica', label: 'Experiência Técnica' },
+    { key: 'comunicacao', label: 'ComunicaÃ§Ã£o' },
+    { key: 'experiencia_tecnica', label: 'ExperiÃªncia TÃ©cnica' },
     { key: 'fit_cultural', label: 'Fit Cultural' },
-    { key: 'apresentacao', label: 'Apresentação' },
+    { key: 'apresentacao', label: 'ApresentaÃ§Ã£o' },
     { key: 'disponibilidade', label: 'Disponibilidade' }
   ];
 
   return (
     <div className="space-y-6">
-      {/* Média Geral */}
+      {/* MÃ©dia Geral */}
       {media && media.total_avaliacoes > 0 && (
         <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-6 border-2 border-yellow-200">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-            Avaliação Média
+            AvaliaÃ§Ã£o MÃ©dia
           </h3>
           
           <div className="flex items-center gap-4 mb-4">
@@ -378,7 +378,7 @@ export function AvaliacaoCandidato({ candidatoId }: {
             <div>
               <RatingStars value={Math.round(media.media_geral || 0)} readonly />
               <p className="text-sm text-gray-600 mt-1">
-                Baseado em {media.total_avaliacoes} avaliação{media.total_avaliacoes !== 1 ? 'ões' : ''}
+                Baseado em {media.total_avaliacoes} avaliaÃ§Ã£o{media.total_avaliacoes !== 1 ? 'Ãµes' : ''}
               </p>
             </div>
           </div>
@@ -390,7 +390,7 @@ export function AvaliacaoCandidato({ candidatoId }: {
               return (
                 <div key={criterio.key} className="flex items-center justify-between bg-white rounded-lg px-3 py-2">
                   <span className="text-gray-700">{criterio.label}</span>
-                  <span className="font-bold text-yellow-600">{valor.toFixed(1)} ⭐</span>
+                  <span className="font-bold text-yellow-600">{valor.toFixed(1)} â­</span>
                 </div>
               );
             })}
@@ -398,15 +398,15 @@ export function AvaliacaoCandidato({ candidatoId }: {
         </div>
       )}
 
-      {/* Botão Adicionar Avaliação */}
+      {/* BotÃ£o Adicionar AvaliaÃ§Ã£o */}
       <button
         onClick={() => setMostrarForm(!mostrarForm)}
         className="w-full px-4 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-medium hover:shadow-lg transition-all"
       >
-        {mostrarForm ? 'Cancelar' : '+ Adicionar Avaliação'}
+        {mostrarForm ? 'Cancelar' : '+ Adicionar AvaliaÃ§Ã£o'}
       </button>
 
-      {/* Form de Nova Avaliação */}
+      {/* Form de Nova AvaliaÃ§Ã£o */}
       <AnimatePresence>
         {mostrarForm && (
           <motion.div
@@ -415,7 +415,7 @@ export function AvaliacaoCandidato({ candidatoId }: {
             exit={{ opacity: 0, height: 0 }}
             className="bg-white rounded-lg border-2 border-primary p-6 space-y-4"
           >
-            <h4 className="font-bold text-gray-900">Nova Avaliação</h4>
+            <h4 className="font-bold text-gray-900">Nova AvaliaÃ§Ã£o</h4>
             
             {criterios.map((criterio) => (
               <div key={criterio.key}>
@@ -431,12 +431,12 @@ export function AvaliacaoCandidato({ candidatoId }: {
 
             <div>
               <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Comentário (opcional)
+                ComentÃ¡rio (opcional)
               </label>
               <textarea
                 value={form.comentario}
                 onChange={(e) => setForm({ ...form, comentario: e.target.value })}
-                placeholder="Adicione observações sobre a avaliação..."
+                placeholder="Adicione observaÃ§Ãµes sobre a avaliaÃ§Ã£o..."
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                 rows={3}
               />
@@ -446,18 +446,18 @@ export function AvaliacaoCandidato({ candidatoId }: {
               onClick={submeterAvaliacao}
               className="w-full px-4 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors"
             >
-              Enviar Avaliação
+              Enviar AvaliaÃ§Ã£o
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Lista de Avaliações */}
+      {/* Lista de AvaliaÃ§Ãµes */}
       <div className="space-y-3">
-        <h4 className="font-bold text-gray-900">Histórico de Avaliações</h4>
+        <h4 className="font-bold text-gray-900">HistÃ³rico de AvaliaÃ§Ãµes</h4>
         {avaliacoes.length === 0 ? (
           <p className="text-center text-gray-400 text-sm py-4">
-            Nenhuma avaliação ainda
+            Nenhuma avaliaÃ§Ã£o ainda
           </p>
         ) : (
           avaliacoes.map((avaliacao) => (
@@ -481,7 +481,7 @@ export function AvaliacaoCandidato({ candidatoId }: {
                   return (
                     <div key={criterio.key} className="flex items-center justify-between">
                       <span className="text-gray-600">{criterio.label}</span>
-                      <span className="font-medium">{valor} ⭐</span>
+                      <span className="font-medium">{valor} â­</span>
                     </div>
                   );
                 })}

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 type CandidatoStatus = 'novo' | 'em_analise' | 'aprovado' | 'reprovado' | 'em_processo';
 type AgendamentoStatus = 'agendado' | 'confirmado' | 'realizado' | 'cancelado';
@@ -12,81 +12,81 @@ interface StatusEmojiProps {
 const statusConfig: Record<string, { emoji: string; animation: string; label: string }> = {
   // Candidatos
   novo: {
-    emoji: '🆕',
+    emoji: 'ðŸ†•',
     animation: 'animate-bounce',
     label: 'Novo',
   },
   em_analise: {
-    emoji: '🔍',
+    emoji: 'ðŸ”',
     animation: 'animate-pulse',
-    label: 'Em Análise',
+    label: 'Em AnÃ¡lise',
   },
   aprovado: {
-    emoji: '✅',
+    emoji: 'âœ…',
     animation: 'animate-bounce',
     label: 'Aprovado',
   },
   reprovado: {
-    emoji: '❌',
+    emoji: 'âŒ',
     animation: 'animate-pulse',
     label: 'Reprovado',
   },
   em_processo: {
-    emoji: '⚙️',
+    emoji: 'âš™ï¸',
     animation: 'animate-spin-slow',
     label: 'Em Processo',
   },
   
   // Agendamentos
   agendado: {
-    emoji: '📅',
+    emoji: 'ðŸ“…',
     animation: 'animate-pulse',
     label: 'Agendado',
   },
   confirmado: {
-    emoji: '✅',
+    emoji: 'âœ…',
     animation: 'animate-bounce',
     label: 'Confirmado',
   },
   realizado: {
-    emoji: '🎉',
+    emoji: 'ðŸŽ‰',
     animation: 'animate-bounce',
     label: 'Realizado',
   },
   cancelado: {
-    emoji: '🚫',
+    emoji: 'ðŸš«',
     animation: 'animate-pulse',
     label: 'Cancelado',
   },
   
   // Outros
   pendente: {
-    emoji: '⏳',
+    emoji: 'â³',
     animation: 'animate-pulse',
     label: 'Pendente',
   },
   concluido: {
-    emoji: '🏆',
+    emoji: 'ðŸ†',
     animation: 'animate-bounce',
-    label: 'Concluído',
+    label: 'ConcluÃ­do',
   },
   atencao: {
-    emoji: '⚠️',
+    emoji: 'âš ï¸',
     animation: 'animate-pulse',
-    label: 'Atenção',
+    label: 'AtenÃ§Ã£o',
   },
   urgente: {
-    emoji: '🔥',
+    emoji: 'ðŸ”¥',
     animation: 'animate-bounce',
     label: 'Urgente',
   },
   sucesso: {
-    emoji: '🎯',
+    emoji: 'ðŸŽ¯',
     animation: 'animate-bounce',
     label: 'Sucesso',
   },
   estrela: {
-    emoji: '⭐',
+    emoji: 'â­',
     animation: 'animate-spin-slow',
     label: 'Destaque',
   },
@@ -171,20 +171,20 @@ export function ProgressEmojis({
 }) {
   const percentage = Math.round((current / total) * 100);
   
-  let emoji = '🔴';
+  let emoji = 'ðŸ”´';
   let animation = '';
   
   if (percentage >= 100) {
-    emoji = '🎉';
+    emoji = 'ðŸŽ‰';
     animation = 'animate-bounce';
   } else if (percentage >= 75) {
-    emoji = '🟢';
+    emoji = 'ðŸŸ¢';
     animation = 'animate-pulse';
   } else if (percentage >= 50) {
-    emoji = '🟡';
+    emoji = 'ðŸŸ¡';
     animation = 'animate-pulse';
   } else if (percentage >= 25) {
-    emoji = '🟠';
+    emoji = 'ðŸŸ ';
     animation = 'animate-pulse';
   }
 
@@ -206,7 +206,7 @@ export function ProgressEmojis({
   );
 }
 
-// Adicionar animação de spin lento ao CSS global
+// Adicionar animaÃ§Ã£o de spin lento ao CSS global
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.textContent = `

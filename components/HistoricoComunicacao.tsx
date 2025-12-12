@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Mail, MessageSquare, CheckCircle, XCircle, Clock, Eye, Filter } from 'lucide-react';
 import { apiGet } from '../lib/api';
 
@@ -50,7 +50,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
       setComunicacoes(data.historico);
       setTotal(data.total);
     } catch (error) {
-      console.error('Erro ao carregar histórico:', error);
+      console.error('Erro ao carregar histÃ³rico:', error);
     } finally {
       setLoading(false);
     }
@@ -81,11 +81,11 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
     const horaLocal = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
     if (data.toDateString() === hoje.toDateString()) {
-      return `Hoje às ${horaLocal}`;
+      return `Hoje Ã s ${horaLocal}`;
     } else if (data.toDateString() === ontem.toDateString()) {
-      return `Ontem às ${horaLocal}`;
+      return `Ontem Ã s ${horaLocal}`;
     } else {
-      return `${dataLocal} às ${horaLocal}`;
+      return `${dataLocal} Ã s ${horaLocal}`;
     }
   };
 
@@ -102,9 +102,9 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">📜 Histórico de Comunicações</h2>
+          <h2 className="text-2xl font-bold text-gray-900">ðŸ“œ HistÃ³rico de ComunicaÃ§Ãµes</h2>
           <p className="text-gray-600 mt-1">
-            {total} {total === 1 ? 'comunicação' : 'comunicações'} registrada{total !== 1 ? 's' : ''}
+            {total} {total === 1 ? 'comunicaÃ§Ã£o' : 'comunicaÃ§Ãµes'} registrada{total !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
@@ -120,8 +120,8 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
           >
             <option value="all">Todos os tipos</option>
-            <option value="email">📧 Email</option>
-            <option value="whatsapp">💬 WhatsApp</option>
+            <option value="email">ðŸ“§ Email</option>
+            <option value="whatsapp">ðŸ’¬ WhatsApp</option>
           </select>
 
           <select
@@ -130,16 +130,16 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
           >
             <option value="all">Todos os status</option>
-            <option value="enviado">✅ Enviado</option>
-            <option value="lido">👁️ Lido</option>
-            <option value="falhou">❌ Falhou</option>
+            <option value="enviado">âœ… Enviado</option>
+            <option value="lido">ðŸ‘ï¸ Lido</option>
+            <option value="falhou">âŒ Falhou</option>
           </select>
 
           <div className="flex-1"></div>
 
           <div className="text-sm text-gray-600">
-            📧 {comunicacoes.filter(c => c.tipo === 'email').length} emails • 
-            💬 {comunicacoes.filter(c => c.tipo === 'whatsapp').length} WhatsApp
+            ðŸ“§ {comunicacoes.filter(c => c.tipo === 'email').length} emails â€¢ 
+            ðŸ’¬ {comunicacoes.filter(c => c.tipo === 'whatsapp').length} WhatsApp
           </div>
         </div>
       </div>
@@ -147,10 +147,10 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
       {/* Lista */}
       {comunicacoes.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-          <div className="text-6xl mb-4">📭</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhuma comunicação encontrada</h3>
+          <div className="text-6xl mb-4">ðŸ“­</div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhuma comunicaÃ§Ã£o encontrada</h3>
           <p className="text-gray-600">
-            Não há comunicações registradas com os filtros aplicados
+            NÃ£o hÃ¡ comunicaÃ§Ãµes registradas com os filtros aplicados
           </p>
         </div>
       ) : (
@@ -166,7 +166,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                 onClick={() => setComunicacaoSelecionada(com)}
               >
                 <div className="flex items-start gap-4">
-                  {/* Ícone do Tipo */}
+                  {/* Ãcone do Tipo */}
                   <div className={`p-2 rounded-lg ${
                     com.tipo === 'email' ? 'bg-blue-50' : 'bg-green-50'
                   }`}>
@@ -177,7 +177,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                     )}
                   </div>
 
-                  {/* Conteúdo */}
+                  {/* ConteÃºdo */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-semibold text-gray-900">
@@ -185,7 +185,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                       </span>
                       {com.vaga_titulo && (
                         <>
-                          <span className="text-gray-400">•</span>
+                          <span className="text-gray-400">â€¢</span>
                           <span className="text-sm text-gray-600">{com.vaga_titulo}</span>
                         </>
                       )}
@@ -195,7 +195,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                       <span>{com.destinatario}</span>
                       {com.template_nome && (
                         <>
-                          <span className="text-gray-400">•</span>
+                          <span className="text-gray-400">â€¢</span>
                           <span>Template: {com.template_nome}</span>
                         </>
                       )}
@@ -209,17 +209,17 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
 
                     <div className="flex items-center gap-3 text-xs text-gray-500">
                       <span>{formatarData(com.enviado_em)}</span>
-                      <span className="text-gray-400">•</span>
+                      <span className="text-gray-400">â€¢</span>
                       <span className={`px-2 py-0.5 rounded ${
                         com.enviado_por === 'automatico' 
                           ? 'bg-purple-100 text-purple-700'
                           : 'bg-blue-100 text-blue-700'
                       }`}>
-                        {com.enviado_por === 'automatico' ? '🤖 Automático' : '👤 Manual'}
+                        {com.enviado_por === 'automatico' ? 'ðŸ¤– AutomÃ¡tico' : 'ðŸ‘¤ Manual'}
                       </span>
                       {com.usuario_nome && (
                         <>
-                          <span className="text-gray-400">•</span>
+                          <span className="text-gray-400">â€¢</span>
                           <span>por {com.usuario_nome}</span>
                         </>
                       )}
@@ -262,13 +262,13 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-gray-900">
-                  {comunicacaoSelecionada.tipo === 'email' ? '📧' : '💬'} Detalhes da Comunicação
+                  {comunicacaoSelecionada.tipo === 'email' ? 'ðŸ“§' : 'ðŸ’¬'} Detalhes da ComunicaÃ§Ã£o
                 </h3>
                 <button
                   onClick={() => setComunicacaoSelecionada(null)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  ✕
+                  âœ•
                 </button>
               </div>
             </div>
@@ -280,7 +280,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                   <p className="text-gray-900">{comunicacaoSelecionada.candidato_nome}</p>
                 </div>
                 <div>
-                  <span className="text-sm font-medium text-gray-600">Destinatário:</span>
+                  <span className="text-sm font-medium text-gray-600">DestinatÃ¡rio:</span>
                   <p className="text-gray-900">{comunicacaoSelecionada.destinatario}</p>
                 </div>
                 {comunicacaoSelecionada.vaga_titulo && (
@@ -300,7 +300,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
                 <div>
                   <span className="text-sm font-medium text-gray-600">Tipo de envio:</span>
                   <p className="text-gray-900">
-                    {comunicacaoSelecionada.enviado_por === 'automatico' ? '🤖 Automático' : '👤 Manual'}
+                    {comunicacaoSelecionada.enviado_por === 'automatico' ? 'ðŸ¤– AutomÃ¡tico' : 'ðŸ‘¤ Manual'}
                   </p>
                 </div>
                 {comunicacaoSelecionada.template_nome && (
@@ -319,7 +319,7 @@ export default function HistoricoComunicacao({ candidatoId, vagaId, limite = 50 
               )}
 
               <div>
-                <span className="text-sm font-medium text-gray-600">Conteúdo:</span>
+                <span className="text-sm font-medium text-gray-600">ConteÃºdo:</span>
                 {comunicacaoSelecionada.tipo === 'email' ? (
                   <div
                     className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200 max-h-96 overflow-y-auto"

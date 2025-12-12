@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Sparkles, Palette } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -26,7 +26,7 @@ export default function ThemeToggle() {
       ) : (
         <>
           <Palette className="w-4 h-4" />
-          <span className="text-sm font-medium">Tema Padrão</span>
+          <span className="text-sm font-medium">Tema PadrÃ£o</span>
         </>
       )}
       
@@ -39,7 +39,7 @@ export default function ThemeToggle() {
   );
 }
 
-// Versão compacta (só ícone)
+// VersÃ£o compacta (sÃ³ Ã­cone)
 export function ThemeToggleCompact() {
   const { toggleTheme, isFeminine } = useTheme();
 

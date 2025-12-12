@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -42,15 +42,15 @@ export default function DocumentosLoginPage() {
         senha: senha.trim()
       });
 
-      // Salvar token de autenticação
+      // Salvar token de autenticaÃ§Ã£o
       localStorage.setItem('documentos_token', response.data.token);
       
-      // Redirecionar para página de upload
+      // Redirecionar para pÃ¡gina de upload
       router.push('/documentos/upload');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       if (axios.isAxiosError(error) && error.response) {
-        setErro(error.response.data.error || 'CPF ou senha inválidos');
+        setErro(error.response.data.error || 'CPF ou senha invÃ¡lidos');
       } else {
         setErro('Erro ao fazer login. Tente novamente.');
       }
@@ -136,7 +136,7 @@ export default function DocumentosLoginPage() {
                 </motion.div>
               )}
 
-              {/* Botão */}
+              {/* BotÃ£o */}
               <motion.button
                 type="submit"
                 disabled={loading || cpf.length < 14 || senha.length < 7}
@@ -158,13 +158,13 @@ export default function DocumentosLoginPage() {
               </motion.button>
             </form>
 
-            {/* Informações */}
+            {/* InformaÃ§Ãµes */}
             <div className="mt-6 rounded-[24px] border border-slate-200 bg-white/70 p-4">
               <p className="text-sm text-slate-900 font-medium mb-1">
                 Verifique seu email e WhatsApp
               </p>
               <p className="text-xs text-slate-600">
-                Você recebeu um CPF e uma senha de 7 caracteres para acessar o sistema de envio de documentos.
+                VocÃª recebeu um CPF e uma senha de 7 caracteres para acessar o sistema de envio de documentos.
               </p>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function DocumentosLoginPage() {
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            © 2025 Aestron
+            Â© 2025 Aestron
           </p>
         </div>
       </motion.div>

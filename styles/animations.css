@@ -1,5 +1,5 @@
-/* ================================================================
-   ANIMAÇÕES DE HOVER MELHORADAS - FASE 2
+﻿/* ================================================================
+   ANIMAÃ‡Ã•ES DE HOVER MELHORADAS - FASE 2
    ================================================================ */
 
 /* Hover: Lift & Shadow */
@@ -37,7 +37,7 @@
 }
 
 .hover-slide-right::after {
-  content: '→';
+  content: 'â†’';
   position: absolute;
   right: 20px;
   opacity: 0;
@@ -259,13 +259,13 @@
   height: 300%;
 }
 
-/* Smooth All (classe utilitária) */
+/* Smooth All (classe utilitÃ¡ria) */
 .smooth-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ================================================================
-   ANIMAÇÕES PARA FALLBACK DO VÍDEO
+   ANIMAÃ‡Ã•ES PARA FALLBACK DO VÃDEO
    ================================================================ */
 
 /* Gradiente animado XY */

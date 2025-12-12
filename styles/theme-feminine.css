@@ -1,4 +1,4 @@
-/* ================================================================
+﻿/* ================================================================
    TEMA FEMININO - PALETA SUAVE & DELICADA
    ================================================================ */
 
@@ -11,8 +11,8 @@
   --secondary: #9c27b0; /* Roxo */
   --secondary-light: #e1bee7; /* Roxo claro */
   
-  --accent: #ba68c8; /* Lilás */
-  --accent-light: #f3e5f5; /* Lilás muito claro */
+  --accent: #ba68c8; /* LilÃ¡s */
+  --accent-light: #f3e5f5; /* LilÃ¡s muito claro */
   
   /* Neutros suaves */
   --background-soft: #fef5f8;
@@ -89,7 +89,7 @@
   color: #8a8a8a !important;
 }
 
-/* Botões femininos */
+/* BotÃµes femininos */
 .theme-feminine button.bg-primary,
 .theme-feminine a.bg-primary {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
@@ -109,13 +109,13 @@
   box-shadow: 0 20px 50px -12px rgba(233, 30, 99, 0.15) !important;
 }
 
-/* Animação de sparkle no tema feminino */
+/* AnimaÃ§Ã£o de sparkle no tema feminino */
 .theme-feminine .sparkle {
   position: relative;
 }
 
 .theme-feminine .sparkle::after {
-  content: '✨';
+  content: 'âœ¨';
   position: absolute;
   top: -10px;
   right: -10px;

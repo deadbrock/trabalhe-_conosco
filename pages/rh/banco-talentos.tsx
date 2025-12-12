@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { apiGet, apiPut } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
@@ -83,9 +83,9 @@ export default function BancoTalentos() {
     try {
       await apiPut(`/candidatos/${talentoId}`, { status: newStatus }, token);
       await load();
-      alert(`✅ Talento ativado com sucesso!`);
+      alert(`âœ… Talento ativado com sucesso!`);
     } catch {
-      alert("❌ Erro ao mover talento");
+      alert("âŒ Erro ao mover talento");
     }
   };
 
@@ -105,7 +105,7 @@ export default function BancoTalentos() {
           </div>
         </div>
 
-        {/* Métricas */}
+        {/* MÃ©tricas */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between">
@@ -122,7 +122,7 @@ export default function BancoTalentos() {
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Adicionados Este Mês</p>
+                <p className="text-sm text-gray-600 font-medium">Adicionados Este MÃªs</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">
                   {items.filter(t => {
                     if (!t.data_cadastro) return false;
@@ -141,7 +141,7 @@ export default function BancoTalentos() {
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 font-medium">Disponíveis</p>
+                <p className="text-sm text-gray-600 font-medium">DisponÃ­veis</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">{items.length}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -161,7 +161,7 @@ export default function BancoTalentos() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="Buscar por nome, email, vaga ou localização..."
+                  placeholder="Buscar por nome, email, vaga ou localizaÃ§Ã£o..."
                   className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
                 />
               </div>
@@ -208,7 +208,7 @@ export default function BancoTalentos() {
                         </div>
                         <div>
                           <h3 className="text-xl font-bold text-gray-900">{talento.nome}</h3>
-                          <p className="text-sm text-gray-600">Vaga anterior: {talento.vaga_titulo || "Não informada"}</p>
+                          <p className="text-sm text-gray-600">Vaga anterior: {talento.vaga_titulo || "NÃ£o informada"}</p>
                         </div>
                       </div>
 
@@ -278,7 +278,7 @@ export default function BancoTalentos() {
                         <Mail className="w-5 h-5" />
                       </a>
 
-                      {/* Ações */}
+                      {/* AÃ§Ãµes */}
                       <div className="flex items-center gap-1 ml-2 border-l pl-2">
                         <button
                           onClick={() => handleMoveToVaga(talento.id, "novo")}
@@ -355,14 +355,14 @@ export default function BancoTalentos() {
               
               <div>
                 <label className="text-sm font-semibold text-gray-600">Vaga Anterior</label>
-                <p className="text-gray-900 mt-1">{selectedTalento.vaga_titulo || "Não informada"}</p>
+                <p className="text-gray-900 mt-1">{selectedTalento.vaga_titulo || "NÃ£o informada"}</p>
               </div>
               
               {(selectedTalento.cidade || selectedTalento.bairro || selectedTalento.estado) && (
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4">
                   <label className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
                     <MapPin className="w-4 h-4 text-primary" />
-                    Localização
+                    LocalizaÃ§Ã£o
                   </label>
                   <div className="grid grid-cols-3 gap-3 text-sm">
                     {selectedTalento.estado && (
@@ -387,9 +387,9 @@ export default function BancoTalentos() {
                 </div>
               )}
 
-              {/* Ações */}
+              {/* AÃ§Ãµes */}
               <div className="bg-gray-50 rounded-2xl p-4">
-                <label className="text-sm font-semibold text-gray-700 block mb-3">Ações</label>
+                <label className="text-sm font-semibold text-gray-700 block mb-3">AÃ§Ãµes</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => {
@@ -409,7 +409,7 @@ export default function BancoTalentos() {
                     className="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-700 font-semibold hover:bg-yellow-200 transition-all flex items-center justify-center gap-2"
                   >
                     <Search className="w-4 h-4" />
-                    Em Análise
+                    Em AnÃ¡lise
                   </button>
                 </div>
               </div>

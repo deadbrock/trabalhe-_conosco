@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { Tag, Plus, X } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
 import { TagsSkeleton } from './Skeleton';
@@ -114,7 +114,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
         )}
       </div>
 
-      {/* Botão adicionar tag */}
+      {/* BotÃ£o adicionar tag */}
       {!readOnly && (
         <>
           {!mostrarSeletor ? (
@@ -142,7 +142,7 @@ export default function TagsCandidato({ candidatoId, readOnly = false }: TagsCan
               <div className="flex flex-wrap gap-2">
                 {tagsDisponiveis.length === 0 ? (
                   <p className="text-sm text-gray-400">
-                    Todas as tags já foram adicionadas
+                    Todas as tags jÃ¡ foram adicionadas
                   </p>
                 ) : (
                   tagsDisponiveis.map((tag) => (

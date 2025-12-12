@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { motion } from "framer-motion";
 import { Award, ShieldCheck, Users, Leaf, Lightbulb, Handshake } from "lucide-react";
 
@@ -10,12 +10,12 @@ type ValueItem = {
 };
 
 const values: ValueItem[] = [
-  { id: "v1", icon: <Award size={22} />, title: "Excelência", text: "Buscamos sempre o mais alto padrão em cada serviço prestado." },
-  { id: "v2", icon: <ShieldCheck size={22} />, title: "Ética e Transparência", text: "Agimos com integridade em todas as relações." },
-  { id: "v3", icon: <Users size={22} />, title: "Valorização Humana", text: "Acreditamos que pessoas são o nosso maior patrimônio." },
-  { id: "v4", icon: <Leaf size={22} />, title: "Sustentabilidade", text: "Respeitamos o meio ambiente e investimos em práticas responsáveis." },
-  { id: "v5", icon: <Lightbulb size={22} />, title: "Inovação", text: "Transformamos desafios em soluções práticas e inteligentes." },
-  { id: "v6", icon: <Handshake size={22} />, title: "Compromisso", text: "Tratamos cada cliente como parceiro estratégico, entregando resultados que fazem diferença." },
+  { id: "v1", icon: <Award size={22} />, title: "ExcelÃªncia", text: "Buscamos sempre o mais alto padrÃ£o em cada serviÃ§o prestado." },
+  { id: "v2", icon: <ShieldCheck size={22} />, title: "Ã‰tica e TransparÃªncia", text: "Agimos com integridade em todas as relaÃ§Ãµes." },
+  { id: "v3", icon: <Users size={22} />, title: "ValorizaÃ§Ã£o Humana", text: "Acreditamos que pessoas sÃ£o o nosso maior patrimÃ´nio." },
+  { id: "v4", icon: <Leaf size={22} />, title: "Sustentabilidade", text: "Respeitamos o meio ambiente e investimos em prÃ¡ticas responsÃ¡veis." },
+  { id: "v5", icon: <Lightbulb size={22} />, title: "InovaÃ§Ã£o", text: "Transformamos desafios em soluÃ§Ãµes prÃ¡ticas e inteligentes." },
+  { id: "v6", icon: <Handshake size={22} />, title: "Compromisso", text: "Tratamos cada cliente como parceiro estratÃ©gico, entregando resultados que fazem diferenÃ§a." },
 ];
 
 export default function ValuesSection() {

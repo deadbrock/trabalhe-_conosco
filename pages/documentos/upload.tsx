@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -64,7 +64,7 @@ export default function DocumentosUploadPage() {
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   
-  // Autodeclaração Racial
+  // AutodeclaraÃ§Ã£o Racial
   const [racaSelecionada, setRacaSelecionada] = useState<string>('');
   const [confirmacaoRaca, setConfirmacaoRaca] = useState(false);
   const [salvandoRaca, setSalvandoRaca] = useState(false);
@@ -74,7 +74,7 @@ export default function DocumentosUploadPage() {
   // Progresso e completude
   const [documentosCompletos, setDocumentosCompletos] = useState(false);
 
-  // Documentos obrigatórios
+  // Documentos obrigatÃ³rios
   const DOCUMENTOS_OBRIGATORIOS = [
     'foto_3x4', 'ctps_digital', 'identidade_frente', 'identidade_verso',
     'comprovante_residencia', 'certidao_nascimento_casamento', 'titulo_eleitor', 'antecedentes_criminais'
@@ -104,17 +104,17 @@ export default function DocumentosUploadPage() {
     { value: 'preta', label: 'Preta' },
     { value: 'parda', label: 'Parda' },
     { value: 'amarela', label: 'Amarela' },
-    { value: 'indigena', label: 'Indígena' },
-    { value: 'nao_declarar', label: 'Prefiro não declarar' },
+    { value: 'indigena', label: 'IndÃ­gena' },
+    { value: 'nao_declarar', label: 'Prefiro nÃ£o declarar' },
   ];
 
   const handleSalvarAutodeclaracao = async () => {
     if (!racaSelecionada) {
-      alert('Por favor, selecione uma opção de raça/cor.');
+      alert('Por favor, selecione uma opÃ§Ã£o de raÃ§a/cor.');
       return;
     }
     if (!confirmacaoRaca) {
-      alert('Por favor, confirme a autodeclaração marcando a caixa de confirmação.');
+      alert('Por favor, confirme a autodeclaraÃ§Ã£o marcando a caixa de confirmaÃ§Ã£o.');
       return;
     }
 
@@ -133,7 +133,7 @@ export default function DocumentosUploadPage() {
 
       setRacaSalva(true);
       
-      // Salvar hash de verificação
+      // Salvar hash de verificaÃ§Ã£o
       if (response.data.hashVerificacao) {
         setHashVerificacao(response.data.hashVerificacao);
       }
@@ -141,20 +141,20 @@ export default function DocumentosUploadPage() {
       // Verificar se completou todos os documentos
       if (response.data.completude?.completo) {
         setDocumentosCompletos(true);
-        alert('🎉 Parabéns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrará em contato em breve.');
+        alert('ðŸŽ‰ ParabÃ©ns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrarÃ¡ em contato em breve.');
       } else {
-        alert('✅ Autodeclaração racial salva com sucesso!');
+        alert('âœ… AutodeclaraÃ§Ã£o racial salva com sucesso!');
       }
     } catch (error) {
-      console.error('Erro ao salvar autodeclaração:', error);
-      alert('❌ Erro ao salvar autodeclaração. Tente novamente.');
+      console.error('Erro ao salvar autodeclaraÃ§Ã£o:', error);
+      alert('âŒ Erro ao salvar autodeclaraÃ§Ã£o. Tente novamente.');
     } finally {
       setSalvandoRaca(false);
     }
   };
 
   useEffect(() => {
-    // Verificar se está autenticado
+    // Verificar se estÃ¡ autenticado
     const token = localStorage.getItem('documentos_token');
     if (!token) {
       router.push('/documentos');
@@ -178,7 +178,7 @@ export default function DocumentosUploadPage() {
       setDados(response.data);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
-      setErro('Erro ao carregar informações');
+      setErro('Erro ao carregar informaÃ§Ãµes');
     } finally {
       setLoading(false);
     }
@@ -189,10 +189,10 @@ export default function DocumentosUploadPage() {
       setUploadingDoc(tipoDocumento);
       setErro(null);
 
-      // Validações
+      // ValidaÃ§Ãµes
       const maxSize = 10 * 1024 * 1024; // 10MB
       if (file.size > maxSize) {
-        alert('❌ Arquivo muito grande! Máximo: 10MB');
+        alert('âŒ Arquivo muito grande! MÃ¡ximo: 10MB');
         setUploadingDoc(null);
         return;
       }
@@ -202,14 +202,14 @@ export default function DocumentosUploadPage() {
       const isPDF = file.type === 'application/pdf';
       
       if (!isImage && !isPDF) {
-        alert('❌ Formato não permitido! Use uma imagem (foto) ou PDF.');
+        alert('âŒ Formato nÃ£o permitido! Use uma imagem (foto) ou PDF.');
         setUploadingDoc(null);
         return;
       }
 
-      // Para foto 3x4, validar que é imagem (não PDF)
+      // Para foto 3x4, validar que Ã© imagem (nÃ£o PDF)
       if (tipoDocumento === 'foto_3x4' && !isImage) {
-        alert('❌ A foto 3x4 deve ser uma imagem (JPG, PNG, etc). PDF não é permitido para este documento.');
+        alert('âŒ A foto 3x4 deve ser uma imagem (JPG, PNG, etc). PDF nÃ£o Ã© permitido para este documento.');
         setUploadingDoc(null);
         return;
       }
@@ -220,7 +220,7 @@ export default function DocumentosUploadPage() {
 
       const token = localStorage.getItem('documentos_token');
 
-      // Usar endpoint específico para foto 3x4 (com processamento automático)
+      // Usar endpoint especÃ­fico para foto 3x4 (com processamento automÃ¡tico)
       const endpoint = tipoDocumento === 'foto_3x4' 
         ? `${API_URL}/documentos/upload-foto-3x4`
         : `${API_URL}/documentos/upload`;
@@ -232,7 +232,7 @@ export default function DocumentosUploadPage() {
         },
       });
 
-      // Atualizar estado local imediatamente (sem recarregar página)
+      // Atualizar estado local imediatamente (sem recarregar pÃ¡gina)
       if (dados) {
         const novosDados = { ...dados };
         const docKey = tipoDocumento as keyof typeof dados.documentos;
@@ -251,15 +251,15 @@ export default function DocumentosUploadPage() {
       // Verificar se completou todos os documentos
       if (response.data.completude?.completo) {
         setDocumentosCompletos(true);
-        alert('🎉 Parabéns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrará em contato em breve.');
+        alert('ðŸŽ‰ ParabÃ©ns! Todos os documentos foram enviados com sucesso! O RH foi notificado e entrarÃ¡ em contato em breve.');
       } else {
-        alert('✅ Documento enviado com sucesso!');
+        alert('âœ… Documento enviado com sucesso!');
       }
       
-      // Não chamar buscarDados() para evitar recarregar a página
+      // NÃ£o chamar buscarDados() para evitar recarregar a pÃ¡gina
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
-      alert('❌ Erro ao enviar documento. Tente novamente.');
+      alert('âŒ Erro ao enviar documento. Tente novamente.');
     } finally {
       setUploadingDoc(null);
     }
@@ -271,20 +271,20 @@ export default function DocumentosUploadPage() {
   };
 
   const documentos = [
-    { key: 'foto_3x4', label: 'Foto 3x4', icon: CameraIcon, color: 'text-purple-600', info: 'A foto será automaticamente ajustada para o formato 3x4' },
+    { key: 'foto_3x4', label: 'Foto 3x4', icon: CameraIcon, color: 'text-purple-600', info: 'A foto serÃ¡ automaticamente ajustada para o formato 3x4' },
     { key: 'ctps_digital', label: 'Carteira de Trabalho Digital', icon: DocumentTextIcon, color: 'text-blue-600', info: null },
     { key: 'identidade_frente', label: 'Identidade (Frente)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
     { key: 'identidade_verso', label: 'Identidade (Verso)', icon: IdentificationIcon, color: 'text-indigo-600', info: null },
-    { key: 'comprovante_residencia', label: 'Comprovante de Residência', icon: HomeIcon, color: 'text-green-600', info: 'Conta de água, luz ou internet de até 3 meses' },
-    { key: 'certidao_nascimento_casamento', label: 'Certidão de Nascimento/Casamento', icon: DocumentIcon, color: 'text-amber-600', info: null },
-    { key: 'reservista', label: 'Certificado de Reservista', icon: ShieldCheckIcon, color: 'text-emerald-600', info: 'Obrigatório apenas para candidatos do sexo masculino' },
-    { key: 'titulo_eleitor', label: 'Título de Eleitor', icon: TicketIcon, color: 'text-cyan-600', info: null },
-    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: DocumentCheckIcon, color: 'text-red-600', info: '⚠️ Aceito APENAS se emitido pelo Tribunal de Justiça ou Fórum da sua região' },
+    { key: 'comprovante_residencia', label: 'Comprovante de ResidÃªncia', icon: HomeIcon, color: 'text-green-600', info: 'Conta de Ã¡gua, luz ou internet de atÃ© 3 meses' },
+    { key: 'certidao_nascimento_casamento', label: 'CertidÃ£o de Nascimento/Casamento', icon: DocumentIcon, color: 'text-amber-600', info: null },
+    { key: 'reservista', label: 'Certificado de Reservista', icon: ShieldCheckIcon, color: 'text-emerald-600', info: 'ObrigatÃ³rio apenas para candidatos do sexo masculino' },
+    { key: 'titulo_eleitor', label: 'TÃ­tulo de Eleitor', icon: TicketIcon, color: 'text-cyan-600', info: null },
+    { key: 'antecedentes_criminais', label: 'Antecedentes Criminais', icon: DocumentCheckIcon, color: 'text-red-600', info: 'âš ï¸ Aceito APENAS se emitido pelo Tribunal de JustiÃ§a ou FÃ³rum da sua regiÃ£o' },
   ];
 
   const documentosDependentes = [
-    { key: 'certidao_nascimento_dependente', label: 'Certidão de Nascimento (Dependente)', icon: UserGroupIcon, color: 'text-pink-600', info: 'Obrigatório para filhos de até 13 anos' },
-    { key: 'cpf_dependente', label: 'CPF do Dependente', icon: DocumentTextIcon, color: 'text-pink-600', info: 'Obrigatório para filhos de até 13 anos' },
+    { key: 'certidao_nascimento_dependente', label: 'CertidÃ£o de Nascimento (Dependente)', icon: UserGroupIcon, color: 'text-pink-600', info: 'ObrigatÃ³rio para filhos de atÃ© 13 anos' },
+    { key: 'cpf_dependente', label: 'CPF do Dependente', icon: DocumentTextIcon, color: 'text-pink-600', info: 'ObrigatÃ³rio para filhos de atÃ© 13 anos' },
   ];
 
   if (loading) {
@@ -321,7 +321,7 @@ export default function DocumentosUploadPage() {
         </div>
       </div>
 
-      {/* Card de Conclusão (se completo) */}
+      {/* Card de ConclusÃ£o (se completo) */}
       {documentosCompletos && (
         <div className="max-w-6xl mx-auto mb-6">
           <motion.div
@@ -332,12 +332,12 @@ export default function DocumentosUploadPage() {
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircleSolidIcon className="w-12 h-12 text-green-600" />
             </div>
-            <h2 className="text-3xl font-bold mb-2">Documentação Completa!</h2>
+            <h2 className="text-3xl font-bold mb-2">DocumentaÃ§Ã£o Completa!</h2>
             <p className="text-lg opacity-90 mb-4">
               Todos os seus documentos foram recebidos com sucesso.
             </p>
             <p className="text-sm opacity-80">
-              Nossa equipe de RH foi notificada e entrará em contato em breve com os próximos passos do processo de admissão.
+              Nossa equipe de RH foi notificada e entrarÃ¡ em contato em breve com os prÃ³ximos passos do processo de admissÃ£o.
             </p>
           </motion.div>
         </div>
@@ -351,10 +351,10 @@ export default function DocumentosUploadPage() {
           className="bg-white rounded-2xl shadow-lg p-6"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold text-gray-900">📊 Progresso do Envio</h3>
+            <h3 className="font-bold text-gray-900">ðŸ“Š Progresso do Envio</h3>
             <span className="text-sm font-medium text-gray-600">
-              {progresso.enviados}/{progresso.total} documentos obrigatórios
-              {racaSalva && ' + Autodeclaração ✓'}
+              {progresso.enviados}/{progresso.total} documentos obrigatÃ³rios
+              {racaSalva && ' + AutodeclaraÃ§Ã£o âœ“'}
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
@@ -373,7 +373,7 @@ export default function DocumentosUploadPage() {
             <span>0%</span>
             <span className="font-medium text-lg">
               {progresso.percentual === 100 && racaSalva ? (
-                <span className="text-green-600">✅ Completo!</span>
+                <span className="text-green-600">âœ… Completo!</span>
               ) : (
                 <span className="text-blue-600">{progresso.percentual}%</span>
               )}
@@ -383,7 +383,7 @@ export default function DocumentosUploadPage() {
         </motion.div>
       </div>
 
-      {/* Instruções */}
+      {/* InstruÃ§Ãµes */}
       <div className="max-w-6xl mx-auto mb-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -393,14 +393,14 @@ export default function DocumentosUploadPage() {
           <div className="flex items-start gap-3">
             <ExclamationTriangleIcon className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="font-bold text-yellow-900 mb-2">Atenção - Requisitos Importantes:</h3>
+              <h3 className="font-bold text-yellow-900 mb-2">AtenÃ§Ã£o - Requisitos Importantes:</h3>
               <ul className="text-yellow-800 space-y-1 text-sm">
-                <li>• 📸 Você pode <strong>usar a câmera do celular</strong> para fotografar os documentos</li>
-                <li>• Todas as fotos devem estar <strong>nítidas e legíveis</strong></li>
-                <li>• Documentos não podem estar <strong>rasurados ou embaçados</strong></li>
-                <li>• Comprovante de residência deve ser de <strong>até 3 meses</strong></li>
-                <li>• Formatos aceitos: <strong>Fotos (câmera/galeria) ou PDF</strong></li>
-                <li>• Tamanho máximo: <strong>10MB por arquivo</strong></li>
+                <li>â€¢ ðŸ“¸ VocÃª pode <strong>usar a cÃ¢mera do celular</strong> para fotografar os documentos</li>
+                <li>â€¢ Todas as fotos devem estar <strong>nÃ­tidas e legÃ­veis</strong></li>
+                <li>â€¢ Documentos nÃ£o podem estar <strong>rasurados ou embaÃ§ados</strong></li>
+                <li>â€¢ Comprovante de residÃªncia deve ser de <strong>atÃ© 3 meses</strong></li>
+                <li>â€¢ Formatos aceitos: <strong>Fotos (cÃ¢mera/galeria) ou PDF</strong></li>
+                <li>â€¢ Tamanho mÃ¡ximo: <strong>10MB por arquivo</strong></li>
               </ul>
             </div>
           </div>
@@ -456,14 +456,14 @@ export default function DocumentosUploadPage() {
                       {isUploaded && !isValidated && !isRejected && (
                         <span className="text-xs text-blue-600 flex items-center gap-1 mt-1">
                           <DocumentTextIcon className="w-3 h-3" />
-                          Em análise
+                          Em anÃ¡lise
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* Informação adicional */}
+                {/* InformaÃ§Ã£o adicional */}
                 {doc.info && (
                   <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p className="text-xs text-amber-800">
@@ -472,7 +472,7 @@ export default function DocumentosUploadPage() {
                   </div>
                 )}
 
-                {/* Motivo de Rejeição */}
+                {/* Motivo de RejeiÃ§Ã£o */}
                 {isRejected && docStatus?.motivo_rejeicao && (
                   <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-xs text-red-700">
@@ -481,7 +481,7 @@ export default function DocumentosUploadPage() {
                   </div>
                 )}
 
-                {/* Botão de Upload ou Status Enviado */}
+                {/* BotÃ£o de Upload ou Status Enviado */}
                 {isUploaded && !isRejected ? (
                   <div className="w-full py-3 px-4 rounded-lg font-medium text-center bg-green-100 text-green-700 border-2 border-green-300">
                     <span className="flex items-center justify-center gap-2">
@@ -531,7 +531,7 @@ export default function DocumentosUploadPage() {
         </div>
       </div>
 
-      {/* Seção de Dependentes */}
+      {/* SeÃ§Ã£o de Dependentes */}
       <div className="max-w-6xl mx-auto mt-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -544,7 +544,7 @@ export default function DocumentosUploadPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Documentos de Dependentes</h2>
-              <p className="text-sm text-gray-600">Obrigatório para filhos de até 13 anos</p>
+              <p className="text-sm text-gray-600">ObrigatÃ³rio para filhos de atÃ© 13 anos</p>
             </div>
           </div>
           
@@ -594,7 +594,7 @@ export default function DocumentosUploadPage() {
                         {isUploaded && !isValidated && !isRejected && (
                           <span className="text-xs text-blue-600 flex items-center gap-1 mt-1">
                             <DocumentTextIcon className="w-3 h-3" />
-                            Em análise
+                            Em anÃ¡lise
                           </span>
                         )}
                       </div>
@@ -607,7 +607,7 @@ export default function DocumentosUploadPage() {
                     </div>
                   )}
 
-                  {/* Botão de Upload ou Status Enviado */}
+                  {/* BotÃ£o de Upload ou Status Enviado */}
                   {isUploaded && !isRejected ? (
                     <div className="w-full py-3 px-4 rounded-lg font-medium text-center bg-green-100 text-green-700 border-2 border-green-300">
                       <span className="flex items-center justify-center gap-2">
@@ -657,12 +657,12 @@ export default function DocumentosUploadPage() {
           </div>
 
           <p className="mt-4 text-xs text-gray-500 text-center italic">
-            * Se você não possui filhos de até 13 anos, não é necessário enviar estes documentos.
+            * Se vocÃª nÃ£o possui filhos de atÃ© 13 anos, nÃ£o Ã© necessÃ¡rio enviar estes documentos.
           </p>
         </motion.div>
       </div>
 
-      {/* Autodeclaração Racial */}
+      {/* AutodeclaraÃ§Ã£o Racial */}
       <div className="max-w-6xl mx-auto mt-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -676,8 +676,8 @@ export default function DocumentosUploadPage() {
               <GlobeAltIcon className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Autodeclaração Racial</h2>
-              <p className="text-sm text-gray-600">Conforme Lei nº 12.288/2010</p>
+              <h2 className="text-xl font-bold text-gray-900">AutodeclaraÃ§Ã£o Racial</h2>
+              <p className="text-sm text-gray-600">Conforme Lei nÂº 12.288/2010</p>
             </div>
             {racaSalva && (
               <span className="ml-auto flex items-center gap-1 text-green-600 font-medium">
@@ -689,17 +689,17 @@ export default function DocumentosUploadPage() {
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-800 text-justify leading-relaxed">
-              <strong>Informação importante:</strong> Esta autodeclaração atende a exigência do art. 39, § 8º, da Lei nº 
-              12.288/2010, alterado pela Lei nº 14.553/2023 e da Portaria MTE nº 3.784/2023, que obriga a prestação 
-              da informação nas inclusões, alterações ou retificações cadastrais dos trabalhadores ocorridas a partir 
-              de 1º de janeiro de 2024, respeitando o critério de autodeclaração do trabalhador, em conformidade com 
-              a classificação utilizada pelo Instituto Brasileiro de Geografia e Estatística - IBGE.
+              <strong>InformaÃ§Ã£o importante:</strong> Esta autodeclaraÃ§Ã£o atende a exigÃªncia do art. 39, Â§ 8Âº, da Lei nÂº 
+              12.288/2010, alterado pela Lei nÂº 14.553/2023 e da Portaria MTE nÂº 3.784/2023, que obriga a prestaÃ§Ã£o 
+              da informaÃ§Ã£o nas inclusÃµes, alteraÃ§Ãµes ou retificaÃ§Ãµes cadastrais dos trabalhadores ocorridas a partir 
+              de 1Âº de janeiro de 2024, respeitando o critÃ©rio de autodeclaraÃ§Ã£o do trabalhador, em conformidade com 
+              a classificaÃ§Ã£o utilizada pelo Instituto Brasileiro de Geografia e EstatÃ­stica - IBGE.
             </p>
           </div>
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Selecione sua raça/cor:
+              Selecione sua raÃ§a/cor:
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {opcoesRaca.map((opcao) => (
@@ -736,10 +736,10 @@ export default function DocumentosUploadPage() {
                 className="w-5 h-5 mt-0.5 text-orange-600 focus:ring-orange-500 rounded"
               />
               <span className="text-sm text-amber-900">
-                <strong>Declaro</strong>, para os devidos fins, que as informações aqui prestadas são verdadeiras 
-                e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá 
-                acarretar responsabilização civil, administrativa e penal, nos termos do art. 299 do Código 
-                Penal Brasileiro e demais disposições legais vigentes.
+                <strong>Declaro</strong>, para os devidos fins, que as informaÃ§Ãµes aqui prestadas sÃ£o verdadeiras 
+                e de minha inteira responsabilidade, ciente de que a prestaÃ§Ã£o de informaÃ§Ãµes falsas poderÃ¡ 
+                acarretar responsabilizaÃ§Ã£o civil, administrativa e penal, nos termos do art. 299 do CÃ³digo 
+                Penal Brasileiro e demais disposiÃ§Ãµes legais vigentes.
               </span>
             </label>
           </div>
@@ -760,7 +760,7 @@ export default function DocumentosUploadPage() {
                   Salvando...
                 </span>
               ) : (
-                'Confirmar Autodeclaração'
+                'Confirmar AutodeclaraÃ§Ã£o'
               )}
             </button>
           )}
@@ -768,20 +768,20 @@ export default function DocumentosUploadPage() {
           {racaSalva && (
             <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
               <CheckCircleSolidIcon className="w-8 h-8 text-green-600 mx-auto mb-2" />
-              <p className="text-green-800 font-medium">Autodeclaração registrada com sucesso!</p>
+              <p className="text-green-800 font-medium">AutodeclaraÃ§Ã£o registrada com sucesso!</p>
               <p className="text-green-600 text-sm mt-1">
-                Raça/cor declarada: <strong>{opcoesRaca.find(o => o.value === racaSelecionada)?.label}</strong>
+                RaÃ§a/cor declarada: <strong>{opcoesRaca.find(o => o.value === racaSelecionada)?.label}</strong>
               </p>
               
-              {/* Código de Verificação */}
+              {/* CÃ³digo de VerificaÃ§Ã£o */}
               {hashVerificacao && (
                 <div className="mt-4 p-3 bg-white rounded-lg border-2 border-green-300">
-                  <p className="text-xs text-gray-500 mb-1">Código de Verificação</p>
+                  <p className="text-xs text-gray-500 mb-1">CÃ³digo de VerificaÃ§Ã£o</p>
                   <p className="text-xl font-mono font-bold text-green-700 tracking-wider">
                     {hashVerificacao}
                   </p>
                   <p className="text-xs text-gray-500 mt-2">
-                    Guarde este código. Ele comprova a autenticidade da sua autodeclaração.
+                    Guarde este cÃ³digo. Ele comprova a autenticidade da sua autodeclaraÃ§Ã£o.
                   </p>
                 </div>
               )}
@@ -794,8 +794,8 @@ export default function DocumentosUploadPage() {
       <div className="max-w-6xl mx-auto mt-8">
         <div className="bg-white rounded-xl shadow-lg p-6 text-center">
           <p className="text-gray-600 text-sm">
-            Após enviar todos os documentos, nossa equipe de RH irá analisá-los.<br />
-            Você receberá um email com o resultado da análise.
+            ApÃ³s enviar todos os documentos, nossa equipe de RH irÃ¡ analisÃ¡-los.<br />
+            VocÃª receberÃ¡ um email com o resultado da anÃ¡lise.
           </p>
         </div>
       </div>

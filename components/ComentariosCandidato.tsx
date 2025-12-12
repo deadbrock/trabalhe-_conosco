@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, Send, Trash2, Star, StarOff } from 'lucide-react';
 import { apiGet, apiPost, apiDelete } from '@/lib/api';
 import { ComentariosSkeleton } from './Skeleton';
@@ -36,13 +36,13 @@ export default function ComentariosCandidato({
       const data = await apiGet<Comentario[]>(`/comentarios/${candidatoId}`);
       setComentarios(data);
     } catch (error) {
-      console.error('Erro ao carregar comentários:', error);
+      console.error('Erro ao carregar comentÃ¡rios:', error);
     } finally {
       setLoadingComentarios(false);
     }
   }, [candidatoId]);
 
-  // Carregar comentários
+  // Carregar comentÃ¡rios
   useEffect(() => {
     carregarComentarios();
   }, [carregarComentarios]);
@@ -64,22 +64,22 @@ export default function ComentariosCandidato({
       setNovoComentario('');
       setImportante(false);
     } catch (error) {
-      console.error('Erro ao adicionar comentário:', error);
-      alert('Erro ao adicionar comentário');
+      console.error('Erro ao adicionar comentÃ¡rio:', error);
+      alert('Erro ao adicionar comentÃ¡rio');
     } finally {
       setLoading(false);
     }
   };
 
   const removerComentario = async (id: number) => {
-    if (!confirm('Remover este comentário?')) return;
+    if (!confirm('Remover este comentÃ¡rio?')) return;
 
     try {
       await apiDelete(`/comentarios/${id}`);
       setComentarios(comentarios.filter((c) => c.id !== id));
     } catch (error) {
-      console.error('Erro ao remover comentário:', error);
-      alert('Erro ao remover comentário');
+      console.error('Erro ao remover comentÃ¡rio:', error);
+      alert('Erro ao remover comentÃ¡rio');
     }
   };
 
@@ -97,15 +97,15 @@ export default function ComentariosCandidato({
     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
       <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
         <MessageCircle className="w-5 h-5 text-primary" />
-        Comentários ({comentarios.length})
+        ComentÃ¡rios ({comentarios.length})
       </h3>
 
-      {/* Adicionar novo comentário */}
+      {/* Adicionar novo comentÃ¡rio */}
       <div className="mb-6">
         <textarea
           value={novoComentario}
           onChange={(e) => setNovoComentario(e.target.value)}
-          placeholder="Adicione um comentário sobre este candidato..."
+          placeholder="Adicione um comentÃ¡rio sobre este candidato..."
           className="w-full p-3 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent"
           rows={3}
         />
@@ -144,13 +144,13 @@ export default function ComentariosCandidato({
         </div>
       </div>
 
-      {/* Lista de comentários */}
+      {/* Lista de comentÃ¡rios */}
       <div className="space-y-3">
         {loadingComentarios ? (
           <ComentariosSkeleton />
         ) : comentarios.length === 0 ? (
           <p className="text-center text-gray-400 py-8">
-            Nenhum comentário ainda. Seja o primeiro!
+            Nenhum comentÃ¡rio ainda. Seja o primeiro!
           </p>
         ) : (
           comentarios.map((comentario) => (
@@ -183,7 +183,7 @@ export default function ComentariosCandidato({
                 <button
                   onClick={() => removerComentario(comentario.id)}
                   className="ml-3 p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Remover comentário"
+                  title="Remover comentÃ¡rio"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import RHLayout from '../../components/RHLayout';
 import api from '../../lib/api';
 import { FileText, CheckCircle, XCircle, Clock, AlertCircle, ExternalLink, Eye, Download, CheckCheck, Ban } from 'lucide-react';
@@ -16,7 +16,7 @@ interface Documento {
   data_conclusao: string;
   token_acesso: string;
   
-  // Autodeclaração Racial
+  // AutodeclaraÃ§Ã£o Racial
   autodeclaracao_racial: string;
   autodeclaracao_data: string;
   autodeclaracao_ip: string;
@@ -100,7 +100,7 @@ export default function DocumentosPage() {
       let motivo = null;
       
       if (acao === 'rejeitar') {
-        motivo = prompt('Informe o motivo da rejeição:');
+        motivo = prompt('Informe o motivo da rejeiÃ§Ã£o:');
         if (!motivo) return;
       }
       
@@ -110,7 +110,7 @@ export default function DocumentosPage() {
         motivo_rejeicao: motivo,
       });
       
-      alert(acao === 'aprovar' ? '✅ Documento aprovado' : '❌ Documento rejeitado');
+      alert(acao === 'aprovar' ? 'âœ… Documento aprovado' : 'âŒ Documento rejeitado');
       buscarDocumentos();
     } catch (error) {
       console.error('Erro ao validar documento:', error);
@@ -123,14 +123,14 @@ export default function DocumentosPage() {
       let motivo = null;
       
       if (acao === 'rejeitar') {
-        motivo = prompt('Informe o motivo da rejeição de todos os documentos:');
+        motivo = prompt('Informe o motivo da rejeiÃ§Ã£o de todos os documentos:');
         if (!motivo) return;
       }
       
       const confirmacao = confirm(
         acao === 'aprovar' 
-          ? '✅ Deseja APROVAR TODOS os documentos deste candidato?' 
-          : '❌ Deseja REPROVAR TODOS os documentos deste candidato?'
+          ? 'âœ… Deseja APROVAR TODOS os documentos deste candidato?' 
+          : 'âŒ Deseja REPROVAR TODOS os documentos deste candidato?'
       );
       
       if (!confirmacao) return;
@@ -140,7 +140,7 @@ export default function DocumentosPage() {
         motivo_rejeicao: motivo,
       });
       
-      alert(acao === 'aprovar' ? '✅ Todos os documentos foram aprovados!' : '❌ Todos os documentos foram rejeitados!');
+      alert(acao === 'aprovar' ? 'âœ… Todos os documentos foram aprovados!' : 'âŒ Todos os documentos foram rejeitados!');
       buscarDocumentos();
     } catch (error) {
       console.error('Erro ao validar todos os documentos:', error);
@@ -148,14 +148,14 @@ export default function DocumentosPage() {
     }
   };
 
-  // Função para baixar formulário em branco de autodeclaração
+  // FunÃ§Ã£o para baixar formulÃ¡rio em branco de autodeclaraÃ§Ã£o
   const baixarFormularioEmBranco = () => {
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Formulário de Autodeclaração Racial - Em Branco</title>
+  <title>FormulÃ¡rio de AutodeclaraÃ§Ã£o Racial - Em Branco</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.6; }
     h1 { text-align: center; color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; }
@@ -179,10 +179,10 @@ export default function DocumentosPage() {
 <body>
   <div class="header">
     <div class="logo">FG Services</div>
-    <p>Sistema de Gestão de Candidatos</p>
+    <p>Sistema de GestÃ£o de Candidatos</p>
   </div>
   
-  <h1>FORMULÁRIO DE AUTODECLARAÇÃO RACIAL</h1>
+  <h1>FORMULÃRIO DE AUTODECLARAÃ‡ÃƒO RACIAL</h1>
   
   <div class="form-group">
     <label>Nome Completo:</label>
@@ -206,13 +206,13 @@ export default function DocumentosPage() {
     <label><span class="checkbox-box"></span> Preta</label>
     <label><span class="checkbox-box"></span> Parda</label>
     <label><span class="checkbox-box"></span> Amarela</label>
-    <label><span class="checkbox-box"></span> Indígena</label>
-    <label><span class="checkbox-box"></span> Prefiro não declarar</label>
+    <label><span class="checkbox-box"></span> IndÃ­gena</label>
+    <label><span class="checkbox-box"></span> Prefiro nÃ£o declarar</label>
   </div>
   
   <div class="legal-text">
-    <strong>DECLARAÇÃO:</strong><br><br>
-    Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do art. 299 do Código Penal Brasileiro e demais disposições legais vigentes.
+    <strong>DECLARAÃ‡ÃƒO:</strong><br><br>
+    Declaro, para os devidos fins, que as informaÃ§Ãµes aqui prestadas sÃ£o verdadeiras e de minha inteira responsabilidade, ciente de que a prestaÃ§Ã£o de informaÃ§Ãµes falsas poderÃ¡ acarretar responsabilizaÃ§Ã£o civil, administrativa e penal, nos termos do art. 299 do CÃ³digo Penal Brasileiro e demais disposiÃ§Ãµes legais vigentes.
   </div>
   
   <div class="date-field">
@@ -224,7 +224,7 @@ export default function DocumentosPage() {
       <div class="signature-line">Assinatura do(a) Candidato(a)</div>
     </div>
     <div class="signature-box">
-      <div class="signature-line">Assinatura do(a) Responsável RH</div>
+      <div class="signature-line">Assinatura do(a) ResponsÃ¡vel RH</div>
     </div>
   </div>
   
@@ -238,10 +238,10 @@ export default function DocumentosPage() {
     window.open(url, '_blank');
   };
 
-  // Função para baixar autodeclaração preenchida do candidato
+  // FunÃ§Ã£o para baixar autodeclaraÃ§Ã£o preenchida do candidato
   const baixarAutodeclaracaoPreenchida = (doc: Documento) => {
     if (!doc.autodeclaracao_racial) {
-      alert('Este candidato ainda não preencheu a autodeclaração racial.');
+      alert('Este candidato ainda nÃ£o preencheu a autodeclaraÃ§Ã£o racial.');
       return;
     }
 
@@ -250,8 +250,8 @@ export default function DocumentosPage() {
       preta: 'Preta',
       parda: 'Parda',
       amarela: 'Amarela',
-      indigena: 'Indígena',
-      nao_declarar: 'Prefere não declarar',
+      indigena: 'IndÃ­gena',
+      nao_declarar: 'Prefere nÃ£o declarar',
     };
 
     const racaDeclarada = racaLabels[doc.autodeclaracao_racial] || doc.autodeclaracao_racial;
@@ -267,17 +267,17 @@ export default function DocumentosPage() {
       ? new Date(doc.autodeclaracao_data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
       : '';
     
-    // Dados de verificação
+    // Dados de verificaÃ§Ã£o
     const codigoVerificacao = doc.autodeclaracao_hash || 'N/D';
-    const ipOrigem = doc.autodeclaracao_ip || 'Não registrado';
-    const aceiteTermos = doc.autodeclaracao_aceite_termos ? 'Sim' : 'Não';
+    const ipOrigem = doc.autodeclaracao_ip || 'NÃ£o registrado';
+    const aceiteTermos = doc.autodeclaracao_aceite_termos ? 'Sim' : 'NÃ£o';
 
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Autodeclaração Racial - ${doc.candidato_nome}</title>
+  <title>AutodeclaraÃ§Ã£o Racial - ${doc.candidato_nome}</title>
   <style>
     body { font-family: 'Georgia', serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.8; color: #333; }
     .header { text-align: center; margin-bottom: 40px; border-bottom: 3px double #0f4c81; padding-bottom: 20px; }
@@ -318,17 +318,17 @@ export default function DocumentosPage() {
   
   <div class="header">
     <div class="logo">FG SERVICES</div>
-    <div class="subtitle">Sistema de Gestão de Candidatos</div>
+    <div class="subtitle">Sistema de GestÃ£o de Candidatos</div>
   </div>
   
-  <h1>Autodeclaração Étnico-Racial</h1>
+  <h1>AutodeclaraÃ§Ã£o Ã‰tnico-Racial</h1>
   
   <div class="documento-info">
     <p><strong>Nome Completo:</strong> ${doc.candidato_nome}</p>
     <p><strong>E-mail:</strong> ${doc.candidato_email}</p>
-    <p><strong>Telefone:</strong> ${doc.candidato_telefone || 'Não informado'}</p>
+    <p><strong>Telefone:</strong> ${doc.candidato_telefone || 'NÃ£o informado'}</p>
     <p><strong>Vaga/Cargo:</strong> ${doc.vaga_titulo}</p>
-    <p><strong>Data da Declaração:</strong> ${dataDeclaracao}${horaDeclaracao ? ` às ${horaDeclaracao}` : ''}</p>
+    <p><strong>Data da DeclaraÃ§Ã£o:</strong> ${dataDeclaracao}${horaDeclaracao ? ` Ã s ${horaDeclaracao}` : ''}</p>
   </div>
   
   <div class="declaracao-box">
@@ -337,31 +337,31 @@ export default function DocumentosPage() {
   </div>
   
   <div class="confirmacao">
-    <p><span class="check">✓</span> O(A) candidato(a) confirmou eletronicamente que leu e concorda com os termos desta declaração.</p>
-    <p><span class="check">✓</span> Aceite dos termos legais: <strong>${aceiteTermos}</strong></p>
+    <p><span class="check">âœ“</span> O(A) candidato(a) confirmou eletronicamente que leu e concorda com os termos desta declaraÃ§Ã£o.</p>
+    <p><span class="check">âœ“</span> Aceite dos termos legais: <strong>${aceiteTermos}</strong></p>
   </div>
   
-  <!-- Seção de Verificação de Autenticidade -->
+  <!-- SeÃ§Ã£o de VerificaÃ§Ã£o de Autenticidade -->
   <div class="verificacao-box">
-    <h4>Verificação de Autenticidade</h4>
-    <p style="margin: 0 0 10px 0; font-size: 12px; color: #555;">Código único que comprova a autenticidade desta declaração:</p>
+    <h4>VerificaÃ§Ã£o de Autenticidade</h4>
+    <p style="margin: 0 0 10px 0; font-size: 12px; color: #555;">CÃ³digo Ãºnico que comprova a autenticidade desta declaraÃ§Ã£o:</p>
     <div class="codigo">${codigoVerificacao}</div>
     
     <div class="info-tecnica">
       <p><strong>IP de origem:</strong> ${ipOrigem}</p>
-      <p><strong>Data/hora do registro:</strong> ${dataDeclaracao}${horaDeclaracao ? ` às ${horaDeclaracao}` : ''}</p>
+      <p><strong>Data/hora do registro:</strong> ${dataDeclaracao}${horaDeclaracao ? ` Ã s ${horaDeclaracao}` : ''}</p>
     </div>
     
     <div class="aviso-verificacao">
-      <strong>Como verificar:</strong> Acesse <em>trabalheconoscofg.com.br/verificar</em> e insira o código acima para confirmar a autenticidade desta declaração.
+      <strong>Como verificar:</strong> Acesse <em>trabalheconoscofg.com.br/verificar</em> e insira o cÃ³digo acima para confirmar a autenticidade desta declaraÃ§Ã£o.
     </div>
   </div>
   
   <div class="legal-text">
-    <strong>DECLARAÇÃO LEGAL:</strong><br><br>
-    Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do <strong>art. 299 do Código Penal Brasileiro</strong> e demais disposições legais vigentes.
+    <strong>DECLARAÃ‡ÃƒO LEGAL:</strong><br><br>
+    Declaro, para os devidos fins, que as informaÃ§Ãµes aqui prestadas sÃ£o verdadeiras e de minha inteira responsabilidade, ciente de que a prestaÃ§Ã£o de informaÃ§Ãµes falsas poderÃ¡ acarretar responsabilizaÃ§Ã£o civil, administrativa e penal, nos termos do <strong>art. 299 do CÃ³digo Penal Brasileiro</strong> e demais disposiÃ§Ãµes legais vigentes.
     <br><br>
-    <strong>COMPROVAÇÃO ELETRÔNICA:</strong> Esta declaração foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificação digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e não-repúdio.
+    <strong>COMPROVAÃ‡ÃƒO ELETRÃ”NICA:</strong> Esta declaraÃ§Ã£o foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificaÃ§Ã£o digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e nÃ£o-repÃºdio.
   </div>
   
   <div class="signature-area">
@@ -369,14 +369,14 @@ export default function DocumentosPage() {
       <div class="signature-line">Assinatura do(a) Candidato(a)</div>
     </div>
     <div class="signature-box">
-      <div class="signature-line">Assinatura do(a) Responsável RH</div>
+      <div class="signature-line">Assinatura do(a) ResponsÃ¡vel RH</div>
     </div>
   </div>
   
   <div class="footer">
     <p>Documento gerado eletronicamente pelo Sistema FG Services</p>
-    <p>Este documento é válido como comprovante de autodeclaração étnico-racial para fins de admissão.</p>
-    <p style="margin-top: 10px;"><strong>Código de Verificação: ${codigoVerificacao}</strong></p>
+    <p>Este documento Ã© vÃ¡lido como comprovante de autodeclaraÃ§Ã£o Ã©tnico-racial para fins de admissÃ£o.</p>
+    <p style="margin-top: 10px;"><strong>CÃ³digo de VerificaÃ§Ã£o: ${codigoVerificacao}</strong></p>
   </div>
   
   <div class="data-geracao">
@@ -413,17 +413,17 @@ export default function DocumentosPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">📄 Documentos de Admissão</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">ðŸ“„ Documentos de AdmissÃ£o</h1>
             <p className="text-gray-600">Visualize e valide os documentos enviados pelos candidatos aprovados</p>
           </div>
           
-          {/* Botão Download Formulário em Branco */}
+          {/* BotÃ£o Download FormulÃ¡rio em Branco */}
           <button
             onClick={baixarFormularioEmBranco}
             className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-medium hover:from-gray-600 hover:to-gray-700 transition-all shadow-md hover:shadow-lg"
           >
             <Download className="w-5 h-5" />
-            Formulário em Branco
+            FormulÃ¡rio em Branco
           </button>
         </div>
 
@@ -457,7 +457,7 @@ export default function DocumentosPage() {
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
-            📋 Docs Enviados ({contadores.documentos_enviados})
+            ðŸ“‹ Docs Enviados ({contadores.documentos_enviados})
           </button>
           <button
             onClick={() => setFiltro('em_analise')}
@@ -467,7 +467,7 @@ export default function DocumentosPage() {
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
-            Em Análise ({contadores.em_analise})
+            Em AnÃ¡lise ({contadores.em_analise})
           </button>
           <button
             onClick={() => setFiltro('aprovado')}
@@ -531,34 +531,34 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
   const [expandido, setExpandido] = useState(false);
 
   const documentosLista = [
-    { key: 'foto_3x4', label: '📸 Foto 3x4' },
-    { key: 'ctps_digital', label: '📄 CTPS Digital' },
-    { key: 'identidade_frente', label: '🪪 Identidade (Frente)' },
-    { key: 'identidade_verso', label: '🪪 Identidade (Verso)' },
-    { key: 'comprovante_residencia', label: '🏠 Comprovante de Residência' },
-    { key: 'certidao_nascimento_casamento', label: '📜 Certidão Nascimento/Casamento' },
-    { key: 'reservista', label: '🎖️ Reservista' },
-    { key: 'titulo_eleitor', label: '🗳️ Título de Eleitor' },
-    { key: 'antecedentes_criminais', label: '📋 Antecedentes Criminais' },
-    { key: 'certidao_nascimento_dependente', label: '👶 Certidão Dependente' },
-    { key: 'cpf_dependente', label: '📋 CPF Dependente' },
+    { key: 'foto_3x4', label: 'ðŸ“¸ Foto 3x4' },
+    { key: 'ctps_digital', label: 'ðŸ“„ CTPS Digital' },
+    { key: 'identidade_frente', label: 'ðŸªª Identidade (Frente)' },
+    { key: 'identidade_verso', label: 'ðŸªª Identidade (Verso)' },
+    { key: 'comprovante_residencia', label: 'ðŸ  Comprovante de ResidÃªncia' },
+    { key: 'certidao_nascimento_casamento', label: 'ðŸ“œ CertidÃ£o Nascimento/Casamento' },
+    { key: 'reservista', label: 'ðŸŽ–ï¸ Reservista' },
+    { key: 'titulo_eleitor', label: 'ðŸ—³ï¸ TÃ­tulo de Eleitor' },
+    { key: 'antecedentes_criminais', label: 'ðŸ“‹ Antecedentes Criminais' },
+    { key: 'certidao_nascimento_dependente', label: 'ðŸ‘¶ CertidÃ£o Dependente' },
+    { key: 'cpf_dependente', label: 'ðŸ“‹ CPF Dependente' },
   ];
 
-  // Mapeamento de raça/cor
+  // Mapeamento de raÃ§a/cor
   const racaLabels: Record<string, string> = {
     branca: 'Branca',
     preta: 'Preta',
     parda: 'Parda',
     amarela: 'Amarela',
-    indigena: 'Indígena',
-    nao_declarar: 'Prefere não declarar',
+    indigena: 'IndÃ­gena',
+    nao_declarar: 'Prefere nÃ£o declarar',
   };
 
   const getStatusBadge = () => {
     const badges = {
       pendente: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pendente', icon: Clock },
-      documentos_enviados: { bg: 'bg-purple-100', text: 'text-purple-800', label: '📋 Docs Enviados', icon: FileText },
-      em_analise: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Em Análise', icon: AlertCircle },
+      documentos_enviados: { bg: 'bg-purple-100', text: 'text-purple-800', label: 'ðŸ“‹ Docs Enviados', icon: FileText },
+      em_analise: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Em AnÃ¡lise', icon: AlertCircle },
       aprovado: { bg: 'bg-green-100', text: 'text-green-800', label: 'Aprovado', icon: CheckCircle },
       rejeitado: { bg: 'bg-red-100', text: 'text-red-800', label: 'Rejeitado', icon: XCircle },
     };
@@ -586,15 +586,15 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
             <h3 className="text-lg font-bold text-gray-900 mb-1">{doc.candidato_nome}</h3>
             <p className="text-sm text-gray-600 mb-2">{doc.vaga_titulo}</p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
-              <span>📧 {doc.candidato_email}</span>
-              {doc.candidato_telefone && <span>📱 {doc.candidato_telefone}</span>}
+              <span>ðŸ“§ {doc.candidato_email}</span>
+              {doc.candidato_telefone && <span>ðŸ“± {doc.candidato_telefone}</span>}
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             {getStatusBadge()}
             <button className="text-primary hover:text-red-700 transition-colors">
-              {expandido ? '▲' : '▼'}
+              {expandido ? 'â–²' : 'â–¼'}
             </button>
           </div>
         </div>
@@ -603,10 +603,10 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
       {/* Documentos (expandido) */}
       {expandido && (
         <div className="border-t border-gray-200 p-6 bg-gray-50 space-y-4">
-          {/* Botões de Ação em Massa */}
+          {/* BotÃµes de AÃ§Ã£o em Massa */}
           <div className="flex flex-wrap gap-3 mb-6 p-4 bg-white rounded-xl border-2 border-gray-200">
             <span className="text-sm font-semibold text-gray-700 flex items-center">
-              ⚡ Ações Rápidas:
+              âš¡ AÃ§Ãµes RÃ¡pidas:
             </span>
             <button
               onClick={() => onValidarTodos(doc.id, 'aprovar')}
@@ -624,19 +624,19 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
             </button>
           </div>
 
-          {/* Autodeclaração Racial */}
+          {/* AutodeclaraÃ§Ã£o Racial */}
           <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border-2 border-orange-200 mb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🌍</span>
+                <span className="text-2xl">ðŸŒ</span>
                 <div>
-                  <h4 className="font-bold text-gray-900">Autodeclaração Racial</h4>
+                  <h4 className="font-bold text-gray-900">AutodeclaraÃ§Ã£o Racial</h4>
                   {doc.autodeclaracao_racial ? (
                     <p className="text-lg font-semibold text-orange-700">
                       {racaLabels[doc.autodeclaracao_racial] || doc.autodeclaracao_racial}
                     </p>
                   ) : (
-                    <p className="text-sm text-gray-500">Não preenchida</p>
+                    <p className="text-sm text-gray-500">NÃ£o preenchida</p>
                   )}
                 </div>
               </div>
@@ -648,7 +648,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                       className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-amber-600 transition-all flex items-center gap-1 shadow-md"
                     >
                       <Download className="w-4 h-4" />
-                      Baixar Declaração
+                      Baixar DeclaraÃ§Ã£o
                     </button>
                     <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
                       <CheckCircle className="w-4 h-4" />
@@ -659,7 +659,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
               </div>
             </div>
             
-            {/* Dados de Verificação */}
+            {/* Dados de VerificaÃ§Ã£o */}
             {doc.autodeclaracao_racial && (
               <div className="mt-3 pt-3 border-t border-orange-200">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -672,7 +672,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                     </p>
                   </div>
                   <div className="bg-white p-2 rounded-lg">
-                    <span className="text-gray-500">Código de Verificação:</span>
+                    <span className="text-gray-500">CÃ³digo de VerificaÃ§Ã£o:</span>
                     <p className="font-mono font-bold text-blue-700 tracking-wider">
                       {doc.autodeclaracao_hash || 'N/D'}
                     </p>
@@ -680,7 +680,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                   <div className="bg-white p-2 rounded-lg">
                     <span className="text-gray-500">Aceite dos Termos:</span>
                     <p className={`font-medium ${doc.autodeclaracao_aceite_termos ? 'text-green-700' : 'text-red-700'}`}>
-                      {doc.autodeclaracao_aceite_termos ? '✓ Sim' : '✗ Não'}
+                      {doc.autodeclaracao_aceite_termos ? 'âœ“ Sim' : 'âœ— NÃ£o'}
                     </p>
                   </div>
                 </div>
@@ -693,7 +693,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
             )}
           </div>
 
-          <h4 className="font-bold text-gray-700 mb-2">📄 Documentos Enviados</h4>
+          <h4 className="font-bold text-gray-700 mb-2">ðŸ“„ Documentos Enviados</h4>
           {documentosLista.map(({ key, label }) => {
             const urlKey = `${key}_url` as keyof Documento;
             const validadoKey = `${key}_validado` as keyof Documento;
@@ -707,7 +707,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
               return (
                 <div key={key} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
                   <span className="text-sm text-gray-600">{label}</span>
-                  <span className="text-xs text-gray-400">Não enviado</span>
+                  <span className="text-xs text-gray-400">NÃ£o enviado</span>
                 </div>
               );
             }
@@ -737,13 +737,13 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
                         onClick={() => onValidar(doc.id, key, 'aprovar')}
                         className="px-3 py-1.5 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                       >
-                        ✓ Aprovar
+                        âœ“ Aprovar
                       </button>
                       <button
                         onClick={() => onValidar(doc.id, key, 'rejeitar')}
                         className="px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                       >
-                        ✗ Rejeitar
+                        âœ— Rejeitar
                       </button>
                     </>
                   )}
@@ -762,7 +762,7 @@ function DocumentoCard({ doc, onValidar, onValidarTodos, onBaixarAutodeclaracao 
               className="text-sm text-blue-600 hover:underline flex items-center gap-1"
             >
               <ExternalLink className="w-4 h-4" />
-              Abrir página de documentos
+              Abrir pÃ¡gina de documentos
             </a>
           </div>
         </div>

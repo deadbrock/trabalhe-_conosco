@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 
@@ -12,7 +12,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
   const [showThanks, setShowThanks] = useState(false);
 
   useEffect(() => {
-    // Não executar efeitos se já está mostrando agradecimento
+    // NÃ£o executar efeitos se jÃ¡ estÃ¡ mostrando agradecimento
     if (showThanks) return;
     // Confetes natalinos (vermelho e verde)
     const christmasConfetti = () => {
@@ -69,7 +69,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
       return interval;
     };
 
-    // Fogos de artifício natalinos
+    // Fogos de artifÃ­cio natalinos
     const christmasFireworks = () => {
       const end = Date.now() + 3000;
       const colors = ['#c41e3a', '#165b33', '#ffd700'];
@@ -107,11 +107,11 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
     // Countdown timer
     const countdownInterval = setInterval(() => {
       setCountdown(prev => {
-        console.log('🎄 Countdown Natal:', prev);
+        console.log('ðŸŽ„ Countdown Natal:', prev);
         if (prev <= 1) {
-          console.log('✅ Natal acabou! Mostrando agradecimento...');
+          console.log('âœ… Natal acabou! Mostrando agradecimento...');
           clearInterval(countdownInterval);
-          // Mostrar mensagem de agradecimento ao invés de fechar
+          // Mostrar mensagem de agradecimento ao invÃ©s de fechar
           setShowThanks(true);
           return 0;
         }
@@ -127,14 +127,14 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
     };
   }, [showThanks]);
 
-  // Log quando a tela de agradecimento é ativada
+  // Log quando a tela de agradecimento Ã© ativada
   useEffect(() => {
     if (showThanks) {
-      console.log('🎉 Tela de agradecimento ativada!');
+      console.log('ðŸŽ‰ Tela de agradecimento ativada!');
     }
   }, [showThanks]);
 
-  // Calcular dias até o Natal
+  // Calcular dias atÃ© o Natal
   const hoje = new Date();
   const natal = new Date(hoje.getFullYear(), 11, 25); // 25 de dezembro
   if (hoje > natal) {
@@ -142,20 +142,20 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
   }
   const diasAteNatal = Math.ceil((natal.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24));
 
-  // Verificar se está nos dias de Natal (24, 25, 26, 27 de dezembro)
+  // Verificar se estÃ¡ nos dias de Natal (24, 25, 26, 27 de dezembro)
   const diaAtual = hoje.getDate();
   const mesAtual = hoje.getMonth(); // 11 = dezembro (0-indexed)
   const isDiasDeNatal = mesAtual === 11 && (diaAtual >= 24 && diaAtual <= 27);
 
-  // Definir título e mensagem baseado na data
-  const titulo = isDiasDeNatal ? "🎄 Feliz Natal! 🎄" : "🎄 Espírito Natalino! 🎄";
+  // Definir tÃ­tulo e mensagem baseado na data
+  const titulo = isDiasDeNatal ? "ðŸŽ„ Feliz Natal! ðŸŽ„" : "ðŸŽ„ EspÃ­rito Natalino! ðŸŽ„";
   const mensagemBemVindo = isDiasDeNatal 
-    ? "Que esta época festiva traga muita alegria e sucesso! 🎅✨"
-    : "A magia do Natal está chegando! Prepare-se para as festividades! ✨🎁";
+    ? "Que esta Ã©poca festiva traga muita alegria e sucesso! ðŸŽ…âœ¨"
+    : "A magia do Natal estÃ¡ chegando! Prepare-se para as festividades! âœ¨ðŸŽ";
 
   // Se deve mostrar mensagem de agradecimento
   if (showThanks) {
-    console.log('🎉 Renderizando tela de agradecimento');
+    console.log('ðŸŽ‰ Renderizando tela de agradecimento');
     return (
       <AnimatePresence>
         <motion.div
@@ -168,7 +168,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             backdropFilter: 'blur(10px)'
           }}
         >
-          {/* Corações flutuantes */}
+          {/* CoraÃ§Ãµes flutuantes */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(20)].map((_, i) => (
               <motion.div
@@ -187,7 +187,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
                   delay: Math.random() * 5,
                 }}
               >
-                ❤️
+                â¤ï¸
               </motion.div>
             ))}
           </div>
@@ -206,7 +206,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               boxShadow: '0 0 50px rgba(59, 130, 246, 0.3)',
             }}
           >
-            {/* Emoji de celebração */}
+            {/* Emoji de celebraÃ§Ã£o */}
             <motion.div
               animate={{
                 scale: [1, 1.2, 1],
@@ -218,17 +218,17 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               }}
               className="text-8xl mb-6"
             >
-              🎉
+              ðŸŽ‰
             </motion.div>
 
-            {/* Título */}
+            {/* TÃ­tulo */}
             <motion.h1
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
               className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
             >
-              Mais de 400 Candidaturas! 🚀
+              Mais de 400 Candidaturas! ðŸš€
             </motion.h1>
 
             {/* Mensagem principal */}
@@ -244,21 +244,21 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border-2 border-blue-200">
                 <p className="text-xl text-gray-700 leading-relaxed mb-4">
-                  Quero expressar minha <span className="font-bold text-blue-600">profunda gratidão</span> a todos que 
-                  confiaram neste sistema e depositaram suas esperanças em meu trabalho.
+                  Quero expressar minha <span className="font-bold text-blue-600">profunda gratidÃ£o</span> a todos que 
+                  confiaram neste sistema e depositaram suas esperanÃ§as em meu trabalho.
                 </p>
                 <p className="text-xl text-gray-700 leading-relaxed mb-4">
                   Cada uma das <span className="font-bold text-purple-600">400+ candidaturas</span> representa um sonho, 
-                  uma oportunidade e a confiança que vocês depositaram em mim.
+                  uma oportunidade e a confianÃ§a que vocÃªs depositaram em mim.
                 </p>
                 <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                  Este marco não seria possível sem a confiança da equipe de RH que acreditou nesta plataforma.
+                  Este marco nÃ£o seria possÃ­vel sem a confianÃ§a da equipe de RH que acreditou nesta plataforma.
                 </p>
                 
                 {/* Assinatura */}
                 <div className="border-t-2 border-blue-300 pt-6 mt-6">
                   <p className="text-2xl font-bold text-gray-800 mb-2">
-                    Com gratidão,
+                    Com gratidÃ£o,
                   </p>
                   <motion.p
                     animate={{
@@ -270,7 +270,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
                     }}
                     className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
                   >
-                    Douglas Marques ✨
+                    Douglas Marques âœ¨
                   </motion.p>
                   <p className="text-sm text-gray-600 mt-2 italic">
                     Desenvolvedor do Sistema Trabalhe Conosco
@@ -280,7 +280,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             </motion.div>
 
 
-            {/* Botão continuar sem countdown - usuário lê com calma */}
+            {/* BotÃ£o continuar sem countdown - usuÃ¡rio lÃª com calma */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -293,11 +293,11 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
                 whileTap={{ scale: 0.95 }}
                 className="px-10 py-5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3"
               >
-                <span>💼</span>
+                <span>ðŸ’¼</span>
                 Acessar o Sistema
-                <span>✨</span>
+                <span>âœ¨</span>
               </motion.button>
-              <p className="text-xs text-gray-500 italic">Leia com calma, sem pressa! 😊</p>
+              <p className="text-xs text-gray-500 italic">Leia com calma, sem pressa! ðŸ˜Š</p>
             </motion.div>
 
             {/* Frase inspiradora */}
@@ -307,7 +307,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               transition={{ delay: 1.5 }}
               className="mt-8 text-lg text-gray-600 italic font-medium"
             >
-              &quot;Juntos, construímos oportunidades e realizamos sonhos!&quot; 🌟
+              &quot;Juntos, construÃ­mos oportunidades e realizamos sonhos!&quot; ðŸŒŸ
             </motion.p>
           </motion.div>
         </motion.div>
@@ -359,7 +359,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
                   delay: randomDelay,
                 }}
               >
-                ❄️
+                â„ï¸
               </motion.div>
             );
           })}
@@ -380,7 +380,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             boxShadow: '0 0 50px rgba(196, 30, 58, 0.3), 0 0 100px rgba(22, 91, 51, 0.2)',
           }}
         >
-          {/* Decorações de Natal */}
+          {/* DecoraÃ§Ãµes de Natal */}
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
             <motion.div
               animate={{
@@ -394,7 +394,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               }}
               className="text-6xl"
             >
-              🎄
+              ðŸŽ„
             </motion.div>
           </div>
 
@@ -404,7 +404,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
               className="text-4xl"
             >
-              ⭐
+              â­
             </motion.div>
           </div>
 
@@ -414,7 +414,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
               className="text-4xl"
             >
-              🎁
+              ðŸŽ
             </motion.div>
           </div>
 
@@ -426,13 +426,13 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             className="mb-6"
           >
             <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-600 to-green-600 text-white px-8 py-4 rounded-2xl shadow-xl">
-              <span className="text-5xl">🎅</span>
+              <span className="text-5xl">ðŸŽ…</span>
               <div className="text-left">
                 <p className="text-sm font-medium opacity-90">Faltam apenas</p>
                 <p className="text-4xl font-bold">{diasAteNatal} dias</p>
                 <p className="text-sm font-medium opacity-90">para o Natal!</p>
               </div>
-              <span className="text-5xl">🎄</span>
+              <span className="text-5xl">ðŸŽ„</span>
             </div>
           </motion.div>
 
@@ -470,7 +470,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             transition={{ delay: 1.2 }}
             className="flex justify-center gap-4 mb-6 text-4xl"
           >
-            {['🎁', '⛄', '🔔', '🕯️', '🎅'].map((emoji, idx) => (
+            {['ðŸŽ', 'â›„', 'ðŸ””', 'ðŸ•¯ï¸', 'ðŸŽ…'].map((emoji, idx) => (
               <motion.span
                 key={idx}
                 animate={{
@@ -488,7 +488,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             ))}
           </motion.div>
 
-          {/* Apenas countdown, sem botão */}
+          {/* Apenas countdown, sem botÃ£o */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -505,7 +505,7 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             transition={{ delay: 2 }}
             className="mt-6 text-sm text-gray-500 italic"
           >
-            &quot;O espírito natalino está no ar! Ho Ho Ho!&quot; 🎅🎄
+            &quot;O espÃ­rito natalino estÃ¡ no ar! Ho Ho Ho!&quot; ðŸŽ…ðŸŽ„
           </motion.p>
         </motion.div>
       </motion.div>
