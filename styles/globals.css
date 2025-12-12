@@ -46,21 +46,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* ================================================================
-   HOME (/): fundo azul/gradiente (mesmo conceito do login Astron)
-   - Aplicado somente quando a página renderiza a camada .home-blue-bg
-   ================================================================ */
-.home-blue-bg {
-  background: linear-gradient(90deg, #354a80, #1e2b50);
-  background-size: 200% 200%;
-  animation: homeBlueFlow 24s ease-in-out infinite;
-}
-
-@keyframes homeBlueFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+ 
 
 /* Partículas simples via CSS */
 .particles {
