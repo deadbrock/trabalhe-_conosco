@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText, ChevronDown } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import NotificationCenter from "./NotificationCenter";
-import "../styles/rh-panel.css";
 
 export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
