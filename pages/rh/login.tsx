@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { apiPost } from "@/lib/api";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { Mail, Lock, Shield, Volume2, VolumeX } from "lucide-react";
+import { Mail, Lock, Volume2, VolumeX } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import ChristmasAnimation from "@/components/ChristmasAnimation";
 
 export default function RHLogin() {
@@ -261,9 +262,16 @@ export default function RHLogin() {
               initial={{ scale: 0.8, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 border-4 border-yellow-400"
+              className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 border-4 border-yellow-400 overflow-hidden"
             >
-              <Shield className="w-10 h-10 text-red-600" />
+              <Image 
+                src="/logo-aestron.png" 
+                alt="AstronTalent Logo" 
+                width={80} 
+                height={80}
+                className="object-contain"
+                priority
+              />
             </motion.div>
             <h1 className="text-3xl font-bold text-white mb-2 relative z-10 flex items-center justify-center gap-2">
               🎄 AstronTalent 🎄
