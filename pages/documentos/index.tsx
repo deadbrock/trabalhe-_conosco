@@ -60,11 +60,7 @@ export default function DocumentosLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      {/* Elementos decorativos */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-
+    <div className="min-h-screen at-page flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -72,19 +68,19 @@ export default function DocumentosLoginPage() {
         className="w-full max-w-md relative z-10"
       >
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="at-card overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center">
+          <div className="p-8 text-center bg-gradient-to-br from-[#354A80] to-[#1f2937]">
             <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+              className="w-16 h-16 bg-white/10 border border-white/20 rounded-full flex items-center justify-center mx-auto mb-4"
             >
-              <FileText className="w-10 h-10 text-blue-600" />
+              <FileText className="w-8 h-8 text-white" />
             </motion.div>
-            <h1 className="text-3xl font-bold text-white mb-2">Envio de Documentos</h1>
-            <p className="text-white/90">Acesse com seu CPF e senha recebida</p>
+            <h1 className="text-3xl font-semibold text-white mb-2">Envio de Documentos</h1>
+            <p className="text-white/80">Acesse com seu CPF e a senha recebida</p>
           </div>
 
           {/* Form */}
@@ -101,7 +97,7 @@ export default function DocumentosLoginPage() {
                     type="text"
                     value={cpf}
                     onChange={handleCPFChange}
-                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-blue-500 focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
+                    className="at-input pl-11 text-slate-900 placeholder:text-slate-400"
                     placeholder="000.000.000-00"
                     maxLength={14}
                     required
@@ -120,7 +116,7 @@ export default function DocumentosLoginPage() {
                     type="password"
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
-                    className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-blue-500 focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
+                    className="at-input pl-11 text-slate-900 placeholder:text-slate-400"
                     placeholder="Senha recebida por email/WhatsApp"
                     maxLength={7}
                     required
@@ -146,7 +142,7 @@ export default function DocumentosLoginPage() {
                 disabled={loading || cpf.length < 14 || senha.length < 7}
                 whileHover={{ scale: loading ? 1 : 1.02 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}
-                className="w-full rounded-xl px-6 py-4 font-bold text-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                className="w-full at-btn at-btn-primary h-[52px] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -163,11 +159,11 @@ export default function DocumentosLoginPage() {
             </form>
 
             {/* Informações */}
-            <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <p className="text-sm text-blue-800 font-medium mb-2">
-                📧 Verifique seu email e WhatsApp
+            <div className="mt-6 rounded-[24px] border border-slate-200 bg-white/70 p-4">
+              <p className="text-sm text-slate-900 font-medium mb-1">
+                Verifique seu email e WhatsApp
               </p>
-              <p className="text-xs text-blue-600">
+              <p className="text-xs text-slate-600">
                 Você recebeu um CPF e uma senha de 7 caracteres para acessar o sistema de envio de documentos.
               </p>
             </div>

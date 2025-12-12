@@ -3,19 +3,15 @@ import Header from "@/components/Header";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="min-h-screen text-foreground at-page">
       <Header />
-      <main className="mx-auto max-w-6xl px-4 py-24 drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">{children}</main>
-      <footer className="mx-auto max-w-6xl px-4 py-8 border-t border-white/10 text-sm">
-        <div className="rounded-xl p-4 text-center text-white space-y-3" style={{
-          background: "linear-gradient(135deg, var(--secondary), var(--primary))"
-        }}>
-          <div className="flex items-center justify-center gap-4 mb-2">
-            <a aria-label="LinkedIn" href="#" className="text-white/90 hover:text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] transition">in</a>
-            <a aria-label="Instagram" href="#" className="text-white/90 hover:text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] transition">ig</a>
-            <a aria-label="YouTube" href="#" className="text-white/90 hover:text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] transition">yt</a>
+      <main className="mx-auto max-w-6xl px-4 pt-24 pb-12">{children}</main>
+      <footer className="mx-auto max-w-6xl px-4 pb-10 text-sm">
+        <div className="at-card">
+          <div className="at-card-body text-center text-slate-600 space-y-2">
+            <div className="text-slate-900 font-semibold">AstronTalent</div>
+            <div>© {new Date().getFullYear()} Aestron</div>
           </div>
-          <div>© {new Date().getFullYear()} Aestron</div>
         </div>
       </footer>
     </div>

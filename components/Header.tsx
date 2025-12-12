@@ -12,17 +12,20 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/40 ${
-        scrolled ? "h-14" : "h-20"
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 at-navbar ${
+        scrolled ? "shadow-sm" : ""
       }`}
     >
       <div className="mx-auto max-w-6xl px-4 h-full flex items-center justify-between">
-        <div className="text-lg font-semibold text-white">
-          <span className="text-white">Trabalhe</span>{" "}
-          <span className="text-white">Conosco</span>
+        <div className="text-lg font-semibold text-slate-900 tracking-tight">
+          <span className="text-slate-900">Trabalhe</span>{" "}
+          <span className="text-slate-900">Conosco</span>
         </div>
         <nav className="flex items-center gap-4 text-sm">
-          <a href="#oportunidades" className="text-white opacity-90 hover:opacity-100 transition font-medium">
+          <a
+            href="#oportunidades"
+            className="text-slate-700 hover:text-slate-900 transition font-medium"
+          >
             Oportunidades
           </a>
         </nav>
