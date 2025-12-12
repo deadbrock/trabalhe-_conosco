@@ -63,10 +63,10 @@ function LogoHeader() {
         <Image
           src="/logo-aestron.png"
           alt="Astron"
-          width={280}
-          height={78}
+          width={360}
+          height={100}
           priority
-          className="h-20 sm:h-24 w-auto object-contain opacity-95 invert"
+          className="h-24 sm:h-32 w-auto object-contain opacity-95 invert"
         />
       </div>
 
@@ -206,7 +206,7 @@ export default function LoginPage() {
 
         {/* Rodapé */}
         <footer className="mt-6 text-center text-xs text-white/70">
-          © 2025 Astron – Sistema Astron
+          © 2025 Aestron – Sistema Astron
         </footer>
       </div>
     </BackgroundWrapper>
