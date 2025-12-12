@@ -64,9 +64,7 @@
    =================== */
 
 .rh-panel {
-  /* Fundo padrão do Painel RH: mesmo conceito visual do login (Astron) */
-  background: linear-gradient(135deg, #354a80 0%, #1f2937 100%);
-  background-attachment: fixed;
+  background: var(--rh-bg);
   min-height: 100vh;
   color: var(--rh-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
