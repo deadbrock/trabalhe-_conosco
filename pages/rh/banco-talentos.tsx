@@ -3,6 +3,10 @@ import { apiGet, apiPut } from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
 import { Star, Search, Filter, Mail, Phone, Calendar, Eye, MessageCircle, MapPin, Briefcase, CheckCircle, ArrowRight } from "lucide-react";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 export type Talento = {
   id: number;
@@ -91,19 +95,12 @@ export default function BancoTalentos() {
 
   return (
     <RHLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center">
-                <Star className="w-6 h-6 text-white" fill="currentColor" />
-              </div>
-              Banco de Talentos
-            </h1>
-            <p className="text-gray-600 mt-2">Candidatos com potencial para futuras oportunidades</p>
-          </div>
-        </div>
+      <div className="space-y-10">
+        <SectionTitle
+          title="Banco de talentos"
+          subtitle="Candidatos com potencial para futuras oportunidades"
+          icon={<Star className="h-5 w-5" />}
+        />
 
         {/* Métricas */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -151,32 +148,27 @@ export default function BancoTalentos() {
           </div>
         </div>
 
-        {/* Busca */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex-grow min-w-[280px]">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="Buscar por nome, email, vaga ou localização..."
-                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-11 pr-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
-                />
-              </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Busca</CardTitle>
+            <CardDescription>Filtre por nome, e-mail, vaga ou localização</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-[1fr_180px]">
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                placeholder="Buscar por nome, e-mail, vaga ou localização…"
+                leftIcon={<Search className="h-4 w-4" />}
+              />
+              <Button onClick={handleSearch} disabled={loading} variant="outline" tone="primary">
+                <Filter className="h-4 w-4" />
+                {loading ? "Buscando…" : "Buscar"}
+              </Button>
             </div>
-
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50"
-            >
-              <Filter className="w-5 h-5" />
-              {loading ? "Buscando..." : "Buscar"}
-            </button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Lista de Talentos */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
