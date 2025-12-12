@@ -82,7 +82,7 @@ function LogoHeader() {
 
 function BackgroundWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[#354A80] to-[#1f2937]">
+    <section className="min-h-screen bg-gradient-to-r from-[#354a80] to-[#1e2b50]">
       <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-12">
         {children}
       </div>
