@@ -91,7 +91,7 @@ export default function RHLogin() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-red-900 via-green-900 to-red-950 flex items-center justify-center p-4 relative overflow-hidden">
+    <section className="min-h-screen bg-gradient-to-br from-[#373f49] via-[#2c3339] to-[#373f49] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Neve caindo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(50)].map((_, i) => {
@@ -124,26 +124,6 @@ export default function RHLogin() {
         })}
       </div>
 
-      {/* Luzes de Natal piscantes */}
-      <div className="absolute top-0 left-0 right-0 h-8 flex justify-around items-center pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`w-4 h-4 rounded-full ${
-              i % 3 === 0 ? 'bg-red-500' : i % 3 === 1 ? 'bg-green-500' : 'bg-yellow-500'
-            }`}
-            animate={{ 
-              opacity: [0.3, 1, 0.3],
-              scale: [0.8, 1.2, 0.8]
-            }}
-            transition={{ 
-              duration: 1.5,
-              repeat: Infinity,
-              delay: i * 0.1
-            }}
-          />
-        ))}
-      </div>
 
       {/* Estrelas brilhantes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -172,15 +152,15 @@ export default function RHLogin() {
       </div>
 
       {/* Elementos decorativos de fundo */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-green-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl" />
       
-      {/* Link para voltar com tema natalino */}
+      {/* Link para voltar */}
       <Link
         href="/"
-        className="absolute top-6 left-6 text-white hover:text-yellow-300 transition-colors font-medium flex items-center gap-2 z-20 bg-red-600/30 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20"
+        className="absolute top-6 left-6 text-white hover:text-blue-300 transition-colors font-medium flex items-center gap-2 z-20 bg-[#373f49]/80 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20"
       >
-        🎄 ← Voltar ao site
+        ← Voltar ao site
       </Link>
 
       {/* Botão de Música Natalina */}
@@ -196,14 +176,14 @@ export default function RHLogin() {
           {/* Anel pulsante */}
           {isMusicPlaying && (
             <motion.div
-              className="absolute inset-0 rounded-full bg-red-500/30"
+              className="absolute inset-0 rounded-full bg-blue-500/30"
               animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
           )}
           
           {/* Botão principal */}
-          <div className="relative bg-gradient-to-r from-red-600 to-green-600 p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300">
+          <div className="relative bg-gradient-to-r from-[#373f49] to-[#4a5461] p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300">
             {isMusicPlaying ? (
               <Volume2 className="w-6 h-6 text-white" />
             ) : (
@@ -214,7 +194,7 @@ export default function RHLogin() {
           {/* Tooltip */}
           <div className="absolute top-full right-0 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
             <div className="bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg whitespace-nowrap">
-              {isMusicPlaying ? "🎵 Pausar música" : "🎄 Música natalina"}
+              {isMusicPlaying ? "🎵 Pausar música" : "🎵 Música de fundo"}
             </div>
           </div>
         </div>
@@ -226,58 +206,53 @@ export default function RHLogin() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md relative z-10"
       >
-        {/* Card de Login com tema natalino */}
-        <div className="bg-white rounded-3xl shadow-2xl border-4 border-red-500/30 overflow-hidden relative">
-          {/* Decoração de azevinho */}
-          <div className="absolute top-4 right-4 text-3xl z-10 animate-bounce">🎅</div>
-          <div className="absolute top-4 left-4 text-3xl z-10 animate-bounce" style={{ animationDelay: '0.5s' }}>🎁</div>
+        {/* Card de Login */}
+        <div className="bg-white rounded-3xl shadow-2xl border-4 border-[#373f49]/20 overflow-hidden relative">
           
-          {/* Header com tema natalino */}
-          <div className="bg-gradient-to-r from-red-600 via-green-600 to-red-600 p-8 text-center relative overflow-hidden">
-            {/* Flocos de neve no header */}
-            <div className="absolute inset-0 opacity-20">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-[#373f49] via-[#4a5461] to-[#373f49] p-8 text-center relative overflow-hidden">
+            {/* Padrão sutil de fundo */}
+            <div className="absolute inset-0 opacity-10">
               {[...Array(10)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute text-white text-xl"
+                  className="absolute w-2 h-2 bg-white rounded-full"
                   style={{
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
                   }}
                   animate={{ 
-                    y: [0, 20, 0],
-                    rotate: [0, 360]
+                    opacity: [0.2, 0.8, 0.2],
+                    scale: [0.8, 1.2, 0.8]
                   }}
                   transition={{ 
                     duration: 3,
                     repeat: Infinity,
                     delay: i * 0.3
                   }}
-                >
-                  ❄️
-                </motion.div>
+                />
               ))}
             </div>
             <motion.div
               initial={{ scale: 0.8, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 overflow-hidden"
+              className="w-36 h-36 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 overflow-hidden"
               style={{ backgroundColor: '#373f49' }}
             >
               <Image 
                 src="/logo-aestron.png" 
                 alt="AstronTalent Logo" 
-                width={80} 
-                height={80}
-                className="object-contain"
+                width={140} 
+                height={140}
+                className="object-contain p-2"
                 priority
               />
             </motion.div>
             <h1 className="text-3xl font-bold text-white mb-2 relative z-10 flex items-center justify-center gap-2">
-              🎄 AstronTalent 🎄
+              AstronTalent
             </h1>
-            <p className="text-white/90 relative z-10">🎅 Feliz Natal! Acesso exclusivo para RH 🎁</p>
+            <p className="text-white/90 relative z-10">Sistema de Gestão de Talentos - Acesso RH</p>
           </div>
 
           {/* Form */}
@@ -337,15 +312,15 @@ export default function RHLogin() {
                 disabled={loading}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full rounded-xl px-6 py-4 font-bold text-lg text-white bg-gradient-to-r from-red-600 via-green-600 to-red-600 hover:from-green-600 hover:via-red-600 hover:to-green-600 transition-all duration-500 shadow-lg hover:shadow-2xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden"
+                className="w-full rounded-xl px-6 py-4 font-bold text-lg text-white bg-gradient-to-r from-[#373f49] via-[#4a5461] to-[#373f49] hover:from-[#4a5461] hover:via-[#373f49] hover:to-[#4a5461] transition-all duration-500 shadow-lg hover:shadow-2xl disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden"
               >
                 <motion.div
-                  className="absolute inset-0 bg-white/20"
+                  className="absolute inset-0 bg-white/10"
                   animate={{ x: ['-100%', '100%'] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 />
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  {loading ? "🎅 Entrando..." : "🎄 Entrar no AstronTalent 🎁"}
+                  {loading ? "Entrando..." : "Entrar no AstronTalent"}
                 </span>
               </motion.button>
             </form>
@@ -358,13 +333,13 @@ export default function RHLogin() {
 
         {/* Informações adicionais com tema natalino */}
         <motion.div 
-          className="mt-6 text-center space-y-3"
+          className="mt-6 text-center"
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 inline-block">
             <p className="text-sm text-white font-medium flex items-center gap-2 justify-center">
-              ⭐ © 2025 Aestron - Feliz Natal e Próspero Ano Novo! 🎊
+              © 2025 Aestron - Sistema AstronTalent
             </p>
           </div>
         </motion.div>
