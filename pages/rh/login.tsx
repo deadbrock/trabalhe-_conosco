@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Mail, Lock } from "lucide-react";
 import { apiPost } from "@/lib/api";
+import "../styles/rh-panel.css";
 
 type InputWithIconProps = {
   id: string;

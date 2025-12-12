@@ -1,0 +1,221 @@
+/* ========================================
+   ESTILOS EXCLUSIVOS DO PAINEL RH ASTRONTALENT
+   ======================================== */
+
+/* Variáveis CSS do Painel RH */
+.rh-panel {
+  --rh-primary: #373f49;
+  --rh-secondary: #535d67;
+  --rh-bg: #f8f9fa;
+  --rh-card-bg: #ffffff;
+  --rh-text: #2c3e50;
+  --rh-text-light: #6c757d;
+  --rh-border: #dee2e6;
+  --rh-hover: #e9ecef;
+  --rh-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --rh-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Layout base do painel RH */
+.rh-panel {
+  background: var(--rh-bg);
+  min-height: 100vh;
+  color: var(--rh-text);
+}
+
+/* Navbar do painel RH */
+.rh-navbar {
+  background: var(--rh-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--rh-shadow);
+}
+
+/* Cards do painel RH */
+.rh-card {
+  background: var(--rh-card-bg);
+  border: 1px solid var(--rh-border);
+  border-radius: 8px;
+  box-shadow: var(--rh-shadow);
+  transition: all 0.3s ease;
+}
+
+.rh-card:hover {
+  box-shadow: var(--rh-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Botões do painel RH */
+.rh-btn-primary {
+  background: var(--rh-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.rh-btn-primary:hover {
+  background: var(--rh-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--rh-shadow);
+}
+
+.rh-btn-secondary {
+  background: var(--rh-secondary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.rh-btn-secondary:hover {
+  background: var(--rh-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--rh-shadow);
+}
+
+/* Inputs do painel RH */
+.rh-input {
+  background: var(--rh-card-bg);
+  border: 1px solid var(--rh-border);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  color: var(--rh-text);
+  transition: all 0.3s ease;
+}
+
+.rh-input:focus {
+  outline: none;
+  border-color: var(--rh-primary);
+  box-shadow: 0 0 0 3px rgba(55, 63, 73, 0.1);
+}
+
+/* Tabelas do painel RH */
+.rh-table {
+  background: var(--rh-card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--rh-shadow);
+}
+
+.rh-table thead {
+  background: var(--rh-primary);
+  color: white;
+}
+
+.rh-table tbody tr {
+  border-bottom: 1px solid var(--rh-border);
+  transition: background 0.2s ease;
+}
+
+.rh-table tbody tr:hover {
+  background: var(--rh-hover);
+}
+
+/* Badges do painel RH */
+.rh-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.rh-badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.rh-badge-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.rh-badge-danger {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.rh-badge-info {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Dropdowns do painel RH */
+.rh-dropdown {
+  background: var(--rh-card-bg);
+  border: 1px solid var(--rh-border);
+  border-radius: 8px;
+  box-shadow: var(--rh-shadow-lg);
+  overflow: hidden;
+}
+
+.rh-dropdown-item {
+  padding: 0.75rem 1rem;
+  color: var(--rh-text);
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.rh-dropdown-item:hover {
+  background: var(--rh-hover);
+}
+
+/* Animações do painel RH */
+@keyframes rh-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rh-fade-in {
+  animation: rh-fadeIn 0.3s ease-out;
+}
+
+/* Glassmorphism para modais */
+.rh-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Scrollbar customizada para o painel RH */
+.rh-panel ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.rh-panel ::-webkit-scrollbar-track {
+  background: var(--rh-bg);
+}
+
+.rh-panel ::-webkit-scrollbar-thumb {
+  background: var(--rh-secondary);
+  border-radius: 4px;
+}
+
+.rh-panel ::-webkit-scrollbar-thumb:hover {
+  background: var(--rh-primary);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .rh-card {
+    border-radius: 6px;
+  }
+  
+  .rh-btn-primary,
+  .rh-btn-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+

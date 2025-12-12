@@ -8,12 +8,6 @@
   --secondary: #354a80; /* azul base */
 }
 
-/* Cores específicas para o painel RH AstronTalent */
-.rh-theme {
-  --primary: #373f49; /* azul acinzentado */
-  --secondary: #535d67; /* azul apagado */
-}
-
 /* Mapeia variáveis para tokens Tailwind v4 */
 @theme inline {
   --color-background: var(--background);

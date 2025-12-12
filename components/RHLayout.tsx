@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText, ChevronDown } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import NotificationCenter from "./NotificationCenter";
+import "../styles/rh-panel.css";
 
 export default function RHLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -53,10 +54,10 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen at-page">
+    <div className="rh-panel min-h-screen">
       
       {/* Navbar corporativa (glassmorphism) */}
-      <header className="sticky top-0 z-50 at-navbar">
+      <header className="sticky top-0 z-50 rh-navbar">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Brand */}
