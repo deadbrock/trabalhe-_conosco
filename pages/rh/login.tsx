@@ -262,7 +262,8 @@ export default function RHLogin() {
               initial={{ scale: 0.8, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 border-4 border-yellow-400 overflow-hidden"
+              className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg relative z-10 overflow-hidden"
+              style={{ backgroundColor: '#373f49' }}
             >
               <Image 
                 src="/logo-aestron.png" 
