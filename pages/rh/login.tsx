@@ -263,7 +263,7 @@ export default function RHLogin() {
               <Shield className="w-10 h-10 text-red-600" />
             </motion.div>
             <h1 className="text-3xl font-bold text-white mb-2 relative z-10 flex items-center justify-center gap-2">
-              🎄 Painel RH 🎄
+              🎄 AstronTalent 🎄
             </h1>
             <p className="text-white/90 relative z-10">🎅 Feliz Natal! Acesso exclusivo para RH 🎁</p>
           </div>
@@ -333,7 +333,7 @@ export default function RHLogin() {
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 />
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  {loading ? "🎅 Entrando..." : "🎄 Entrar no Painel 🎁"}
+                  {loading ? "🎅 Entrando..." : "🎄 Entrar no AstronTalent 🎁"}
                 </span>
               </motion.button>
             </form>
@@ -346,13 +346,18 @@ export default function RHLogin() {
 
         {/* Informações adicionais com tema natalino */}
         <motion.div 
-          className="mt-6 text-center"
+          className="mt-6 text-center space-y-3"
           animate={{ y: [0, -5, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 inline-block">
             <p className="text-sm text-white font-medium flex items-center gap-2 justify-center">
               ⭐ © 2025 FG Services - Feliz Natal e Próspero Ano Novo! 🎊
+            </p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 inline-block">
+            <p className="text-xs text-white/80 font-medium">
+              💻 Desenvolvido por <span className="font-bold text-white">Aestron</span>
             </p>
           </div>
         </motion.div>

@@ -259,6 +259,20 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </main>
+
+      {/* Footer com créditos */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4">
+        <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+            <div className="text-gray-600">
+              © {new Date().getFullYear()} <span className="font-semibold text-primary">AstronTalent</span> - FG Services
+            </div>
+            <div className="text-gray-500 text-xs">
+              💻 Desenvolvido por <span className="font-semibold text-gray-700">Aestron</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

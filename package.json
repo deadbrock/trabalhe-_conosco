@@ -1,7 +1,8 @@
 {
-  "name": "trabalhe-conosco",
+  "name": "astrontalent-trabalhe-conosco",
   "version": "0.1.0",
   "private": true,
+  "description": "AstronTalent - Sistema de Gestão de RH desenvolvido pela Aestron",
   "engines": {
     "node": ">=20.0.0"
   },
