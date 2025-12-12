@@ -57,12 +57,13 @@ export default function RHDashboard() {
           setUserName(nome);
           localStorage.setItem("rh_user_email", email);
           
+          // Animação de boas-vindas desabilitada
           // Se é usuário especial e viu menos de 5 vezes
-          if (welcomeCount < 5 && specialUsers.includes(email)) {
-            setShowWelcome(true);
-            // Incrementar contador
-            localStorage.setItem("rh_welcome_count", String(welcomeCount + 1));
-          }
+          // if (welcomeCount < 5 && specialUsers.includes(email)) {
+          //   setShowWelcome(true);
+          //   // Incrementar contador
+          //   localStorage.setItem("rh_welcome_count", String(welcomeCount + 1));
+          // }
         } catch (err) {
           console.error("Erro ao decodificar token:", err);
         }

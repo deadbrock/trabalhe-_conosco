@@ -71,8 +71,11 @@ export default function RHLogin() {
         setUserName("");
       }
       
-      // Mostrar animação de Natal
-      setShowChristmas(true);
+      // Animação de Natal desabilitada
+      // setShowChristmas(true);
+      
+      // Redirecionar diretamente para o painel
+      router.push("/rh");
     } catch (err) {
       console.error("Erro de login:", err);
       setError("Credenciais inválidas. Verifique seu email e senha.");
