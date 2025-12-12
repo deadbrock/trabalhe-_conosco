@@ -59,14 +59,14 @@ function LogoHeader() {
   return (
     <div className="flex flex-col items-center text-center">
       {/* Logo: personalize aqui (arquivo/cores). Dica: use uma versão branca/monocromática */}
-      <div className="mb-5 flex items-center justify-center">
+      <div className="mb-5 mt-8 flex items-center justify-center">
         <Image
           src="/logo-aestron.png"
           alt="Astron"
-          width={490}
-          height={220}
+          width={560}
+          height={250}
           priority
-          className="h-30 sm:h-42 w-auto object-contain opacity-95 invert"
+          className="h-36 sm:h-44 w-auto object-contain opacity-95 invert"
         />
       </div>
 
