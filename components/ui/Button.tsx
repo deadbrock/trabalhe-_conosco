@@ -24,7 +24,7 @@ const base =
 function solidClasses(tone: ButtonTone, gradient: boolean) {
   if (gradient && tone === "primary") {
     return (
-      "text-white bg-premium-gradient shadow-md " +
+      "text-white bg-gradient-to-r from-[#354a80] to-[#1e2b50] shadow-md " +
       "hover:shadow-lg hover:brightness-[1.02] active:brightness-[0.98] " +
       "hover:-translate-y-0.5 active:translate-y-0 " +
       "hover:ring-2 hover:ring-primary/20"
