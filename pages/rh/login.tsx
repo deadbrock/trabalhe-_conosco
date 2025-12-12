@@ -63,10 +63,10 @@ function LogoHeader() {
         <Image
           src="/logo-aestron.png"
           alt="Astron"
-          width={128}
-          height={32}
+          width={200}
+          height={56}
           priority
-          className="h-10 w-auto object-contain opacity-95 invert"
+          className="h-14 sm:h-16 w-auto object-contain opacity-95 invert"
         />
       </div>
 
