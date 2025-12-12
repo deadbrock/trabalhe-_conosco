@@ -182,7 +182,7 @@ export default function DocumentosPage() {
     <p>Sistema de Gestão de Candidatos</p>
   </div>
   
-  <h1>FORMULÁRIO DE AUTODECLARAÃ‡ÃƒO RACIAL</h1>
+  <h1>FORMULÁRIO DE AUTODECLARAÇÃO RACIAL</h1>
   
   <div class="form-group">
     <label>Nome Completo:</label>
@@ -211,7 +211,7 @@ export default function DocumentosPage() {
   </div>
   
   <div class="legal-text">
-    <strong>DECLARAÃ‡ÃƒO:</strong><br><br>
+    <strong>DECLARAÇÃO:</strong><br><br>
     Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do art. 299 do Código Penal Brasileiro e demais disposições legais vigentes.
   </div>
   
@@ -321,7 +321,7 @@ export default function DocumentosPage() {
     <div class="subtitle">Sistema de Gestão de Candidatos</div>
   </div>
   
-  <h1>Autodeclaração Ã‰tnico-Racial</h1>
+  <h1>Autodeclaração Étnico-Racial</h1>
   
   <div class="documento-info">
     <p><strong>Nome Completo:</strong> ${doc.candidato_nome}</p>
@@ -358,10 +358,10 @@ export default function DocumentosPage() {
   </div>
   
   <div class="legal-text">
-    <strong>DECLARAÃ‡ÃƒO LEGAL:</strong><br><br>
+    <strong>DECLARAÇÃO LEGAL:</strong><br><br>
     Declaro, para os devidos fins, que as informações aqui prestadas são verdadeiras e de minha inteira responsabilidade, ciente de que a prestação de informações falsas poderá acarretar responsabilização civil, administrativa e penal, nos termos do <strong>art. 299 do Código Penal Brasileiro</strong> e demais disposições legais vigentes.
     <br><br>
-    <strong>COMPROVAÃ‡ÃƒO ELETRÃ”NICA:</strong> Esta declaração foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificação digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e não-repúdio.
+    <strong>COMPROVAÇÃO ELETRÔNICA:</strong> Esta declaração foi registrada eletronicamente pelo sistema FG Services, com captura de dados de identificação digital (IP, data/hora, aceite de termos) que garantem sua autenticidade e não-repúdio.
   </div>
   
   <div class="signature-area">

@@ -6,6 +6,9 @@ import TemplateEditor from '../../components/TemplateEditor';
 import HistoricoComunicacao from '../../components/HistoricoComunicacao';
 import DashboardComunicacao from '../../components/DashboardComunicacao';
 import ConfiguracaoGatilhos from '../../components/ConfiguracaoGatilhos';
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 
 type AbaAtiva = 'dashboard' | 'templates' | 'historico' | 'gatilhos';
 type ModoTemplate = 'lista' | 'novo' | 'editar';
@@ -32,25 +35,15 @@ export default function ComunicacaoPage() {
 
   return (
     <RHLayout>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-gradient-to-br from-primary to-purple-600 rounded-lg text-white">
-                <Mail className="w-8 h-8" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900"> Comunicação Automatizada</h1>
-                <p className="text-gray-600 mt-1">
-                  Gerencie templates, histórico e configurações de Email e WhatsApp
-                </p>
-              </div>
-            </div>
-          </div>
+      <div className="space-y-10">
+        <SectionTitle
+          title="Comunicação"
+          subtitle="Templates, histórico e gatilhos de e-mail e WhatsApp"
+          icon={<Mail className="h-5 w-5" />}
+        />
 
           {/* Tabs de Navegação */}
-          <div className="bg-white rounded-lg shadow-sm mb-6">
+          <Card className="p-0">
             <div className="border-b border-gray-200">
               <nav className="flex -mb-px overflow-x-auto">
                 <button
@@ -105,7 +98,7 @@ export default function ComunicacaoPage() {
                 </button>
               </nav>
             </div>
-          </div>
+          </Card>
 
           {/* Conteúdo das Abas */}
           <div>
@@ -136,50 +129,37 @@ export default function ComunicacaoPage() {
 
           {/* Info Box */}
           {abaAtiva === 'dashboard' && (
-            <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
-              <div className="flex items-start gap-4">
-                <div className="text-4xl"></div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Sistema de Comunicação Automatizada Ativo!
-                  </h3>
-                  <div className="space-y-2 text-sm text-gray-700">
-                    <p className="flex items-center gap-2">
-                      <span className="text-green-600"></span>
-                      <strong>Email:</strong> Comunicação profissional e formal com histórico rastreável
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-green-600"></span>
-                      <strong>WhatsApp:</strong> Alta taxa de leitura (90-95%) e engajamento instantâneo
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-green-600"></span>
-                      <strong>Gatilhos Automáticos:</strong> Envios disparados automaticamente em eventos-chave
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-green-600"></span>
-                      <strong>Templates Personalizáveis:</strong> Crie e edite mensagens com variáveis dinâmicas
-                    </p>
-                  </div>
-                  <div className="mt-4 flex gap-3">
-                    <button
-                      onClick={() => setAbaAtiva('templates')}
-                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
-                    >
-                      Ver Templates
-                    </button>
-                    <button
-                      onClick={() => setAbaAtiva('gatilhos')}
-                      className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium border border-gray-300"
-                    >
-                      Configurar Gatilhos
-                    </button>
-                  </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Sistema ativo</CardTitle>
+                <CardDescription>Comunicação automatizada para acelerar o processo</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-700">
+                  <li>
+                    <strong>E-mail:</strong> comunicação formal com histórico rastreável
+                  </li>
+                  <li>
+                    <strong>WhatsApp:</strong> alta taxa de leitura e engajamento rápido
+                  </li>
+                  <li>
+                    <strong>Gatilhos:</strong> envios automáticos em eventos-chave
+                  </li>
+                  <li>
+                    <strong>Templates:</strong> mensagens com variáveis dinâmicas
+                  </li>
+                </ul>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button onClick={() => setAbaAtiva('templates')} gradient>
+                    Ver templates
+                  </Button>
+                  <Button onClick={() => setAbaAtiva('gatilhos')} variant="outline" tone="primary">
+                    Configurar gatilhos
+                  </Button>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           )}
-        </div>
       </div>
     </RHLayout>
   );

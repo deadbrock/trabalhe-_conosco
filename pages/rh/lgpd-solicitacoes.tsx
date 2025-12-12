@@ -46,7 +46,7 @@ export default function LGPDSolicitacoes() {
   const [processando, setProcessando] = useState(false);
 
   // ==========================================
-  // CARREGAR SOLICITAÃ‡Ã•ES
+  // CARREGAR SOLICITAÇÕES
   // ==========================================
   const carregarSolicitacoes = useCallback(async () => {
     setLoading(true);
@@ -96,7 +96,7 @@ export default function LGPDSolicitacoes() {
   const handleExcluir = async () => {
     if (!solicitacaoSelecionada) return;
 
-    if (!confirm('ATENÇÃO: ATENÃ‡ÃƒO: Esta ação é IRREVERSÍVEL!\n\nTodos os dados do candidato serão ANONIMIZADOS.\n\nDeseja continuar?')) {
+    if (!confirm('ATENÇÃO: Esta ação é IRREVERSÍVEL!\n\nTodos os dados do candidato serão ANONIMIZADOS.\n\nDeseja continuar?')) {
       return;
     }
 
@@ -118,7 +118,7 @@ export default function LGPDSolicitacoes() {
   };
 
   // ==========================================
-  // REJEITAR SOLICITAÃ‡ÃƒO
+  // REJEITAR SOLICITAÇÃO
   // ==========================================
   const handleRejeitar = async () => {
     if (!solicitacaoSelecionada || !motivo) {
@@ -142,7 +142,7 @@ export default function LGPDSolicitacoes() {
   };
 
   // ==========================================
-  // NOTIFICAR EMAIL NÃƒO ENCONTRADO
+  // NOTIFICAR EMAIL NÃO ENCONTRADO
   // ==========================================
   const handleNotificarEmailNaoEncontrado = async () => {
     if (!solicitacaoSelecionada) return;
@@ -492,7 +492,7 @@ export default function LGPDSolicitacoes() {
                 {modalTipo === 'excluir' && (
                   <div>
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                      <p className="text-red-800 font-medium">ATENÇÃO: ATENÃ‡ÃƒO: Esta ação é IRREVERSÍVEL!</p>
+                      <p className="text-red-800 font-medium">ATENÇÃO: Esta ação é IRREVERSÍVEL!</p>
                       <p className="text-red-700 text-sm mt-2">
                         Todos os dados pessoais serão anonimizados e não poderão ser recuperados.
                       </p>

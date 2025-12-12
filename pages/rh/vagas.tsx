@@ -3,6 +3,13 @@ import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
 import { Plus, Search, Edit, Trash2, Eye, EyeOff, RefreshCw, MapPin, Briefcase } from "lucide-react";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Badge } from "@/components/ui/Badge";
+import { Table, TableContainer, TD, TH, THead, TR } from "@/components/ui/Table";
 
 export type Vaga = {
   id: number;
@@ -83,56 +90,48 @@ export default function RHVagas() {
 
   return (
     <RHLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Gerenciar Vagas</h1>
-            <p className="text-gray-600">Publique e gerencie as vagas disponíveis</p>
-          </div>
-          <button 
-            onClick={() => { setEditing(null); setModalOpen(true); }} 
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            <Plus className="w-5 h-5" />
-            Nova Vaga
-          </button>
-        </div>
+      <div className="space-y-10">
+        <SectionTitle
+          title="Vagas"
+          subtitle="Publique e gerencie as vagas disponíveis"
+          icon={<Briefcase className="h-5 w-5" />}
+          right={
+            <Button onClick={() => { setEditing(null); setModalOpen(true); }} gradient>
+              <Plus className="h-4 w-4" />
+              Nova Vaga
+            </Button>
+          }
+        />
 
-        {/* Filtros */}
-        <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex-grow min-w-[280px]">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input 
-                  value={q} 
-                  onChange={(e) => setQ(e.target.value)} 
-                  onKeyDown={(e) => e.key === 'Enter' && load()}
-                  placeholder="Buscar por título, endereço ou descrição..." 
-                  className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-12 pr-4 py-3.5 outline-none focus:border-primary focus:bg-white focus:shadow-md transition-all duration-300 text-gray-900 placeholder:text-gray-400 font-medium"
-                />
-              </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Filtros</CardTitle>
+            <CardDescription>Encontre vagas por texto e status</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-[1fr_220px_180px]">
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && load()}
+                placeholder="Buscar por título, endereço ou descrição…"
+                leftIcon={<Search className="h-4 w-4" />}
+              />
+              <Select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")}
+              >
+                <option value="all">Todos os status</option>
+                <option value="ativa">Ativas</option>
+                <option value="inativa">Inativas</option>
+              </Select>
+              <Button onClick={load} disabled={loading} variant="outline" tone="primary">
+                <RefreshCw className={loading ? "h-4 w-4 animate-spin" : "h-4 w-4"} />
+                {loading ? "Atualizando…" : "Atualizar"}
+              </Button>
             </div>
-            <select 
-              value={statusFilter} 
-              onChange={(e) => setStatusFilter(e.target.value as "ativa" | "inativa" | "all")} 
-              className="px-5 py-3.5 rounded-xl border-2 border-gray-200 bg-gray-50 outline-none focus:border-secondary focus:bg-white focus:shadow-md transition-all duration-300 text-gray-900 font-semibold cursor-pointer"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="ativa">Ativas</option>
-              <option value="inativa">Inativas</option>
-            </select>
-            <button 
-              onClick={load} 
-              disabled={loading}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-blue-600 text-white hover:shadow-lg transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
-            >
-              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-              {loading ? "Atualizando..." : "Atualizar"}
-            </button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Lista de Vagas */}
         <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">

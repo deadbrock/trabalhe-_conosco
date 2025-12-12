@@ -2,6 +2,10 @@ import { useState } from 'react';
 import RHLayout from '@/components/RHLayout';
 import { apiGet, apiPost } from '@/lib/api';
 import { Smartphone, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 interface QRCodeResponse {
   qrcode?: string;
@@ -78,64 +82,52 @@ export default function WhatsAppConnect() {
 
   return (
     <RHLayout>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Smartphone className="w-8 h-8 text-green-600" />
-            Conectar WhatsApp
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Configure sua conta do WhatsApp para envio automático de mensagens aos candidatos.
-          </p>
-        </div>
+      <div className="space-y-10 max-w-4xl mx-auto">
+        <SectionTitle
+          title="WhatsApp"
+          subtitle="Conecte sua conta para envio automatizado de mensagens aos candidatos"
+          icon={<Smartphone className="h-5 w-5" />}
+        />
 
-        {/* Card Principal */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* Status */}
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="font-semibold text-gray-700">Status:</span>
-              {status === 'connected' && (
-                <span className="flex items-center gap-2 text-green-600 font-medium">
-                  <CheckCircle className="w-5 h-5" />
-                  Conectado
-                </span>
-              )}
-              {status === 'connecting' && (
-                <span className="flex items-center gap-2 text-yellow-600 font-medium">
-                  <RefreshCw className="w-5 h-5 animate-spin" />
-                  Aguardando conexão...
-                </span>
-              )}
-              {status === 'disconnected' && (
-                <span className="flex items-center gap-2 text-red-600 font-medium">
-                  <XCircle className="w-5 h-5" />
-                  Desconectado
-                </span>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <CardTitle>Conexão</CardTitle>
+                <CardDescription>Status e pareamento via QR Code</CardDescription>
+              </div>
+              {status === "connected" ? (
+                <Badge tone="success">Conectado</Badge>
+              ) : status === "connecting" ? (
+                <Badge tone="warning">Aguardando conexão</Badge>
+              ) : (
+                <Badge tone="error">Desconectado</Badge>
               )}
             </div>
-          </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
 
           {/* Botão Gerar QR Code */}
           {status !== 'connected' && (
-            <button
+            <Button
               onClick={gerarQRCode}
               disabled={loading}
-              className="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              tone="primary"
+              gradient
+              className="w-full md:w-auto"
             >
               {loading ? (
                 <>
-                  <RefreshCw className="w-5 h-5 animate-spin" />
-                  Gerando...
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Gerando…
                 </>
               ) : (
                 <>
-                  <Smartphone className="w-5 h-5" />
+                  <Smartphone className="h-4 w-4" />
                   Gerar QR Code
                 </>
               )}
-            </button>
+            </Button>
           )}
 
           {/* Erro ou Mensagem */}
@@ -170,11 +162,11 @@ export default function WhatsAppConnect() {
                 </div>
                 <div className="text-sm text-gray-600 space-y-2">
                   <p><strong>1.</strong> Abra o WhatsApp no celular</p>
-                  <p><strong>2.</strong> Toque em &quot;Configurações&quot; â†’ &quot;Aparelhos conectados&quot;</p>
+                  <p><strong>2.</strong> Toque em &quot;Configurações&quot; → &quot;Aparelhos conectados&quot;</p>
                   <p><strong>3.</strong> Toque em &quot;Conectar um aparelho&quot;</p>
                   <p><strong>4.</strong> Escaneie o QR Code acima</p>
                   <p className="text-yellow-600 font-medium mt-4">
-                    â±¸ O QR Code expira em 2 minutos
+                    O QR Code expira em 2 minutos
                   </p>
                 </div>
               </div>
@@ -195,7 +187,7 @@ export default function WhatsAppConnect() {
                   </p>
                   <button
                     onClick={() => window.location.href = '/rh/comunicacao'}
-                    className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                    className="hidden"
                   >
                     Ir para Comunicação
                   </button>
@@ -205,17 +197,34 @@ export default function WhatsAppConnect() {
           )}
 
           {/* Informações Adicionais */}
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2"> Importante:</h3>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>• O WhatsApp precisa estar instalado no celular</li>
-              <li>• Mantenha o celular conectado à internet</li>
-              <li>• Não faça logout do WhatsApp Web manualmente</li>
-              <li>• A conexão é salva e persiste entre reinicializações do servidor</li>
-              <li>• Recomenda-se usar um número comercial, não pessoal</li>
+          {status === "connected" ? (
+            <Button
+              onClick={() => (window.location.href = "/rh/comunicacao")}
+              variant="outline"
+              tone="primary"
+              className="w-full sm:w-auto"
+            >
+              Ir para Comunicação
+            </Button>
+          ) : null}
+        </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Importante</CardTitle>
+            <CardDescription>Boas práticas para manter a integração estável</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-700">
+              <li>O WhatsApp precisa estar instalado no celular</li>
+              <li>Mantenha o celular conectado à internet</li>
+              <li>Não faça logout do WhatsApp Web manualmente</li>
+              <li>A conexão persiste entre reinicializações do servidor</li>
+              <li>Recomenda-se usar um número comercial, não pessoal</li>
             </ul>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </RHLayout>
   );
