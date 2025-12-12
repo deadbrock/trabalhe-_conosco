@@ -4,6 +4,12 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
+  --primary: #a2122a; /* vermelho base */
+  --secondary: #354a80; /* azul base */
+}
+
+/* Cores específicas para o painel RH AstronTalent */
+.rh-theme {
   --primary: #373f49; /* azul acinzentado */
   --secondary: #535d67; /* azul apagado */
 }

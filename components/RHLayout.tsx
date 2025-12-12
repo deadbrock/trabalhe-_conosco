@@ -54,7 +54,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-light via-white to-gray-100">
+    <div className="rh-theme min-h-screen bg-gradient-to-br from-light via-white to-gray-100">
       {/* Animações Delicadas */}
       <DelicateAnimations />
       

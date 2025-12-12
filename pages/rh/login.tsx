@@ -91,7 +91,7 @@ export default function RHLogin() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[#373f49] via-[#2c3339] to-[#373f49] flex items-center justify-center p-4 relative overflow-hidden">
+    <section className="rh-theme min-h-screen bg-gradient-to-br from-[#373f49] via-[#2c3339] to-[#373f49] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Neve caindo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(50)].map((_, i) => {
