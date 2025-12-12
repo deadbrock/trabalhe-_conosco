@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
@@ -88,7 +88,7 @@ export default function RHVagas() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Gerenciar Vagas</h1>
-            <p className="text-gray-600">Publique e gerencie as vagas disponÃ­veis</p>
+            <p className="text-gray-600">Publique e gerencie as vagas disponíveis</p>
           </div>
           <button 
             onClick={() => { setEditing(null); setModalOpen(true); }} 
@@ -109,7 +109,7 @@ export default function RHVagas() {
                   value={q} 
                   onChange={(e) => setQ(e.target.value)} 
                   onKeyDown={(e) => e.key === 'Enter' && load()}
-                  placeholder="Buscar por tÃ­tulo, endereÃ§o ou descriÃ§Ã£o..." 
+                  placeholder="Buscar por título, endereço ou descrição..." 
                   className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 pl-12 pr-4 py-3.5 outline-none focus:border-primary focus:bg-white focus:shadow-md transition-all duration-300 text-gray-900 placeholder:text-gray-400 font-medium"
                 />
               </div>
@@ -140,7 +140,7 @@ export default function RHVagas() {
             <div className="p-16 text-center">
               <Briefcase className="w-20 h-20 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-700 text-lg font-semibold mb-2">Nenhuma vaga encontrada</p>
-              <p className="text-gray-500 text-sm">Crie sua primeira vaga clicando no botÃ£o acima</p>
+              <p className="text-gray-500 text-sm">Crie sua primeira vaga clicando no botão acima</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
@@ -236,14 +236,14 @@ export default function RHVagas() {
                     onClick={() => { setModalOpen(false); setEditing(null); }} 
                     className="p-2 hover:bg-white/20 rounded-lg transition-all text-white"
                   >
-                    âœ•
+                    ×
                   </button>
                 </div>
               </div>
 
               <form onSubmit={onSubmit} className="p-8 space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">TÃ­tulo da Vaga *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título da Vaga *</label>
                   <input 
                     name="titulo" 
                     defaultValue={editing?.titulo} 
@@ -265,11 +265,11 @@ export default function RHVagas() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">EndereÃ§o *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Endereço *</label>
                     <input 
                       name="endereco" 
                       defaultValue={editing?.endereco} 
-                      placeholder="Ex: SÃ£o Paulo/SP" 
+                      placeholder="Ex: São Paulo/SP" 
                       className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900"
                       required 
                     />
@@ -283,13 +283,13 @@ export default function RHVagas() {
                     defaultValue={editing?.status || "ativa"} 
                     className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 font-medium"
                   >
-                    <option value="ativa">Ativa (VisÃ­vel no site)</option>
+                    <option value="ativa">Ativa (Visível no site)</option>
                     <option value="inativa">Inativa (Oculta)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">DescriÃ§Ã£o</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descrição</label>
                   <textarea 
                     name="descricao" 
                     defaultValue={editing?.descricao} 
@@ -303,7 +303,7 @@ export default function RHVagas() {
                   <textarea 
                     name="requisitos" 
                     defaultValue={editing?.requisitos} 
-                    placeholder="Liste os requisitos necessÃ¡rios (separados por vÃ­rgula ou linha)..." 
+                    placeholder="Liste os requisitos necessários (separados por vírgula ou linha)..." 
                     className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-h-[100px]"
                   />
                 </div>
@@ -313,7 +313,7 @@ export default function RHVagas() {
                   <textarea 
                     name="diferenciais" 
                     defaultValue={editing?.diferenciais} 
-                    placeholder="Diferenciais ou benefÃ­cios da vaga..." 
+                    placeholder="Diferenciais ou benefícios da vaga..." 
                     className="w-full rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-primary focus:bg-white transition-all text-gray-900 min-h-[100px]"
                   />
                 </div>
@@ -330,7 +330,7 @@ export default function RHVagas() {
                     type="submit"
                     className="px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-red-700 hover:from-red-700 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    {editing ? "Salvar AlteraÃ§Ãµes" : "Criar Vaga"}
+                    {editing ? "Salvar Alterações" : "Criar Vaga"}
                   </button>
                 </div>
               </form>

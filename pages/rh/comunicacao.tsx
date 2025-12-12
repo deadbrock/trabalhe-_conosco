@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Mail, FileText, Settings, BarChart3, History } from 'lucide-react';
 import RHLayout from '../../components/RHLayout';
 import TemplateManager from '../../components/TemplateManager';
@@ -41,15 +41,15 @@ export default function ComunicacaoPage() {
                 <Mail className="w-8 h-8" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">ðŸ“¬ ComunicaÃ§Ã£o Automatizada</h1>
+                <h1 className="text-3xl font-bold text-gray-900"> Comunicação Automatizada</h1>
                 <p className="text-gray-600 mt-1">
-                  Gerencie templates, histÃ³rico e configuraÃ§Ãµes de Email e WhatsApp
+                  Gerencie templates, histórico e configurações de Email e WhatsApp
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Tabs de NavegaÃ§Ã£o */}
+          {/* Tabs de Navegação */}
           <div className="bg-white rounded-lg shadow-sm mb-6">
             <div className="border-b border-gray-200">
               <nav className="flex -mb-px overflow-x-auto">
@@ -89,7 +89,7 @@ export default function ComunicacaoPage() {
                   }`}
                 >
                   <History className="w-5 h-5" />
-                  HistÃ³rico
+                  Histórico
                 </button>
 
                 <button
@@ -107,7 +107,7 @@ export default function ComunicacaoPage() {
             </div>
           </div>
 
-          {/* ConteÃºdo das Abas */}
+          {/* Conteúdo das Abas */}
           <div>
             {abaAtiva === 'dashboard' && <DashboardComunicacao />}
 
@@ -138,27 +138,27 @@ export default function ComunicacaoPage() {
           {abaAtiva === 'dashboard' && (
             <div className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
               <div className="flex items-start gap-4">
-                <div className="text-4xl">ðŸš€</div>
+                <div className="text-4xl"></div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Sistema de ComunicaÃ§Ã£o Automatizada Ativo!
+                    Sistema de Comunicação Automatizada Ativo!
                   </h3>
                   <div className="space-y-2 text-sm text-gray-700">
                     <p className="flex items-center gap-2">
-                      <span className="text-green-600">âœ…</span>
-                      <strong>Email:</strong> ComunicaÃ§Ã£o profissional e formal com histÃ³rico rastreÃ¡vel
+                      <span className="text-green-600"></span>
+                      <strong>Email:</strong> Comunicação profissional e formal com histórico rastreável
                     </p>
                     <p className="flex items-center gap-2">
-                      <span className="text-green-600">âœ…</span>
-                      <strong>WhatsApp:</strong> Alta taxa de leitura (90-95%) e engajamento instantÃ¢neo
+                      <span className="text-green-600"></span>
+                      <strong>WhatsApp:</strong> Alta taxa de leitura (90-95%) e engajamento instantâneo
                     </p>
                     <p className="flex items-center gap-2">
-                      <span className="text-green-600">âœ…</span>
-                      <strong>Gatilhos AutomÃ¡ticos:</strong> Envios disparados automaticamente em eventos-chave
+                      <span className="text-green-600"></span>
+                      <strong>Gatilhos Automáticos:</strong> Envios disparados automaticamente em eventos-chave
                     </p>
                     <p className="flex items-center gap-2">
-                      <span className="text-green-600">âœ…</span>
-                      <strong>Templates PersonalizÃ¡veis:</strong> Crie e edite mensagens com variÃ¡veis dinÃ¢micas
+                      <span className="text-green-600"></span>
+                      <strong>Templates Personalizáveis:</strong> Crie e edite mensagens com variáveis dinâmicas
                     </p>
                   </div>
                   <div className="mt-4 flex gap-3">

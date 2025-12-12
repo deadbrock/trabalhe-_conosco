@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { 
@@ -78,7 +78,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
               A
             </div>
             <div className="leading-tight">
-              <div className="text-base font-bold text-slate-900">AstronTalent</div>
+              <div className="text-base font-bold text-slate-900">Astron</div>
               <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
               <div className="flex items-center gap-3">
                 <div className="rh-nav-icon">A</div>
                 <div>
-                  <div className="font-bold text-slate-900">AstronTalent</div>
+                  <div className="font-bold text-slate-900">Astron</div>
                   <div className="text-xs text-slate-500">Gestão de Talentos</div>
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-slate-200 bg-white mt-12">
         <div className="rh-container">
           <div className="py-6 text-center text-sm text-slate-500">
-            AstronTalent © {new Date().getFullYear()} Aestron
+            Astron © {new Date().getFullYear()} Aestron
           </div>
         </div>
       </footer>

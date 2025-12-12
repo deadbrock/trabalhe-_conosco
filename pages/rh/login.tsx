@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -58,11 +58,11 @@ function InputWithIcon({
 function LogoHeader() {
   return (
     <div className="flex flex-col items-center text-center">
-      {/* Logo: personalize aqui (arquivo/cores). Dica: use uma versÃ£o branca/monocromÃ¡tica */}
+      {/* Logo: personalize aqui (arquivo/cores). Dica: use uma versão branca/monocromática */}
       <div className="mb-5 flex items-center justify-center">
         <Image
           src="/logo-aestron.png"
-          alt="AstronTalent"
+          alt="Astron"
           width={128}
           height={32}
           priority
@@ -71,10 +71,10 @@ function LogoHeader() {
       </div>
 
       <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-        AstronTalent
+        Astron
       </h1>
       <p className="mt-2 text-sm sm:text-base text-white/80">
-        Sistema de GestÃ£o de Talentos â€“ Acesso RH
+        Sistema de Gestão de Talentos – Acesso RH
       </p>
     </div>
   );
@@ -113,7 +113,7 @@ export default function LoginPage() {
       router.push("/rh");
     } catch (err) {
       console.error("Erro de login:", err);
-      setError("Credenciais invÃ¡lidas. Verifique seu email e senha.");
+      setError("Credenciais inválidas. Verifique seu email e senha.");
     } finally {
       setLoading(false);
     }
@@ -126,7 +126,7 @@ export default function LoginPage() {
         <div
           className="rounded-[28px] border border-white/15 bg-white/10 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl"
           role="region"
-          aria-label="Login AstronTalent"
+          aria-label="Login Astron"
         >
           <LogoHeader />
 
@@ -149,7 +149,7 @@ export default function LoginPage() {
               type="password"
               value={senha}
               onChange={setSenha}
-              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+              placeholder="••••••••"
               autoComplete="current-password"
               required
               Icon={Lock}
@@ -157,7 +157,7 @@ export default function LoginPage() {
 
             {sessionExpired && (
               <div className="rounded-[14px] border border-amber-200/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-                Sua sessÃ£o expirou. Por favor, faÃ§a login novamente.
+                Sua sessão expirou. Por favor, faça login novamente.
               </div>
             )}
 
@@ -177,7 +177,7 @@ export default function LoginPage() {
               className="h-[52px] w-full rounded-[14px] bg-[#354A80] text-white font-semibold shadow-sm transition
                          hover:-translate-y-[1px] hover:shadow-lg active:translate-y-0
                          disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-              aria-label="Entrar no AstronTalent"
+              aria-label="Entrar no Astron"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>
@@ -185,7 +185,7 @@ export default function LoginPage() {
             <div className="text-center">
               {/* Personalize aqui: email/URL de suporte */}
               <a
-                href="mailto:suporte@fgservices.com.br?subject=Esqueci%20minha%20senha%20-%20AstronTalent"
+                href="mailto:suporte@fgservices.com.br?subject=Esqueci%20minha%20senha%20-%20Astron"
                 className="text-sm text-white/80 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1f2937]"
               >
                 Esqueci minha senha
@@ -204,9 +204,9 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* RodapÃ© */}
+        {/* Rodapé */}
         <footer className="mt-6 text-center text-xs text-white/70">
-          Â© 2025 Astron â€“ Sistema AstronTalent
+          © 2025 Astron – Sistema Astron
         </footer>
       </div>
     </BackgroundWrapper>

@@ -31,7 +31,7 @@ Este projeto possui **dois sistemas visuais completamente independentes**:
 
 ---
 
-### 2️⃣ Painel RH (AstronTalent)
+### 2️⃣ Painel RH (Astron)
 **Arquivos de estilo:** `styles/rh-panel.css` ⚠️ **EXCLUSIVO DO PAINEL RH**
 
 **Componentes:**
@@ -39,14 +39,14 @@ Este projeto possui **dois sistemas visuais completamente independentes**:
 - `pages/rh/*.tsx` (todas as páginas do painel)
 
 **Características:**
-- ✅ Cores corporativas (azul acinzentado `#373f49` e `#535d67`)
+- ✅ Cores corporativas (primária `#354a80`, secundária `#a2122a`, neutros premium)
 - ✅ Design limpo e profissional
 - ✅ Glassmorphism e sombras suaves
 - ✅ Interface de gestão otimizada
 - ✅ Classe base `.rh-panel` em todos os elementos
 
 **Rotas:**
-- `/rh/login` - Login do RH
+- `/rh/login` - Login do RH (Astron)
 - `/rh` - Dashboard
 - `/rh/vagas` - Gestão de vagas
 - `/rh/candidatos` - Gestão de candidatos
@@ -185,5 +185,5 @@ trabalhe-_conosco/
 ---
 
 **Desenvolvido por Aestron**
-© 2025 AstronTalent - Sistema de Gestão de Talentos
+© 2025 Astron - Sistema de Gestão de Talentos
 

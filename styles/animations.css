@@ -103,6 +103,21 @@
   }
 }
 
+/* =========================
+   SaaS Premium: Dropdown In
+   (fade + slide)
+   ========================= */
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hover-pulse {
   position: relative;
 }

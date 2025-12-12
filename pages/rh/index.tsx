@@ -1,10 +1,15 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { apiGet } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
 import WelcomeAnimation from "@/components/WelcomeAnimation";
-import { Briefcase, Users, TrendingUp, UserCheck, Mail, Phone, Calendar, ExternalLink } from "lucide-react";
+import { Briefcase, Users, TrendingUp, UserCheck, Mail, Phone, Calendar, ExternalLink, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
+import { SectionTitle } from "@/components/ui/SectionTitle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Table, TableContainer, TD, TH, THead, TR } from "@/components/ui/Table";
 
 type Metrics = {
   vagas_abertas: number;
@@ -33,12 +38,12 @@ export default function RHDashboard() {
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
     
-    // Verificar se Ã© o primeiro acesso dos usuÃ¡rios especiais
+    // Verificar se é o primeiro acesso dos usuários especiais
     if (typeof window !== "undefined") {
       const welcomeCount = parseInt(localStorage.getItem("rh_welcome_count") || "0");
       const storedEmail = localStorage.getItem("rh_user_email");
       
-      // Emails dos usuÃ¡rios que devem ver a animaÃ§Ã£o
+      // Emails dos usuários que devem ver a animação
       const specialUsers = [
         "rh@fgservices.com.br",
         "rh-2@fgservices.com.br",
@@ -46,19 +51,19 @@ export default function RHDashboard() {
         "gestaorh@fgservices.com.br"
       ];
       
-      // Pegar nome do usuÃ¡rio do token JWT
+      // Pegar nome do usuário do token JWT
       if (token) {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           const email = payload.email || storedEmail || "";
-          const nome = payload.nome || "UsuÃ¡rio";
+          const nome = payload.nome || "Usuário";
           
           setUserEmail(email);
           setUserName(nome);
           localStorage.setItem("rh_user_email", email);
           
-          // AnimaÃ§Ã£o de boas-vindas desabilitada
-          // Se Ã© usuÃ¡rio especial e viu menos de 5 vezes
+          // Animação de boas-vindas desabilitada
+          // Se é usuário especial e viu menos de 5 vezes
           // if (welcomeCount < 5 && specialUsers.includes(email)) {
           //   setShowWelcome(true);
           //   // Incrementar contador
@@ -72,7 +77,7 @@ export default function RHDashboard() {
     
     apiGet<Metrics>("/metrics", token).then(setMetrics).catch(() => setMetrics({ vagas_abertas: 0, total_candidatos: 0, candidatos_hoje: 0 }));
     
-    // Carregar Ãºltimos 5 candidatos
+    // Carregar últimos 5 candidatos
     apiGet<Candidato[]>("/candidatos", token).then((data) => {
       setRecentCandidatos(data.slice(0, 5));
     }).catch(() => setRecentCandidatos([]));
@@ -113,13 +118,13 @@ export default function RHDashboard() {
   ];
 
   const quickActions = [
-    { label: "Nova Vaga", href: "/rh/vagas", icon: Briefcase, color: "from-[#354A80] to-[#1f2937]" },
-    { label: "Ver Candidatos", href: "/rh/candidatos", icon: UserCheck, color: "from-[#1f2937] to-[#354A80]" },
+    { label: "Nova Vaga", href: "/rh/vagas", icon: Briefcase },
+    { label: "Ver Candidatos", href: "/rh/candidatos", icon: UserCheck },
   ];
 
   return (
     <RHLayout>
-      {/* AnimaÃ§Ã£o de Boas-Vindas */}
+      {/* Animação de Boas-Vindas */}
       {showWelcome && (
         <WelcomeAnimation 
           userName={userName}
@@ -128,14 +133,30 @@ export default function RHDashboard() {
         />
       )}
       
-      <div className="space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-          <p className="text-gray-600">Bem-vindo ao painel de gerenciamento de RH</p>
-        </div>
+      <div className="space-y-12">
+        <SectionTitle
+          title="Dashboard"
+          subtitle="Visão geral do recrutamento e atividade recente"
+          icon={<LayoutDashboard className="h-5 w-5" />}
+          right={
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Link href="/rh/vagas" className="w-full sm:w-auto">
+                <Button gradient className="w-full sm:w-auto">
+                  <Briefcase className="h-4 w-4" />
+                  Nova Vaga
+                </Button>
+              </Link>
+              <Link href="/rh/candidatos" className="w-full sm:w-auto">
+                <Button variant="outline" tone="primary" className="w-full sm:w-auto">
+                  <UserCheck className="h-4 w-4" />
+                  Ver Candidatos
+                </Button>
+              </Link>
+            </div>
+          }
+        />
 
-        {/* MÃ©tricas - Cards com bordas coloridas */}
+        {/* Métricas */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, i) => (
             <motion.div 
@@ -143,115 +164,101 @@ export default function RHDashboard() {
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.6, delay: i * 0.15 }} 
-              className={`bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 ${card.borderColor} animate-[fadeInUp_0.6s_ease_forwards]`}
+              className="animate-[fadeInUp_0.6s_ease_forwards]"
               style={{ animationDelay: `${i * 150}ms` }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center shadow-lg`}>
-                  <card.icon className="w-7 h-7 text-white" />
-                </div>
-                <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase ${card.bgColor} ${card.textColor}`}>
-                  Atualizado
-                </span>
-              </div>
-              <div className="text-sm font-medium text-gray-500 mb-2 tracking-wide">{card.label}</div>
-              <div className="text-4xl font-bold text-dark">{card.value}</div>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <card.icon className="h-6 w-6" />
+                    </div>
+                    <Badge tone="neutral">Atualizado</Badge>
+                  </div>
+                  <CardDescription>{card.label}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-bold text-neutral-900">{card.value}</div>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
 
-        {/* AÃ§Ãµes RÃ¡pidas */}
-        <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100">
-          <h2 className="text-2xl font-semibold text-dark mb-6 tracking-wide">AÃ§Ãµes RÃ¡pidas</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {quickActions.map((action, i) => (
-              <Link
-                key={i}
-                href={action.href}
-                className={`flex items-center gap-4 p-6 rounded-xl bg-gradient-to-r ${action.color} text-white hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-md`}
-              >
-                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg">
-                  <action.icon className="w-7 h-7" />
-                </div>
-                <span className="font-semibold text-lg tracking-wide">{action.label}</span>
+        {/* Últimas candidaturas */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <CardTitle>Últimas candidaturas</CardTitle>
+                <CardDescription>Os 5 registros mais recentes</CardDescription>
+              </div>
+              <Link href="/rh/candidatos">
+                <Button variant="ghost" tone="primary">
+                  Ver todos <ExternalLink className="h-4 w-4" />
+                </Button>
               </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Ãšltimos Candidatos */}
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="p-8 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-            <h2 className="text-2xl font-semibold text-dark tracking-wide">Ãšltimas Candidaturas</h2>
-            <Link 
-              href="/rh/candidatos" 
-              className="text-sm text-primary hover:text-secondary font-bold flex items-center gap-1 transition-colors duration-300 px-3 py-2 rounded-lg hover:bg-slate-100"
-            >
-              Ver Todos
-              <ExternalLink className="w-4 h-4" />
-            </Link>
-          </div>
-          
-          {recentCandidatos.length === 0 ? (
-            <div className="p-12 text-center">
-              <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 font-medium">Nenhuma candidatura recente</p>
             </div>
-          ) : (
-            <div className="divide-y divide-gray-100">
-              {recentCandidatos.map((candidato, idx) => (
-                <motion.div
-                  key={candidato.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="p-6 hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent transition-all duration-300"
-                >
-                  <div className="flex items-center justify-between gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="font-semibold text-dark text-lg">{candidato.nome}</h3>
-                        {candidato.status === "novo" && (
-                          <span className="bg-gradient-to-r from-[#354A80] to-[#1f2937] text-white text-xs font-bold px-3 py-1 rounded-md uppercase shadow-sm">
-                            Novo
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <Briefcase className="w-4 h-4 text-secondary" />
-                          <span className="font-medium">{candidato.vaga_titulo || "Vaga nÃ£o especificada"}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-primary" />
-                          <span>{candidato.email}</span>
-                        </div>
-                        {candidato.telefone && (
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-green-600" />
-                            <span>{candidato.telefone}</span>
-                          </div>
-                        )}
-                        {candidato.data_cadastro && (
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-purple-600" />
-                            <span>{new Date(candidato.data_cadastro).toLocaleDateString('pt-BR')}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <Link
-                      href={`/rh/candidatos/${candidato.vaga_id}`}
-                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#354A80] to-[#1f2937] text-white font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
-                    >
-                      Ver Kanban
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
+          </CardHeader>
+          <CardContent>
+            {recentCandidatos.length === 0 ? (
+              <div className="py-10 text-center text-sm text-neutral-500">
+                Nenhuma candidatura recente
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <TableContainer className="shadow-none border border-neutral-200/70">
+                  <Table>
+                    <THead>
+                      <TR className="hover:bg-transparent">
+                        <TH>Candidato</TH>
+                        <TH>Vaga</TH>
+                        <TH>Status</TH>
+                        <TH className="text-right">Ações</TH>
+                      </TR>
+                    </THead>
+                    <tbody>
+                      {recentCandidatos.map((c) => (
+                        <TR key={c.id}>
+                          <TD>
+                            <div className="font-semibold text-neutral-900">{c.nome}</div>
+                            <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500">
+                              <Mail className="h-3.5 w-3.5" /> {c.email}
+                              {c.telefone ? (
+                                <>
+                                  <span className="mx-1 text-neutral-300">•</span>
+                                  <Phone className="h-3.5 w-3.5" /> {c.telefone}
+                                </>
+                              ) : null}
+                              {c.data_cadastro ? (
+                                <>
+                                  <span className="mx-1 text-neutral-300">•</span>
+                                  <Calendar className="h-3.5 w-3.5" />{" "}
+                                  {new Date(c.data_cadastro).toLocaleDateString("pt-BR")}
+                                </>
+                              ) : null}
+                            </div>
+                          </TD>
+                          <TD>{c.vaga_titulo || "—"}</TD>
+                          <TD>
+                            {c.status === "novo" ? <Badge tone="primary">Novo</Badge> : <Badge>{c.status}</Badge>}
+                          </TD>
+                          <TD className="text-right">
+                            <Link href={`/rh/candidatos/${c.vaga_id}`}>
+                              <Button variant="outline" tone="primary">
+                                Ver Kanban
+                              </Button>
+                            </Link>
+                          </TD>
+                        </TR>
+                      ))}
+                    </tbody>
+                  </Table>
+                </TableContainer>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
       </div>
     </RHLayout>

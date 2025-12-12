@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import RHLayout from '@/components/RHLayout';
 import { apiGet, apiPost } from '@/lib/api';
 import { Smartphone, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
@@ -65,7 +65,7 @@ export default function WhatsAppConnect() {
       }
     }, 5000);
 
-    // Limpar apÃ³s 2 minutos (QR code expira)
+    // Limpar após 2 minutos (QR code expira)
     setTimeout(() => {
       clearInterval(interval);
       if (status === 'connecting') {
@@ -86,7 +86,7 @@ export default function WhatsAppConnect() {
             Conectar WhatsApp
           </h1>
           <p className="text-gray-600 mt-2">
-            Configure sua conta do WhatsApp para envio automÃ¡tico de mensagens aos candidatos.
+            Configure sua conta do WhatsApp para envio automático de mensagens aos candidatos.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export default function WhatsAppConnect() {
               {status === 'connecting' && (
                 <span className="flex items-center gap-2 text-yellow-600 font-medium">
                   <RefreshCw className="w-5 h-5 animate-spin" />
-                  Aguardando conexÃ£o...
+                  Aguardando conexão...
                 </span>
               )}
               {status === 'disconnected' && (
@@ -117,7 +117,7 @@ export default function WhatsAppConnect() {
             </div>
           </div>
 
-          {/* BotÃ£o Gerar QR Code */}
+          {/* Botão Gerar QR Code */}
           {status !== 'connected' && (
             <button
               onClick={gerarQRCode}
@@ -158,7 +158,7 @@ export default function WhatsAppConnect() {
             <div className="mt-8">
               <div className="bg-gray-50 rounded-xl p-8 text-center">
                 <p className="text-gray-700 font-medium mb-4">
-                  ðŸ“± Escaneie o QR Code com seu WhatsApp
+                   Escaneie o QR Code com seu WhatsApp
                 </p>
                 <div className="flex justify-center mb-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -170,11 +170,11 @@ export default function WhatsAppConnect() {
                 </div>
                 <div className="text-sm text-gray-600 space-y-2">
                   <p><strong>1.</strong> Abra o WhatsApp no celular</p>
-                  <p><strong>2.</strong> Toque em &quot;ConfiguraÃ§Ãµes&quot; â†’ &quot;Aparelhos conectados&quot;</p>
+                  <p><strong>2.</strong> Toque em &quot;Configurações&quot; â†’ &quot;Aparelhos conectados&quot;</p>
                   <p><strong>3.</strong> Toque em &quot;Conectar um aparelho&quot;</p>
                   <p><strong>4.</strong> Escaneie o QR Code acima</p>
                   <p className="text-yellow-600 font-medium mt-4">
-                    â±ï¸ O QR Code expira em 2 minutos
+                    â±¸ O QR Code expira em 2 minutos
                   </p>
                 </div>
               </div>
@@ -188,31 +188,31 @@ export default function WhatsAppConnect() {
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-semibold text-green-900 mb-2">
-                    âœ… WhatsApp Conectado com Sucesso!
+                     WhatsApp Conectado com Sucesso!
                   </h3>
                   <p className="text-green-700 text-sm mb-3">
-                    Seu WhatsApp estÃ¡ conectado e pronto para enviar mensagens automÃ¡ticas aos candidatos.
+                    Seu WhatsApp está conectado e pronto para enviar mensagens automáticas aos candidatos.
                   </p>
                   <button
                     onClick={() => window.location.href = '/rh/comunicacao'}
                     className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                   >
-                    Ir para ComunicaÃ§Ã£o
+                    Ir para Comunicação
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* InformaÃ§Ãµes Adicionais */}
+          {/* Informações Adicionais */}
           <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">â„¹ï¸ Importante:</h3>
+            <h3 className="font-semibold text-blue-900 mb-2"> Importante:</h3>
             <ul className="text-sm text-blue-700 space-y-1">
-              <li>â€¢ O WhatsApp precisa estar instalado no celular</li>
-              <li>â€¢ Mantenha o celular conectado Ã  internet</li>
-              <li>â€¢ NÃ£o faÃ§a logout do WhatsApp Web manualmente</li>
-              <li>â€¢ A conexÃ£o Ã© salva e persiste entre reinicializaÃ§Ãµes do servidor</li>
-              <li>â€¢ Recomenda-se usar um nÃºmero comercial, nÃ£o pessoal</li>
+              <li>• O WhatsApp precisa estar instalado no celular</li>
+              <li>• Mantenha o celular conectado à internet</li>
+              <li>• Não faça logout do WhatsApp Web manualmente</li>
+              <li>• A conexão é salva e persiste entre reinicializações do servidor</li>
+              <li>• Recomenda-se usar um número comercial, não pessoal</li>
             </ul>
           </div>
         </div>
