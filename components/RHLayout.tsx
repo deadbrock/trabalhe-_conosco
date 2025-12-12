@@ -1,7 +1,20 @@
 ﻿import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { LayoutDashboard, Briefcase, Users, LogOut, Menu, X, Star, MessageCircle, Shield, FileText, ChevronDown } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Briefcase, 
+  Users, 
+  LogOut, 
+  Menu, 
+  X, 
+  Star, 
+  MessageCircle, 
+  Shield, 
+  FileText, 
+  ChevronDown,
+  Bell
+} from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import NotificationCenter from "./NotificationCenter";
 
@@ -19,7 +32,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Removido 'router' das dependências para evitar loop
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("rh_token");
@@ -53,262 +66,205 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="rh-panel min-h-screen">
+    <div className="rh-panel">
       
-      {/* Navbar corporativa (glassmorphism) */}
-      <header className="sticky top-0 z-50 rh-navbar">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Brand */}
-            <div className="hidden md:flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-[#354A80] text-white flex items-center justify-center font-semibold shadow-sm">
-                A
-              </div>
-              <div className="leading-tight">
-                <div className="text-sm font-semibold text-slate-900">AstronTalent</div>
-                <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
-              </div>
+      {/* Navbar Premium */}
+      <header className="rh-navbar">
+        <div className="rh-navbar-content">
+          
+          {/* Brand */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="rh-nav-icon">
+              A
             </div>
+            <div className="leading-tight">
+              <div className="text-base font-bold text-slate-900">AstronTalent</div>
+              <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
+            </div>
+          </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-2">
-              {menuItems.map((item, index) => {
-                // Se tem submenu, renderiza dropdown
-                if ('submenu' in item && item.submenu) {
-                  const isOpen = openDropdown === item.label;
-                  const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
-                  
-                  return (
-                    <div key={index} className="relative">
-                      <button
-                        onClick={() => setOpenDropdown(isOpen ? null : item.label)}
-                        onMouseEnter={() => setOpenDropdown(item.label)}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-[14px] font-medium transition-all duration-200 h-11 ${
-                          isAnySubmenuActive
-                            ? "bg-[#354A80] text-white shadow-sm"
-                            : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                      >
-                        <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                          isAnySubmenuActive ? "bg-white/15" : "bg-slate-100"
-                        }`}>
-                          <item.icon className={`w-5 h-5 ${isAnySubmenuActive ? "text-white" : "text-slate-700"}`} />
-                        </span>
-                        {item.label}
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      
-                      {/* Dropdown Menu */}
-                      {isOpen && (
-                        <div 
-                          className="absolute top-full left-0 mt-2 w-64 at-dropdown at-dropdown-anim py-2 z-50"
-                          onMouseLeave={() => setOpenDropdown(null)}
-                        >
-                          {item.submenu.map((subItem) => {
-                            const isActive = router.pathname === subItem.href;
-                            return (
-                              <Link
-                                key={subItem.href}
-                                href={subItem.href}
-                                onClick={() => setOpenDropdown(null)}
-                                className={`flex items-center gap-3 px-4 py-3 transition-all duration-150 ${
-                                  isActive
-                                    ? "bg-[#354A80] text-white"
-                                    : "text-slate-700 hover:bg-slate-100"
-                                }`}
-                              >
-                                <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                                  isActive ? "bg-white/15" : "bg-slate-100"
-                                }`}>
-                                  <subItem.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-700"}`} />
-                                </span>
-                                {subItem.label}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-                
-                // Se não tem submenu, renderiza link normal
-                const isActive = router.pathname === item.href;
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden rh-btn-ghost rh-btn-icon"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-2">
+            {menuItems.map((item, index) => {
+              // Se tem submenu, renderiza dropdown
+              if ('submenu' in item && item.submenu) {
+                const isOpen = openDropdown === item.label;
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-[14px] font-medium transition-all duration-200 h-11 ${
-                      isActive
-                        ? "bg-[#354A80] text-white shadow-sm"
-                        : "text-slate-700 hover:bg-slate-100"
-                    }`}
-                  >
-                    <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                      isActive ? "bg-white/15" : "bg-slate-100"
-                    }`}>
-                      <item.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-700"}`} />
-                    </span>
-                    {item.label}
-                  </Link>
+                  <div key={index} className="relative">
+                    <button
+                      onClick={() => setOpenDropdown(isOpen ? null : item.label)}
+                      className="rh-nav-item"
+                    >
+                      <item.icon size={18} />
+                      {item.label}
+                      <ChevronDown 
+                        size={16} 
+                        className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                    
+                    {isOpen && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-10" 
+                          onClick={() => setOpenDropdown(null)}
+                        />
+                        <div className="rh-dropdown" style={{ top: '100%', marginTop: '0.5rem' }}>
+                          {item.submenu.map((subItem, subIndex) => (
+                            <Link 
+                              key={subIndex} 
+                              href={subItem.href}
+                              className="rh-dropdown-item"
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              <subItem.icon size={18} />
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 );
-              })}
+              }
               
-              {/* Separador visual */}
-              <div className="w-px h-7 bg-slate-200 mx-1"></div>
-              
-              <NotificationCenter />
-              <ThemeToggleCompact />
-              
-              {/* Separador visual */}
-              <div className="w-px h-7 bg-slate-200 mx-1"></div>
-              
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 px-3 py-2 rounded-[14px] font-medium text-slate-700 hover:bg-slate-100 transition-all duration-200 h-11"
-              >
-                <span className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center">
-                  <LogOut className="w-5 h-5 text-slate-700" />
-                </span>
-                <span>Sair</span>
-              </button>
-            </nav>
+              // Item simples
+              return (
+                <Link 
+                  key={index} 
+                  href={item.href}
+                  className={`rh-nav-item ${router.pathname === item.href ? 'active' : ''}`}
+                >
+                  <item.icon size={18} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-[14px] hover:bg-slate-100 text-slate-700"
+          {/* Right Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggleCompact />
+            <NotificationCenter />
+            <button 
+              onClick={handleLogout}
+              className="rh-btn-ghost rh-btn-icon"
+              title="Sair"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <LogOut size={20} />
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white/70 backdrop-blur-xl">
-            <nav className="px-4 py-3 space-y-1">
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}>
+          <div 
+            className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+              <div className="flex items-center gap-3">
+                <div className="rh-nav-icon">A</div>
+                <div>
+                  <div className="font-bold text-slate-900">AstronTalent</div>
+                  <div className="text-xs text-slate-500">Gestão de Talentos</div>
+                </div>
+              </div>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="rh-btn-ghost rh-btn-icon">
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Mobile Menu Items */}
+            <nav className="p-4 space-y-2">
               {menuItems.map((item, index) => {
-                // Se tem submenu
                 if ('submenu' in item && item.submenu) {
                   const isOpen = openDropdown === item.label;
-                  const isAnySubmenuActive = item.submenu.some(sub => router.pathname === sub.href);
-                  
                   return (
                     <div key={index}>
                       <button
                         onClick={() => setOpenDropdown(isOpen ? null : item.label)}
-                        className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-[18px] font-medium transition-all duration-200 ${
-                          isAnySubmenuActive
-                            ? "bg-[#354A80] text-white shadow-sm"
-                            : "text-slate-700 hover:bg-slate-100"
-                        }`}
+                        className="w-full rh-nav-item justify-between"
                       >
                         <div className="flex items-center gap-3">
-                          <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                            isAnySubmenuActive ? "bg-white/15" : "bg-slate-100"
-                          }`}>
-                            <item.icon className={`w-5 h-5 ${isAnySubmenuActive ? "text-white" : "text-slate-700"}`} />
-                          </span>
+                          <item.icon size={20} />
                           {item.label}
                         </div>
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                        <ChevronDown 
+                          size={16} 
+                          className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        />
                       </button>
-                      
-                      {/* Submenu Mobile */}
                       {isOpen && (
-                        <div className="ml-4 mt-1 space-y-1">
-                          {item.submenu.map((subItem) => {
-                            const isActive = router.pathname === subItem.href;
-                            return (
-                              <Link
-                                key={subItem.href}
-                                href={subItem.href}
-                                onClick={() => {
-                                  setIsMobileMenuOpen(false);
-                                  setOpenDropdown(null);
-                                }}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-[18px] font-medium transition-all duration-200 ${
-                                  isActive
-                                    ? "bg-[#354A80] text-white shadow-sm"
-                                    : "text-slate-700 hover:bg-slate-100"
-                                }`}
-                              >
-                                <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                                  isActive ? "bg-white/15" : "bg-slate-100"
-                                }`}>
-                                  <subItem.icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-700"}`} />
-                                </span>
-                                {subItem.label}
-                              </Link>
-                            );
-                          })}
+                        <div className="ml-8 mt-2 space-y-1">
+                          {item.submenu.map((subItem, subIndex) => (
+                            <Link
+                              key={subIndex}
+                              href={subItem.href}
+                              className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              <subItem.icon size={16} />
+                              {subItem.label}
+                            </Link>
+                          ))}
                         </div>
                       )}
                     </div>
                   );
                 }
                 
-                // Se não tem submenu
-                const isActive = router.pathname === item.href;
                 return (
                   <Link
-                    key={item.href}
+                    key={index}
                     href={item.href}
+                    className={`w-full rh-nav-item ${router.pathname === item.href ? 'active' : ''}`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-[18px] font-medium transition-all duration-200 ${
-                      isActive
-                        ? "bg-[#354A80] text-white shadow-sm"
-                        : "text-slate-700 hover:bg-slate-100"
-                    }`}
                   >
-                    <span className={`h-9 w-9 rounded-full flex items-center justify-center ${
-                      isActive ? "bg-white/15" : "bg-slate-100"
-                    }`}>
-                      <item.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-700"}`} />
-                    </span>
+                    <item.icon size={20} />
                     {item.label}
                   </Link>
                 );
               })}
-              <div className="flex items-center justify-center gap-3 py-2">
-                <NotificationCenter />
-                <ThemeToggleCompact />
+              
+              <div className="pt-4 border-t border-slate-200 space-y-2">
+                <button 
+                  onClick={handleLogout}
+                  className="w-full rh-btn-danger"
+                >
+                  <LogOut size={20} />
+                  Sair
+                </button>
               </div>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-[18px] font-medium text-slate-700 hover:bg-slate-100 transition-all duration-200"
-              >
-                <span className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center">
-                  <LogOut className="w-5 h-5 text-slate-700" />
-                </span>
-                <span>Sair</span>
-              </button>
             </nav>
           </div>
-        )}
-      </header>
-
-      {/* Main Content - Container com sombra e bordas arredondadas */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
-        <div className="at-card">
-          <div className="at-card-body p-6 sm:p-8">
-          {children}
-          </div>
         </div>
+      )}
+
+      {/* Main Content */}
+      <main className="rh-container">
+        {children}
       </main>
 
-      {/* Footer com créditos */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4">
-        <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-            <div className="text-gray-600">
-              <span className="font-semibold text-primary">AstronTalent</span> © {new Date().getFullYear()} Aestron
-            </div>
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white mt-12">
+        <div className="rh-container">
+          <div className="py-6 text-center text-sm text-slate-500">
+            AstronTalent © {new Date().getFullYear()} Aestron
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
