@@ -132,6 +132,68 @@ export default function RHDashboard() {
           onClose={handleCloseWelcome}
         />
       )}
+
+      {/* Banner de Boas-vindas (Dezembro) */}
+      {(() => {
+        const hoje = new Date();
+        const isDezembro = hoje.getMonth() === 11; // 11 = dezembro
+        
+        if (!isDezembro) return null;
+        
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 rounded-2xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-6 text-white shadow-xl relative overflow-hidden border border-white/10"
+          >
+            {/* Efeito de brilho sutil */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-400/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400/30 to-transparent" />
+            
+            {/* Partículas sutis de fundo */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    opacity: [0.2, 0.8, 0.2],
+                    scale: [1, 1.5, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.4,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1">
+                    Bem-vindo, {userName || 'Equipe RH'}
+                  </h2>
+                  <p className="text-sm text-white/70">
+                    Season&apos;s Greetings • Dezembro 2025
+                  </p>
+                </div>
+                <div className="hidden sm:block">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-500/20 to-green-500/20 flex items-center justify-center border border-white/10">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })()}
       
       <div className="space-y-12">
         <SectionTitle

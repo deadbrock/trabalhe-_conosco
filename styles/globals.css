@@ -134,3 +134,161 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* ========================================
+   🎄 TEMA NATALINO - Dezembro 2025 🎄
+   ======================================== */
+
+/* Animação de flocos de neve */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Animação de brilho natalino */
+@keyframes christmasGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(196, 30, 58, 0.5), 0 0 20px rgba(22, 91, 51, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(196, 30, 58, 0.8), 0 0 40px rgba(22, 91, 51, 0.5), 0 0 60px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* Animação de luzes de Natal piscando */
+@keyframes christmasLights {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.6;
+    filter: brightness(1.5);
+  }
+}
+
+/* Animação de rotação suave para decorações */
+@keyframes gentleRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animação de balanço para enfeites */
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Classe para aplicar brilho natalino */
+.christmas-glow {
+  animation: christmasGlow 2s ease-in-out infinite;
+}
+
+/* Classe para luzes piscantes */
+.christmas-lights {
+  animation: christmasLights 1.5s ease-in-out infinite;
+}
+
+/* Classe para rotação suave */
+.christmas-rotate {
+  animation: gentleRotate 20s linear infinite;
+}
+
+/* Classe para balanço */
+.christmas-swing {
+  animation: swing 3s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* Gradiente natalino para backgrounds */
+.christmas-gradient {
+  background: linear-gradient(135deg, #0f4c81 0%, #1e3a5f 25%, #c41e3a 75%, #165b33 100%);
+  background-size: 400% 400%;
+  animation: christmasGradientShift 15s ease infinite;
+}
+
+@keyframes christmasGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Borda natalina decorativa */
+.christmas-border {
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(45deg, #c41e3a, #165b33, #ffd700, #c41e3a) border-box;
+  animation: christmasBorderRotate 3s linear infinite;
+}
+
+@keyframes christmasBorderRotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Texto com efeito de neve */
+.christmas-text-snow {
+  text-shadow: 
+    0 0 5px rgba(255, 255, 255, 0.8),
+    0 0 10px rgba(196, 30, 58, 0.6),
+    0 0 15px rgba(22, 91, 51, 0.4);
+}
+
+/* Botão com tema natalino */
+.christmas-button {
+  background: linear-gradient(90deg, #c41e3a, #165b33, #c41e3a);
+  background-size: 200% 100%;
+  animation: christmasButtonSlide 3s ease infinite;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+  transition: all 0.3s ease;
+}
+
+.christmas-button:hover {
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.6), 0 0 30px rgba(22, 91, 51, 0.4);
+  transform: translateY(-2px);
+}
+
+@keyframes christmasButtonSlide {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
