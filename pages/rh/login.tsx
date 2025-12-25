@@ -172,7 +172,14 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const data = await apiPost<{ token: string; usuario?: { nome: string } }>("/auth/login", { email, senha });
+      console.log('✅ Login bem-sucedido! Token recebido:', data.token ? `${data.token.substring(0, 30)}...` : 'NENHUM');
+      
       localStorage.setItem("rh_token", data.token);
+      console.log('💾 Token salvo no localStorage');
+      
+      // Verificar se foi salvo corretamente
+      const tokenSalvo = localStorage.getItem("rh_token");
+      console.log('🔍 Verificação - Token no localStorage:', tokenSalvo ? `${tokenSalvo.substring(0, 30)}...` : 'ERRO AO SALVAR');
       
       // Extrair nome do usuário do email ou da resposta
       const nome = data.usuario?.nome || email.split('@')[0];

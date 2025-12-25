@@ -42,6 +42,10 @@ export default function ConfiguracoesPage() {
   const carregarPerfil = async () => {
     setLoading(true);
     try {
+      // Debug: verificar se o token existe
+      const tokenDebug = localStorage.getItem("rh_token");
+      console.log('🔍 Debug - Token no localStorage:', tokenDebug ? `${tokenDebug.substring(0, 30)}...` : 'NENHUM');
+      
       const response = await api.get("/perfil");
       const data = response.data;
       setUsuario(data);
@@ -50,6 +54,9 @@ export default function ConfiguracoesPage() {
       setCargo(data.cargo || "");
     } catch (error: any) {
       console.error("Erro ao carregar perfil:", error);
+      console.error("Status do erro:", error.response?.status);
+      console.error("Dados do erro:", error.response?.data);
+      
       if (error.response?.status === 401) {
         // Token inválido ou expirado
         localStorage.removeItem("rh_token");
