@@ -74,17 +74,6 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       <header className="rh-navbar">
         <div className="rh-navbar-content">
           
-          {/* Brand */}
-          <div className="hidden md:flex items-center gap-3">
-            <div className="rh-nav-icon">
-              A
-            </div>
-            <div className="leading-tight">
-              <div className="text-base font-bold text-slate-900">Astron</div>
-              <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
-            </div>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -262,8 +251,18 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       {/* Footer */}
       <footer className="border-t border-slate-200 bg-white mt-12">
         <div className="rh-container">
-          <div className="py-6 text-center text-sm text-slate-500">
-            Astron © {new Date().getFullYear()} Aestron
+          <div className="py-6 flex items-center justify-center gap-4 text-sm text-slate-500">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-red-700 flex items-center justify-center text-white font-bold text-sm">
+                A
+              </div>
+              <div className="leading-tight text-left">
+                <div className="text-sm font-bold text-slate-900">Astron</div>
+                <div className="text-xs text-slate-500">Sistema de Gestão de Talentos</div>
+              </div>
+            </div>
+            <span className="text-slate-300">•</span>
+            <div>© {new Date().getFullYear()} Aestron</div>
           </div>
         </div>
       </footer>

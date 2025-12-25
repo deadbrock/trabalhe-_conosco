@@ -3,7 +3,6 @@ import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Briefcase, Camera, Lock, Save, X, Upload, Trash2, Settings } from "lucide-react";
 import api from "@/lib/api";
-import { apiGet } from "@/lib/api";
 
 type Usuario = {
   id: number;
@@ -36,8 +35,6 @@ export default function ConfiguracoesPage() {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
-
   useEffect(() => {
     carregarPerfil();
   }, []);
@@ -45,14 +42,22 @@ export default function ConfiguracoesPage() {
   const carregarPerfil = async () => {
     setLoading(true);
     try {
-      const data = await apiGet<Usuario>("/perfil", token);
+      const response = await api.get("/perfil");
+      const data = response.data;
       setUsuario(data);
       setNome(data.nome || "");
       setTelefone(data.telefone || "");
       setCargo(data.cargo || "");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao carregar perfil:", error);
-      alert("❌ Erro ao carregar perfil");
+      if (error.response?.status === 401) {
+        // Token inválido ou expirado
+        localStorage.removeItem("rh_token");
+        alert("❌ Sessão expirada. Faça login novamente.");
+        window.location.href = "/rh/login";
+      } else {
+        alert("❌ Erro ao carregar perfil");
+      }
     } finally {
       setLoading(false);
     }
