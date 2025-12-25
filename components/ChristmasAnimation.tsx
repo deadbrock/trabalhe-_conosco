@@ -102,9 +102,17 @@ export default function ChristmasAnimation({ userName, onClose }: ChristmasAnima
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-gray-600 mb-6"
+            className="text-gray-600 mb-6 text-center px-4"
           >
-            {isDezembro ? 'Season\'s Greetings • Dezembro 2025' : 'Login realizado com sucesso'}
+            {isDezembro ? (
+              <span className="text-sm leading-relaxed">
+                Natal é tempo de renovar, agradecer e planejar o futuro.
+                <br />
+                <strong>Boas Festas!</strong>
+              </span>
+            ) : (
+              'Login realizado com sucesso'
+            )}
           </motion.p>
 
           {/* Loading indicator */}

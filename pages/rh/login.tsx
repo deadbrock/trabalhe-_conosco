@@ -89,10 +89,12 @@ function LogoHeader() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-3 px-4 py-1.5 rounded-full bg-gradient-to-r from-red-500/20 to-green-500/20 border border-white/10"
+          className="mt-3 px-4 py-2 rounded-full bg-gradient-to-r from-red-500/20 to-green-500/20 border border-white/10"
         >
-          <p className="text-xs text-white/70">
-            Feliz Natal • Season&apos;s Greetings
+          <p className="text-xs text-white/80 text-center leading-relaxed">
+            Natal é tempo de renovar, agradecer e planejar o futuro.
+            <br />
+            <span className="font-semibold">Boas Festas!</span>
           </p>
         </motion.div>
       )}

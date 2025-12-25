@@ -177,11 +177,13 @@ export default function RHDashboard() {
             <div className="relative z-10">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-bold mb-1">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2">
                     Bem-vindo, {userName || 'Equipe RH'}
                   </h2>
-                  <p className="text-sm text-white/70">
-                    Season&apos;s Greetings • Dezembro 2025
+                  <p className="text-sm text-white/90 leading-relaxed">
+                    Natal é tempo de renovar, agradecer e planejar o futuro.
+                    <br />
+                    <span className="font-semibold text-white">Boas Festas!</span>
                   </p>
                 </div>
                 <div className="hidden sm:block">

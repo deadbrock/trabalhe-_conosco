@@ -67,8 +67,8 @@ export default function RHCandidatos() {
   const load = async () => {
     setLoading(true);
     try {
-      // Buscar vagas ativas
-      const vagasData = await apiGet<Vaga[]>("/vagas?status=ativa", token);
+      // Buscar TODAS as vagas (ativas, desativadas, ocultadas) - exceto excluídas
+      const vagasData = await apiGet<Vaga[]>("/vagas?status=all", token);
       setVagas(vagasData);
 
       // Buscar todos os candidatos
@@ -208,7 +208,22 @@ export default function RHCandidatos() {
               <ArrowLeft className="w-6 h-6 text-gray-700" />
             </button>
             <div className="flex-grow">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{vagaSelecionada.titulo}</h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900">{vagaSelecionada.titulo}</h1>
+                {vagaSelecionada.status !== 'ativa' && (
+                  <span className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+                    vagaSelecionada.status === 'desativada'
+                      ? 'bg-gray-200 text-gray-800 border border-gray-300'
+                      : vagaSelecionada.status === 'oculta'
+                      ? 'bg-orange-200 text-orange-800 border border-orange-300'
+                      : 'bg-yellow-200 text-yellow-800 border border-yellow-300'
+                  }`}>
+                    {vagaSelecionada.status === 'desativada' ? '🚫 Vaga Desativada' : 
+                     vagaSelecionada.status === 'oculta' ? '👁️ Vaga Oculta' : 
+                     `Status: ${vagaSelecionada.status}`}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 <span className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4" />
@@ -232,6 +247,30 @@ export default function RHCandidatos() {
               Abrir Kanban
             </Link>
           </div>
+
+          {/* Aviso importante para vagas desativadas/ocultas */}
+          {vagaSelecionada.status !== 'ativa' && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`rounded-2xl p-4 ${
+                vagaSelecionada.status === 'desativada'
+                  ? 'bg-gray-100 border-2 border-gray-300'
+                  : 'bg-orange-100 border-2 border-orange-300'
+              }`}
+            >
+              <p className={`text-sm font-semibold ${
+                vagaSelecionada.status === 'desativada' ? 'text-gray-800' : 'text-orange-800'
+              }`}>
+                ℹ️ {vagaSelecionada.status === 'desativada' 
+                  ? 'Esta vaga está desativada. Os candidatos ainda podem ser consultados e gerenciados.' 
+                  : 'Esta vaga está oculta do site público. Os candidatos existentes ainda podem ser consultados.'}
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                💡 <strong>Dica:</strong> Para excluir esta vaga sem perder os candidatos, mova todos para o "Banco de Talentos" primeiro.
+              </p>
+            </motion.div>
+          )}
 
           {/* Stats Cards */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -950,10 +989,16 @@ export default function RHCandidatos() {
                 onClick={() => setVagaSelecionada(vaga)}
                 className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 cursor-pointer group hover-lift hover-glow"
               >
-                  {/* Badge de Candidatos */}
+                  {/* Badge de Candidatos e Status da Vaga */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-12 h-12 bg-gradient-to-br from-primary to-red-700 rounded-xl flex items-center justify-center">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                        vaga.status === 'ativa' 
+                          ? 'bg-gradient-to-br from-primary to-red-700'
+                          : vaga.status === 'desativada'
+                          ? 'bg-gray-400'
+                          : 'bg-orange-400'
+                      }`}>
                         <Briefcase className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -961,7 +1006,22 @@ export default function RHCandidatos() {
                         <p className="text-2xl font-bold text-gray-900">{vaga.total_candidatos}</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    <div className="flex items-center gap-2">
+                      {vaga.status !== 'ativa' && (
+                        <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${
+                          vaga.status === 'desativada'
+                            ? 'bg-gray-100 text-gray-700'
+                            : vaga.status === 'oculta'
+                            ? 'bg-orange-100 text-orange-700'
+                            : 'bg-yellow-100 text-yellow-700'
+                        }`}>
+                          {vaga.status === 'desativada' ? '🚫 Desativada' : 
+                           vaga.status === 'oculta' ? '👁️ Oculta' : 
+                           vaga.status}
+                        </span>
+                      )}
+                      <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </div>
                   </div>
 
                   {/* Título da Vaga */}
