@@ -13,7 +13,8 @@ import {
   Shield, 
   FileText, 
   ChevronDown,
-  Bell
+  Bell,
+  Settings
 } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import NotificationCenter from "./NotificationCenter";
@@ -63,6 +64,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
       ]
     },
+    { href: "/rh/configuracoes", icon: Settings, label: "Configurações" },
   ];
 
   return (
