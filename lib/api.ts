@@ -17,12 +17,8 @@ const api = axios.create({
 // Interceptor para adicionar token automaticamente
 api.interceptors.request.use((config) => {
   const token = getAuthToken();
-  console.log('🔐 Token encontrado:', token ? `${token.substring(0, 20)}...` : 'NENHUM TOKEN');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log('✅ Header Authorization adicionado');
-  } else {
-    console.warn('⚠️ Nenhum token encontrado no localStorage');
   }
   return config;
 });
