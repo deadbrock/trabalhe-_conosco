@@ -91,8 +91,14 @@ export default function RHCandidatos() {
 
   // Scroll automático para o topo quando a aba muda ou o modal abre
   useEffect(() => {
-    if (selectedCandidato && modalContentRef.current) {
-      modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    if (selectedCandidato) {
+      // Rola a página principal para o topo quando o modal abre
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Rola o conteúdo do modal para o topo quando troca de aba
+      if (modalContentRef.current) {
+        modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   }, [abaAtiva, selectedCandidato]);
 
@@ -562,7 +568,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    🏷️ Tags
+                    ¸ Tags
                   </button>
                   <button
                     onClick={() => setAbaAtiva('agendamentos')}
@@ -582,7 +588,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ⭐ Pontuação
+                    â­ Pontuação
                   </button>
                   <button
                     onClick={() => setAbaAtiva('notas')}
@@ -602,7 +608,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ⭐ Avaliações
+                    â­ Avaliações
                   </button>
                   <button
                     onClick={() => setAbaAtiva('atividades')}
