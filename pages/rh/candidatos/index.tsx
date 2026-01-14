@@ -562,7 +562,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ¸ Tags
+                    🏷️ Tags
                   </button>
                   <button
                     onClick={() => setAbaAtiva('agendamentos')}
@@ -582,7 +582,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    â­ Pontuação
+                    ⭐ Pontuação
                   </button>
                   <button
                     onClick={() => setAbaAtiva('notas')}
@@ -602,7 +602,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    â­ Avaliações
+                    ⭐ Avaliações
                   </button>
                   <button
                     onClick={() => setAbaAtiva('atividades')}
