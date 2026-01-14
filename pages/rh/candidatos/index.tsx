@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { apiGet, apiPut, apiPost, getApiBase } from "@/lib/api";
 import api from "@/lib/api";
 import RHLayout from "@/components/RHLayout";
@@ -59,6 +59,7 @@ export default function RHCandidatos() {
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
   const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao' | 'notas' | 'avaliacoes' | 'atividades'>('detalhes');
   const [enviandoFGS, setEnviandoFGS] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
   const userId = typeof window !== "undefined" ? parseInt(localStorage.getItem("rh_user_id") || "1") : 1;
@@ -87,6 +88,13 @@ export default function RHCandidatos() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Scroll automático para o topo quando a aba muda ou o modal abre
+  useEffect(() => {
+    if (selectedCandidato && modalContentRef.current) {
+      modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [abaAtiva, selectedCandidato]);
 
   // Agrupar candidatos por vaga e calcular estatísticas
   const vagasComCandidatos = useMemo<VagaComCandidatos[]>(() => {
@@ -534,7 +542,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                     Detalhes
+                    📋 Detalhes
                   </button>
                   <button
                     onClick={() => setAbaAtiva('comentarios')}
@@ -544,7 +552,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                     Comentários
+                    💬 Comentários
                   </button>
                   <button
                     onClick={() => setAbaAtiva('tags')}
@@ -554,7 +562,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    ¸ Tags
+                    🏷️ Tags
                   </button>
                   <button
                     onClick={() => setAbaAtiva('agendamentos')}
@@ -564,7 +572,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                     Agendamentos
+                    📅 Agendamentos
                   </button>
                   <button
                     onClick={() => setAbaAtiva('pontuacao')}
@@ -574,7 +582,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    â­ Pontuação
+                    ⭐ Pontuação
                   </button>
                   <button
                     onClick={() => setAbaAtiva('notas')}
@@ -584,7 +592,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                     Notas
+                    📝 Notas
                   </button>
                   <button
                     onClick={() => setAbaAtiva('avaliacoes')}
@@ -594,7 +602,7 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    â­ Avaliações
+                    ⭐ Avaliações
                   </button>
                   <button
                     onClick={() => setAbaAtiva('atividades')}
@@ -604,11 +612,11 @@ export default function RHCandidatos() {
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                     Atividades
+                    📊 Atividades
                   </button>
                 </div>
 
-                <div className="p-8 space-y-5 overflow-y-auto flex-1">
+                <div ref={modalContentRef} className="p-8 space-y-5 overflow-y-auto flex-1">
                   {/* Aba Detalhes */}
                   {abaAtiva === 'detalhes' && (
                     <>
