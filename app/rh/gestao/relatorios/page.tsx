@@ -102,7 +102,7 @@ export default function GestaoRelatorios() {
       const filiaisData = await filiaisRes.json();
       setFiliais(filiaisData);
 
-      await carregarRelatorios(token);
+      await carregarRelatorios(token || "");
     } catch (err: any) {
       setError(err.message);
     } finally {
