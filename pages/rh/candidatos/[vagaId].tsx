@@ -85,7 +85,6 @@ export default function RHCandidatosPorVaga() {
   const onDrop = async (candidatoId: number, newStatus: string) => {
     if (newStatus === "reprovado") {
       setReprovarCandidatoId(candidatoId);
-      setMotivoReprovacaoDraft("");
       return;
     }
     await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
