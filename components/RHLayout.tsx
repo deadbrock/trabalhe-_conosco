@@ -8,13 +8,15 @@ import {
   LogOut, 
   Menu, 
   X, 
-  Star, 
+  Star,
+  UserX,
   MessageCircle, 
   Shield, 
   FileText, 
   ChevronDown,
   Bell,
-  Settings
+  Settings,
+  BarChart2
 } from "lucide-react";
 import { ThemeToggleCompact } from "./ThemeToggle";
 import NotificationCenter from "./NotificationCenter";
@@ -52,6 +54,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
       icon: Users, 
       submenu: [
         { href: "/rh/candidatos", icon: Users, label: "Candidatos" },
+        { href: "/rh/candidatos/reprovados", icon: UserX, label: "Reprovados" },
         { href: "/rh/banco-talentos", icon: Star, label: "Banco de Talentos" },
         { href: "/rh/documentos", icon: FileText, label: "Documentos" },
       ]
@@ -64,6 +67,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
         { href: "/rh/lgpd-solicitacoes", icon: Shield, label: "LGPD" },
       ]
     },
+    { href: "/rh/estatisticas", icon: BarChart2, label: "Estatísticas" },
     { href: "/rh/configuracoes", icon: Settings, label: "Configurações" },
   ];
 
@@ -83,7 +87,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1 flex-shrink-0">
             {menuItems.map((item, index) => {
               // Se tem submenu, renderiza dropdown
               if ('submenu' in item && item.submenu) {
@@ -142,7 +146,7 @@ export default function RHLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Right Actions */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2 flex-shrink-0">
             <ThemeToggleCompact />
             <NotificationCenter />
             <button 

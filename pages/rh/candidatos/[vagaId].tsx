@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import ReactDOM from "react-dom";
 import { useRouter } from "next/router";
 import { apiGet, apiPut, getApiBase } from "@/lib/api";
 import { motion } from "framer-motion";
 import RHLayout from "@/components/RHLayout";
 import { ArrowLeft, Mail, Phone, FileText, Calendar, MessageCircle, ExternalLink, Download } from "lucide-react";
 import Link from "next/link";
+import ModalReprovacao from "@/components/ModalReprovacao";
 
 export type Candidato = {
   id: number;
@@ -21,6 +23,8 @@ export type Candidato = {
   estado?: string;
   cidade?: string;
   bairro?: string;
+  motivo_reprovacao?: string | null;
+  data_reprovacao?: string | null;
 };
 
 const STATUSES = ["novo", "em_analise", "entrevista", "aprovado", "reprovado", "banco_talentos"] as const;
@@ -45,7 +49,20 @@ export default function RHCandidatosPorVaga() {
   const router = useRouter();
   const { vagaId } = router.query as { vagaId?: string };
   const [items, setItems] = useState<Candidato[]>([]);
+  const [reprovarCandidatoId, setReprovarCandidatoId] = useState<number | null>(null);
+  const [enviandoReprovacao, setEnviandoReprovacao] = useState(false);
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
+
+  // Bloqueia scroll do body enquanto modal de reprovação está aberto
+  useEffect(() => {
+    if (reprovarCandidatoId !== null) {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [reprovarCandidatoId]);
 
   const load = useCallback(async () => {
     if (!vagaId) return;
@@ -66,9 +83,40 @@ export default function RHCandidatosPorVaga() {
   }, [items]);
 
   const onDrop = async (candidatoId: number, newStatus: string) => {
+    if (newStatus === "reprovado") {
+      setReprovarCandidatoId(candidatoId);
+      setMotivoReprovacaoDraft("");
+      return;
+    }
     await apiPut(`/candidatos/${candidatoId}`, { status: newStatus }, token);
     await load();
   };
+
+  const fecharModalReprovar = () => {
+    setReprovarCandidatoId(null);
+  };
+
+  const confirmarReprovarKanban = async (motivo: string) => {
+    if (reprovarCandidatoId == null) return;
+    setEnviandoReprovacao(true);
+    try {
+      await apiPut(
+        `/candidatos/${reprovarCandidatoId}`,
+        { status: "reprovado", motivo_reprovacao: motivo },
+        token
+      );
+      await load();
+      fecharModalReprovar();
+    } catch {
+      alert("Erro ao reprovar candidato.");
+    } finally {
+      setEnviandoReprovacao(false);
+    }
+  };
+
+  const candidatoReprovando = reprovarCandidatoId != null
+    ? items.find((c) => c.id === reprovarCandidatoId) ?? null
+    : null;
 
   const getWhatsAppLink = (telefone?: string) => {
     if (!telefone) return null;
@@ -79,6 +127,17 @@ export default function RHCandidatosPorVaga() {
 
   return (
     <RHLayout>
+      {typeof document !== "undefined" && ReactDOM.createPortal(
+        <ModalReprovacao
+          aberto={reprovarCandidatoId !== null}
+          nomeCandidato={candidatoReprovando?.nome ?? ""}
+          vagaTitulo={candidatoReprovando?.vaga_titulo}
+          enviando={enviandoReprovacao}
+          onConfirmar={confirmarReprovarKanban}
+          onCancelar={fecharModalReprovar}
+        />,
+        document.body
+      )}
       <div className="space-y-6">
         {/* Header com voltar */}
         <div className="flex items-center gap-4">

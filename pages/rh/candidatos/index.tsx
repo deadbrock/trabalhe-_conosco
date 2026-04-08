@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+﻿import React, { useEffect, useState, useMemo, useRef } from "react";
+import ReactDOM from "react-dom";
 import { apiGet, apiPut, apiPost, getApiBase } from "@/lib/api";
 import api from "@/lib/api";
+import ModalReprovacao from "@/components/ModalReprovacao";
 import RHLayout from "@/components/RHLayout";
 import { motion } from "framer-motion";
 import { Search, Users, FileText, Briefcase, MapPin, ChevronRight, Clock, ArrowLeft, Mail, Phone, Download, MessageCircle, CheckCircle, XCircle, Star, Eye, Calendar, Send, Loader2 } from "lucide-react";
@@ -40,6 +42,8 @@ export type Candidato = {
   cidade?: string;
   bairro?: string;
   score?: number;
+  motivo_reprovacao?: string | null;
+  data_reprovacao?: string | null;
 };
 
 type VagaComCandidatos = Vaga & {
@@ -59,6 +63,8 @@ export default function RHCandidatos() {
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
   const [abaAtiva, setAbaAtiva] = useState<'detalhes' | 'comentarios' | 'tags' | 'agendamentos' | 'pontuacao' | 'notas' | 'avaliacoes' | 'atividades'>('detalhes');
   const [enviandoFGS, setEnviandoFGS] = useState(false);
+  const [reprovarCandidatoId, setReprovarCandidatoId] = useState<number | null>(null);
+  const [enviandoReprovacao, setEnviandoReprovacao] = useState(false);
   const modalContentRef = useRef<HTMLDivElement>(null);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("rh_token") || undefined : undefined;
@@ -89,18 +95,30 @@ export default function RHCandidatos() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Scroll automático para o topo quando a aba muda ou o modal abre
+  // Bloqueia scroll do body e sobe a página quando o modal abre/fecha
   useEffect(() => {
     if (selectedCandidato) {
-      // Rola a página principal para o topo quando o modal abre
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      
-      // Rola o conteúdo do modal para o topo quando troca de aba
-      if (modalContentRef.current) {
-        modalContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
-  }, [abaAtiva, selectedCandidato]);
+    return () => { document.body.style.overflow = ""; };
+  }, [selectedCandidato]);
+
+  // Ao trocar de aba dentro do modal, rola o conteúdo do modal para o topo
+  useEffect(() => {
+    if (modalContentRef.current) {
+      modalContentRef.current.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    }
+  }, [abaAtiva]);
+
+  // Sobe a página ao selecionar uma vaga (a lista de candidatos começa do topo)
+  useEffect(() => {
+    if (vagaSelecionada) {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    }
+  }, [vagaSelecionada]);
 
   // Agrupar candidatos por vaga e calcular estatísticas
   const vagasComCandidatos = useMemo<VagaComCandidatos[]>(() => {
@@ -132,6 +150,50 @@ export default function RHCandidatos() {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("pt-BR");
   };
+
+  const TZ = "America/Sao_Paulo";
+
+  const formatDateTime = (date?: string | null) => {
+    if (!date) return "—";
+    return (
+      new Date(date).toLocaleString("pt-BR", {
+        timeZone: TZ,
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }) + " (Brasília)"
+    );
+  };
+
+  const fecharModalReprovar = () => {
+    setReprovarCandidatoId(null);
+  };
+
+  const confirmarReprovar = async (motivo: string) => {
+    if (reprovarCandidatoId == null) return;
+    setEnviandoReprovacao(true);
+    try {
+      await apiPut(
+        `/candidatos/${reprovarCandidatoId}`,
+        { status: "reprovado", motivo_reprovacao: motivo },
+        token
+      );
+      await load();
+      fecharModalReprovar();
+      setSelectedCandidato(null);
+    } catch {
+      alert("Erro ao reprovar candidato.");
+    } finally {
+      setEnviandoReprovacao(false);
+    }
+  };
+
+  const candidatoReprovando = useMemo(
+    () => (reprovarCandidatoId != null ? candidatos.find((c) => c.id === reprovarCandidatoId) ?? null : null),
+    [reprovarCandidatoId, candidatos]
+  );
 
   // Estatísticas gerais
   const totalCandidatos = candidatos.length;
@@ -179,6 +241,21 @@ export default function RHCandidatos() {
     }
   };
 
+  const modalReprovar =
+    typeof document !== "undefined"
+      ? ReactDOM.createPortal(
+          <ModalReprovacao
+            aberto={reprovarCandidatoId !== null}
+            nomeCandidato={candidatoReprovando?.nome ?? ""}
+            vagaTitulo={candidatoReprovando?.vaga_titulo}
+            enviando={enviandoReprovacao}
+            onConfirmar={confirmarReprovar}
+            onCancelar={fecharModalReprovar}
+          />,
+          document.body
+        )
+      : null;
+
   const handleEnviarParaFGS = async (candidatoId: number) => {
     if (!confirm('Deseja enviar este candidato para o sistema FGS (Admissão)?\n\nOs dados e documentos serão transferidos para o sistema de admissão.')) {
       return;
@@ -212,6 +289,7 @@ export default function RHCandidatos() {
   if (vagaSelecionada) {
     return (
       <RHLayout>
+        {modalReprovar}
         <div className="space-y-6">
           {/* Header com botão Voltar */}
           <div className="flex items-center gap-4">
@@ -493,7 +571,10 @@ export default function RHCandidatos() {
                           )}
                           {candidato.status !== "reprovado" && (
                             <button
-                              onClick={() => handleStatusChange(candidato.id, "reprovado")}
+                              onClick={() => {
+                                setReprovarCandidatoId(candidato.id);
+                                setMotivoReprovacaoDraft("");
+                              }}
                               className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
                               title="Reprovar"
                             >
@@ -518,18 +599,20 @@ export default function RHCandidatos() {
             )}
           </div>
 
-          {/* Modal de Detalhes do Candidato */}
-          {selectedCandidato && (
+          {/* Modal de Detalhes do Candidato — Portal garante que fixed seja relativo ao viewport */}
+          {selectedCandidato && typeof document !== "undefined" && ReactDOM.createPortal(
             <div 
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+              style={{ touchAction: "none" }}
               onClick={() => {
                 setSelectedCandidato(null);
                 setAbaAtiva('detalhes');
               }}
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.95, y: 24 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                 className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -539,87 +622,31 @@ export default function RHCandidatos() {
                 </div>
 
                 {/* Abas */}
-                <div className="bg-gray-100 px-8 py-2 flex gap-2 overflow-x-auto border-b border-gray-200">
-                  <button
-                    onClick={() => setAbaAtiva('detalhes')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'detalhes'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    📋 Detalhes
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('comentarios')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'comentarios'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    💬 Comentários
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('tags')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'tags'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    ¸ Tags
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('agendamentos')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'agendamentos'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    📅 Agendamentos
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('pontuacao')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'pontuacao'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    â­ Pontuação
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('notas')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'notas'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    📝 Notas
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('avaliacoes')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'avaliacoes'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    â­ Avaliações
-                  </button>
-                  <button
-                    onClick={() => setAbaAtiva('atividades')}
-                    className={`px-4 py-2 rounded-t-lg font-medium transition-colors ${
-                      abaAtiva === 'atividades'
-                        ? 'bg-white text-primary shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    📊 Atividades
-                  </button>
+                <div className="bg-gray-100 px-8 py-2 flex gap-1 overflow-x-auto border-b border-gray-200">
+                  {(
+                    [
+                      { key: 'detalhes',     label: 'Detalhes'     },
+                      { key: 'comentarios',  label: 'Comentários'  },
+                      { key: 'tags',         label: 'Tags'         },
+                      { key: 'agendamentos', label: 'Agendamentos' },
+                      { key: 'pontuacao',    label: 'Pontuação'    },
+                      { key: 'notas',        label: 'Notas'        },
+                      { key: 'avaliacoes',   label: 'Avaliações'   },
+                      { key: 'atividades',   label: 'Atividades'   },
+                    ] as const
+                  ).map(({ key, label }) => (
+                    <button
+                      key={key}
+                      onClick={() => setAbaAtiva(key)}
+                      className={`px-4 py-2 rounded-t-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                        abaAtiva === key
+                          ? 'bg-white text-primary shadow-sm'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
 
                 <div ref={modalContentRef} className="p-8 space-y-5 overflow-y-auto flex-1">
@@ -701,6 +728,20 @@ export default function RHCandidatos() {
                         <StatusBadge status={selectedCandidato.status} showEmoji={true} showText={true} />
                       </div>
 
+                      {selectedCandidato.status === "reprovado" && (
+                        <div className="rounded-2xl border border-red-200 bg-red-50 p-4">
+                          <label className="text-sm font-bold text-red-900">Motivo da reprovação</label>
+                          <p className="mt-2 text-sm text-red-950 whitespace-pre-wrap">
+                            {selectedCandidato.motivo_reprovacao?.trim()
+                              ? selectedCandidato.motivo_reprovacao
+                              : "Não registrado (reprovação anterior ao cadastro de motivo)."}
+                          </p>
+                          <p className="mt-2 text-xs text-red-800/80">
+                            Registrado em: {formatDateTime(selectedCandidato.data_reprovacao)}
+                          </p>
+                        </div>
+                      )}
+
                       <div className="bg-gray-50 rounded-2xl p-4">
                         <label className="text-sm font-semibold text-gray-700 block mb-3">Alterar Status</label>
                         <div className="grid grid-cols-2 gap-2">
@@ -730,7 +771,10 @@ export default function RHCandidatos() {
                             Banco de Talentos
                           </button>
                           <button
-                            onClick={() => handleStatusChange(selectedCandidato.id, "reprovado")}
+                            onClick={() => {
+                              setReprovarCandidatoId(selectedCandidato.id);
+                              setMotivoReprovacaoDraft("");
+                            }}
                             className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
                           >
                              Reprovar
@@ -884,7 +928,8 @@ export default function RHCandidatos() {
                   </div>
                 </div>
               </motion.div>
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       </RHLayout>
@@ -894,6 +939,7 @@ export default function RHCandidatos() {
   // Visualização principal: Grid de vagas
   return (
     <RHLayout>
+      {modalReprovar}
       <div className="space-y-6">
         {/* Header */}
         <div>
