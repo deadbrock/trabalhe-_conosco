@@ -1,6 +1,5 @@
 import React, { useEffect, useId, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Mail, Lock } from "lucide-react";
 import { apiPost } from "@/lib/api";
@@ -48,39 +47,26 @@ function InputWithIcon({
           placeholder={placeholder}
           autoComplete={autoComplete}
           required={required}
-          className="h-12 w-full rounded-[14px] border border-white/15 bg-white/10 pl-11 pr-4 text-white placeholder:text-white/50 outline-none transition
-                     focus-visible:ring-2 focus-visible:ring-[#354A80]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1f2937]
-                     focus:border-white/30"
+          className="h-12 w-full rounded-[14px] border border-white/20 bg-black/20 pl-11 pr-4 text-white placeholder:text-white/45 outline-none transition
+                     focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent
+                     focus:border-white/35"
         />
       </div>
     </div>
   );
 }
 
-function LogoHeader() {
-  // Verificar se estamos em dezembro
+function LoginHeader() {
   const hoje = new Date();
-  const isDezembro = hoje.getMonth() === 11; // 11 = dezembro (0-indexed)
-  
-  return (
-    <div className="flex flex-col items-center text-center">
-      {/* Logo */}
-      <div className="mb-5 mt-8 flex items-center justify-center">
-        <Image
-          src="/logo-aestron.png"
-          alt="Astron"
-          width={560}
-          height={250}
-          priority
-          className="h-36 sm:h-44 w-auto object-contain opacity-95 invert"
-        />
-      </div>
+  const isDezembro = hoje.getMonth() === 11;
 
-      <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-        Astron
+  return (
+    <div className="flex flex-col items-center text-center pt-2">
+      <h1 className="text-3xl sm:text-[2rem] font-bold tracking-tight text-white [text-shadow:0_1px_24px_rgba(0,0,0,0.35)]">
+        Trabalhe Conosco
       </h1>
-      <p className="mt-2 text-sm sm:text-base text-white/80">
-        Sistema de Gestão de Talentos – Acesso RH
+      <p className="mt-3 text-sm sm:text-base text-white/85 max-w-sm leading-relaxed">
+        Painel de gestão de talentos — acesso restrito ao RH
       </p>
       
       {/* Mensagem sutil de Natal apenas em dezembro */}
@@ -104,47 +90,31 @@ function LogoHeader() {
 
 function BackgroundWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] relative overflow-hidden">
-      {/* Neve sutil de fundo */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        {[...Array(25)].map((_, i) => {
-          const randomX = Math.random() * 100;
-          const randomDelay = Math.random() * 8;
-          const randomDuration = Math.random() * 15 + 15;
-          
-          return (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full"
-              style={{
-                left: `${randomX}%`,
-              }}
-              initial={{
-                y: '-5vh',
-                opacity: 0.3,
-              }}
-              animate={{
-                y: '105vh',
-                opacity: [0.3, 0.8, 0.3],
-              }}
-              transition={{
-                duration: randomDuration,
-                repeat: Infinity,
-                ease: 'linear',
-                delay: randomDelay,
-              }}
-            />
-          );
-        })}
+    <section className="relative min-h-screen overflow-hidden bg-[#1a0a12]">
+      {/* Gradiente principal vermelho → azul */}
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-[#a2122a] via-[#5c1a3d] to-[#354a80]"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-tl from-[#354a80]/90 via-transparent to-[#c41e3a]/40"
+        aria-hidden
+      />
+      {/* Malha suave */}
+      <div
+        className="absolute inset-0 opacity-[0.15] mix-blend-overlay"
+        style={{
+          backgroundImage: `radial-gradient(circle at 20% 30%, white 0.5px, transparent 0.6px)`,
+          backgroundSize: "24px 24px",
+        }}
+        aria-hidden
+      />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-32 top-1/4 h-[420px] w-[420px] rounded-full bg-[#a2122a]/35 blur-[100px]" />
+        <div className="absolute -right-24 bottom-1/4 h-[380px] w-[380px] rounded-full bg-[#354a80]/45 blur-[90px]" />
       </div>
 
-      {/* Gradiente suave decorativo */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-12 relative z-10">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-12">
         {children}
       </div>
     </section>
@@ -207,36 +177,20 @@ export default function LoginPage() {
         <div className="w-full max-w-[460px]">
           {/* Card (glassmorphism) */}
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="rounded-[28px] border border-white/20 bg-white/10 p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur-xl relative overflow-hidden"
+            initial={{ scale: 0.96, opacity: 0, y: 12 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="relative overflow-hidden rounded-[28px] border border-white/25 bg-white/[0.12] p-8 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-10"
             role="region"
-            aria-label="Login Astron"
+            aria-label="Login Trabalhe Conosco"
           >
-            {/* Brilho sutil no topo (efeito de neve refletida) */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            
-            {/* Accent decorativo minimalista */}
-            <div className="absolute top-4 right-4">
-              <motion.div
-                animate={{
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="w-8 h-8 border-2 border-red-400/30 rounded-lg"
-                style={{
-                  boxShadow: '0 0 20px rgba(239, 68, 68, 0.1)',
-                }}
-              />
-            </div>
-          <LogoHeader />
+            <div
+              className="pointer-events-none absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-[#ff8a8a] via-white/85 to-[#8fb4e8]"
+              aria-hidden
+            />
+          <LoginHeader />
 
-          <form onSubmit={onSubmit} className="mt-8 space-y-5" aria-describedby={error ? errorId : undefined}>
+          <form onSubmit={onSubmit} className="relative mt-8 space-y-5" aria-describedby={error ? errorId : undefined}>
             <InputWithIcon
               id="rh-email"
               label="E-mail"
@@ -282,14 +236,12 @@ export default function LoginPage() {
               disabled={loading}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="h-[52px] w-full rounded-[14px] bg-[#354A80] text-white font-semibold shadow-sm transition
-                         hover:-translate-y-[1px] hover:shadow-lg hover:bg-[#2d3d6b] active:translate-y-0
-                         disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0
-                         relative overflow-hidden group"
-              aria-label="Entrar no Astron"
+              className="group relative h-[52px] w-full overflow-hidden rounded-[14px] bg-gradient-to-r from-[#a2122a] to-[#354a80] font-semibold text-white shadow-lg shadow-black/20 transition
+                         hover:-translate-y-px hover:shadow-xl hover:brightness-[1.05] active:translate-y-0
+                         disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:brightness-100"
+              aria-label="Entrar no painel Trabalhe Conosco"
             >
-              {/* Brilho sutil no hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent translate-x-[-200%] transition-transform duration-1000 group-hover:translate-x-[200%]" />
               
               <span className="relative z-10">
                 {loading ? "Entrando..." : "Entrar"}
@@ -299,8 +251,8 @@ export default function LoginPage() {
             <div className="text-center">
               {/* Personalize aqui: email/URL de suporte */}
               <a
-                href="mailto:suporte@fgservices.com.br?subject=Esqueci%20minha%20senha%20-%20Astron"
-                className="text-sm text-white/80 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1f2937]"
+                href="mailto:suporte@fgservices.com.br?subject=Esqueci%20minha%20senha%20-%20Trabalhe%20Conosco%20RH"
+                className="text-sm text-white/85 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
               >
                 Esqueci minha senha
               </a>
@@ -309,8 +261,8 @@ export default function LoginPage() {
             <div className="pt-1 text-center">
               <Link
                 href="/"
-                className="text-xs text-white/60 hover:text-white/80 transition
-                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1f2937]"
+                className="text-xs text-white/70 transition hover:text-white
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
               >
                 Voltar ao site
               </Link>
@@ -320,8 +272,8 @@ export default function LoginPage() {
 
           {/* Rodapé */}
           <footer className="mt-6 text-center">
-            <p className="text-xs text-white/70">
-              © 2025 Aestron – Sistema Astron
+            <p className="text-xs text-white/75">
+              © {new Date().getFullYear()} Trabalhe Conosco — painel RH
             </p>
           </footer>
         </div>
