@@ -573,7 +573,6 @@ export default function RHCandidatos() {
                             <button
                               onClick={() => {
                                 setReprovarCandidatoId(candidato.id);
-                                setMotivoReprovacaoDraft("");
                               }}
                               className="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-all"
                               title="Reprovar"
@@ -773,7 +772,6 @@ export default function RHCandidatos() {
                           <button
                             onClick={() => {
                               setReprovarCandidatoId(selectedCandidato.id);
-                              setMotivoReprovacaoDraft("");
                             }}
                             className="px-4 py-2 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition-all col-span-2"
                           >
